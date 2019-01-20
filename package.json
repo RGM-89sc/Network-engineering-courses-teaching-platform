@@ -1,0 +1,17 @@
+{
+  "name": "network_course_website",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "git-branch": "^2.0.1",
+    "gulp": "^4.0.0",
+    "inquirer": "^6.2.1",
+    "simple-git": "^1.107.0"
+  }
+}

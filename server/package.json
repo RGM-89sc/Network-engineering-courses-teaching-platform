@@ -1,0 +1,25 @@
+{
+  "name": "server",
+  "scripts": {
+    "start": "node ./server.js"
+  },
+  "dependencies": {
+    "bcrypt": "3.0.2",
+    "chai": "^4.2.0",
+    "jsonwebtoken": "^8.4.0",
+    "koa": "^2.6.2",
+    "koa-body": "^4.0.6",
+    "koa-jwt": "^3.5.1",
+    "koa-passport": "^4.1.1",
+    "koa-router": "^7.4.0",
+    "koa-session2": "^2.2.8",
+    "koa-static": "^5.0.0",
+    "koa2-cors": "^2.0.6",
+    "log4js": "^3.0.6",
+    "mongoose": "^5.4.2",
+    "passport-local": "^1.0.0"
+  },
+  "devDependencies": {
+    "mocha": "^5.2.0"
+  }
+}
