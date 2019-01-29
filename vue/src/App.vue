@@ -56,7 +56,7 @@ body {
 }
 .slide-fade-enter,
 .slide-fade-leave-to {
-  transform: translateX(50px);
+  //transform: translateX(50px);
   opacity: 0;
 }
 </style>

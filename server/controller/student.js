@@ -9,7 +9,7 @@ const saltRounds = 10;
 
 module.exports = {
   // get info by id
-  async getInfoById (ctx) {
+  async getInfoById(ctx) {
     const { id } = ctx.request.body;
 
     await db.student.findOne({ id }, { password: 0, _id: 0, __v: 0 })
@@ -22,7 +22,7 @@ module.exports = {
   },
 
   // register
-  async register (ctx) {
+  async register(ctx) {
     const { id, username, password, faculty, major, grade, sclass } = ctx.request.body;
 
     if (await db.student.findOne({ id })) {
@@ -52,21 +52,21 @@ module.exports = {
   },
 
   // 登录
-  async login (ctx) {
+  async login(ctx) {
     return passport.authenticate('local', (err, user, info, status) => {
       if (user) {
         ctx.login(user);
-        ctx.cookies.set('loginState', 
-          encodeURI(JSON.stringify({ 
-            id: user.id, 
+        ctx.cookies.set('loginState',
+          encodeURI(JSON.stringify({
+            id: user.id,
             username: user.username,
             avatar: user.avatar,
             userType: user.userType
-          })), 
-          { 
-            httpOnly: false, 
-            overwrite: false, 
-            maxAge: 1000 * 60 * 60 * 3 
+          })),
+          {
+            httpOnly: false,
+            overwrite: false,
+            maxAge: 1000 * 60 * 60 * 3
           }
         );
 
@@ -89,7 +89,7 @@ module.exports = {
   },
 
   // logout
-  async logout (ctx) {
+  async logout(ctx) {
     ctx.logout(ctx.state.user);
     ctx.cookies.set('loginState', '',
       {
@@ -103,7 +103,7 @@ module.exports = {
   },
 
   // change avatar
-  async changeAvatar (ctx) {
+  async changeAvatar(ctx) {
     const userid = ctx.state.user.id;
     const avatar = ctx.request.files.avatar;
     const name = `stu_${userid + path.extname(avatar.name)}`;
@@ -114,17 +114,17 @@ module.exports = {
       await db.student.updateOne({ id: userid }, {
         avatar: `/static/img/avatar/${name}`
       })
-      .then(docs => {
-        ctx.body = {
-          code: 1
-        };
-      })
-      .catch(err => {
-        ctx.body = {
-          code: -1,
-          errMsg: err.message
-        };
-      });
+        .then(docs => {
+          ctx.body = {
+            code: 1
+          };
+        })
+        .catch(err => {
+          ctx.body = {
+            code: -1,
+            errMsg: err.message
+          };
+        });
       return null;
     }
     ctx.body = {
@@ -133,22 +133,22 @@ module.exports = {
   },
 
   // change password
-  async changePW (ctx) {
+  async changePW(ctx) {
     const { password } = ctx.request.body;
 
     await bcrypt.hash(password, saltRounds).then(async hash => {
       await db.student.updateOne({ id: ctx.state.user.id }, { password: hash })
-      .then(docs => {
-        ctx.body = {
-          code: 1
-        };
-      })
-      .catch(err => {
-        ctx.body = {
-          code: -1,
-          errMsg: err.message
-        }
-      });
+        .then(docs => {
+          ctx.body = {
+            code: 1
+          };
+        })
+        .catch(err => {
+          ctx.body = {
+            code: -1,
+            errMsg: err.message
+          }
+        });
     });
   }
 };

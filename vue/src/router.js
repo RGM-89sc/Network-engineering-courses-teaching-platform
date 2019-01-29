@@ -37,5 +37,10 @@ export default new Router({
       name: 'qa',
       component: () => import('./views/Qa.vue')
     },
+    {
+      path: '/myInfo',
+      name: 'myInfo',
+      component: () => import('./views/myInfo.vue')
+    }
   ]
 });
