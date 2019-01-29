@@ -1,5 +1,25 @@
 # 基于Vue.js的网络基础课程在线教学平台
-## 使用gulp上传到github
-1、Download整个项目到本地，在项目总根目录、server根目录（server文件夹为后台项目文件夹）、vue根目录（vue文件夹为前端项目文件夹）分别执行`npm install`。
 
-2、对server或vue目录中的内容做过修改后，在总根目录使用git bash执行`gulp`即可上传。或使用github客户端进行上传。
+## 目录结构
+server 后端项目文件夹
+├─ controller
+├─ libs
+├─ middleware
+├─ model
+├─ public
+│    └─ static
+│         ├─ heads
+│         ├─ remotes
+│         └─ tags
+└─ tools
+
+vue 前端项目文件夹（pc）
+
+## 分支说明
+主分支：master
+个人分支：
+|user|branch|
+|:---:|:---:|
+|rgm-89sc|rgm|
+
+> 注：各用户自建属于个人的分支进行更新代码，master用于合并，若欲更新他人分支请新建分支
