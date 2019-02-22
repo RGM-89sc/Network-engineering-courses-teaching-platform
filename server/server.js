@@ -18,7 +18,7 @@ logger.level = 'debug';
 connectDB('mongodb://localhost:27017/ncw', { useNewUrlParser: true });
 
 app.use(cors({
-  origin: '*',
+  origin: 'http://localhost:8082', 
   exposeHeaders: ['WWW-Authenticate', 'Server-Authorization'],
   maxAge: 5,
   credentials: true,

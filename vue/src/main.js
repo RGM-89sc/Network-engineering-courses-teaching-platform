@@ -1,7 +1,8 @@
 import Vue from 'vue';
 import App from './App.vue';
 import router from './router';
-import axios from 'axios';
+import http from './http';
+import getLoginState from './getLoginState';
 import {
   Header,
   Menu,
@@ -19,11 +20,18 @@ import {
   Dropdown,
   DropdownMenu,
   DropdownItem,
+  Table,
+  TableColumn,
+  Upload,
+  Dialog,
+  MessageBox,
+  InputNumber,
+  Loading,
+  ColorPicker,
+  Slider
 } from 'element-ui';
 
 Vue.config.productionTip = false;
-
-Vue.prototype.$http = axios;
 
 Vue.prototype.$ELEMENT = { size: 'large', zIndex: 3000 };
 
@@ -42,20 +50,25 @@ Vue.use(Button);
 Vue.use(Dropdown);
 Vue.use(DropdownMenu);
 Vue.use(DropdownItem);
+Vue.use(Table);
+Vue.use(TableColumn);
+Vue.use(Upload);
+Vue.use(Dialog);
+Vue.use(InputNumber);
+Vue.use(Loading.directive);
+Vue.use(ColorPicker);
+Vue.use(Slider);
 
+Vue.prototype.$loading = Loading.service;
 Vue.prototype.$message = Message;
+Vue.prototype.$alert = MessageBox.alert;
+Vue.prototype.$confirm = MessageBox.confirm;
 
-Vue.prototype.$getLoginState = function () {
-  let loginState;
-  decodeURI(document.cookie)
-    .split(";")
-    .forEach(value => {
-      if (/loginState=/.test(value)) {
-        loginState = JSON.parse(value.split("=")[1]);
-      }
-    });
-    return loginState;
-};
+Vue.prototype.$http = http;
+
+Vue.prototype.$getLoginState = getLoginState;
+
+Vue.prototype.$serverBaseUrl = 'http://localhost:9000';
 
 new Vue({
   router,

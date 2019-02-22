@@ -15,7 +15,8 @@ const tchSchema = new mongoose.Schema({
     require: true
   },
   faculty: {
-    type: String
+    type: String,
+    require: true,
   },
   teaching: {
     type: Array,

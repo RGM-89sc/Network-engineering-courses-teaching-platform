@@ -4,7 +4,7 @@
 
     <el-main @login="updateLoginState">
       <transition name="slide-fade">
-        <router-view></router-view>
+        <router-view :user="user"></router-view>
       </transition>
     </el-main>
   </div>

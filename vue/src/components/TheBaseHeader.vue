@@ -1,6 +1,6 @@
 <template>
   <el-header>
-    <el-menu :default-active="$route.path" class="el-menu-demo" mode="horizontal" :router="true">
+    <el-menu :default-active="$route.path.replace(/(\/[^\/]+)(\/[^\/]+$)/, '$1')" class="el-menu-demo" mode="horizontal" :router="true">
       <el-menu-item index="/">课程</el-menu-item>
       <el-menu-item index="/library">教学资源</el-menu-item>
       <el-menu-item index="/exercise">作业练习</el-menu-item>

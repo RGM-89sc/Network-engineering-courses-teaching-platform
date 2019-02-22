@@ -39,8 +39,15 @@ module.exports = app => {
   router.post('/updateStuInfo', auth.tch, app.controllers.teacher.updateStuInfo);
   // 教师更改头像
   router.post('/tchChangeAvatar', auth.tch, app.controllers.teacher.changeAvatar);
-  // 学生修改密码
+  // 教师修改密码
   router.post('/tchChangePW', auth.tch, app.controllers.teacher.changePW);
+
+  // 教师上传资源
+  router.post('/updateResources', auth.tch, app.controllers.resources.updateResources);
+  // 教师删除单个资源
+  router.post('/delResources', auth.tch, app.controllers.resources.delResource);
+  // 获取资源
+  router.post('/getResources', app.controllers.resources.getResources);
 
 
   // 登录认证状态测试

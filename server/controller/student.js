@@ -31,24 +31,22 @@ module.exports = {
         info: '该学号已存在'
       }
     }
-
-    await bcrypt.hash(password, saltRounds).then(async hash => {
-      await db.student.create({
-        id, username, password: hash, faculty, major, grade, sclass
+    const hash = await bcrypt.hash(password, saltRounds);
+    await db.student.create({
+      id, username, password: hash, faculty, major, grade, sclass
+    })
+      .then(docs => {
+        ctx.body = {
+          code: 1,
+          data: omit(docs, ['_id', 'password', '__v'], true)
+        };
       })
-        .then(docs => {
-          ctx.body = {
-            code: 1,
-            data: omit(docs, ['_id', 'password', '__v'], true)
-          };
-        })
-        .catch(err => {
-          ctx.body = {
-            code: -1,
-            errMsg: err.message
-          };
-        });
-    });
+      .catch(err => {
+        ctx.body = {
+          code: -1,
+          errMsg: err.message
+        };
+      });
   },
 
   // 登录
@@ -95,6 +93,7 @@ module.exports = {
       {
         httpOnly: false,
         overwrite: false,
+        maxAge: 0
       }
     );
     ctx.body = {
@@ -136,19 +135,18 @@ module.exports = {
   async changePW(ctx) {
     const { password } = ctx.request.body;
 
-    await bcrypt.hash(password, saltRounds).then(async hash => {
-      await db.student.updateOne({ id: ctx.state.user.id }, { password: hash })
-        .then(docs => {
-          ctx.body = {
-            code: 1
-          };
-        })
-        .catch(err => {
-          ctx.body = {
-            code: -1,
-            errMsg: err.message
-          }
-        });
-    });
+    const hash = await bcrypt.hash(password, saltRounds);
+    await db.student.updateOne({ id: ctx.state.user.id }, { password: hash })
+      .then(docs => {
+        ctx.body = {
+          code: 1
+        };
+      })
+      .catch(err => {
+        ctx.body = {
+          code: -1,
+          errMsg: err.message
+        }
+      });
   }
 };

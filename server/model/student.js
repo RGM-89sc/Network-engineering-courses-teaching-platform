@@ -15,16 +15,20 @@ const stuSchema = new mongoose.Schema({
     require: true
   },
   faculty: {
-    type: String
+    type: String,
+    require: true,
   },
   major: {
-    type: String
+    type: String,
+    require: true,
   },
   grade: {
-    type: Number
+    type: Number,
+    require: true,
   },
   sclass: {
-    type: Number
+    type: Number,
+    require: true,
   },
   avatar: {
     type: String,

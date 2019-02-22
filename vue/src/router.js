@@ -19,8 +19,19 @@ export default new Router({
     },
     {
       path: '/library',
-      name: 'library',
-      component: () => import('./views/Library.vue')
+      component: () => import('./views/Library.vue'),
+      children: [
+        {
+          path: '',
+          name: 'show_resources',
+          component: () => import('./components/Resources.vue')
+        },
+        {
+          path: ':filename',
+          name: 'preview_courseware',
+          component: () => import('./components/PreviewCourseware.vue')
+        }
+      ]
     },
     {
       path: '/exercise',
@@ -40,7 +51,12 @@ export default new Router({
     {
       path: '/myInfo',
       name: 'myInfo',
-      component: () => import('./views/myInfo.vue')
+      component: () => import('./views/MyInfo.vue')
+    },
+    {
+      path: '/emptyPage',
+      name: 'emptyPage',
+      component: () => import('./views/EmptyPage.vue')
     }
   ]
 });
