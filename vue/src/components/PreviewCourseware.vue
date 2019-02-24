@@ -23,7 +23,7 @@
         <i class="el-icon-edit" style="cursor: pointer" title="铅笔" @click="selectPen"></i>
         <el-color-picker size="small" title="选择颜色" v-model="penColor" :predefine="['#000', '#FF0000', '#ff8c00', '#ffd700', '#90ee90', '#00ced1', '#1e90ff', '#c71585']"></el-color-picker>
         <div style="display: inline-block; width: 120px; box-sizing: border-box; padding: 0 15px;">
-          <el-slider v-model="penThickness" :max="10" title="笔尖粗细"></el-slider>
+          <el-slider v-model="penThickness" :min="1" :max="10" title="笔尖粗细"></el-slider>
         </div>
       </el-row>
 
