@@ -40,7 +40,7 @@ export default new Router({
     {
       path: '/myInfo',
       name: 'myInfo',
-      component: () => import('./views/myInfo.vue')
+      component: () => import('./views/MyInfo.vue')
     }
   ]
 });

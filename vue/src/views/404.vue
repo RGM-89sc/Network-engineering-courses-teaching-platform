@@ -1,64 +1,37 @@
 <template>
   <div class="bigCon">
-		<div class="con">
-			<p class="notf">404 Not Found</p>
-			<p class="mes">This is not the web page you are looking for.</p>
-			<span class="reHome">
-				<a href="javascript: void();">返回首页>></a>
-			</span>
-		</div>
-	</div>
+    <div class="con">
+      <p class="notf">404 Not Found</p>
+      <p class="mes">This is not the web page you are looking for.</p>
+      <el-button type="primary" @click="$router.push({ path: '/' })">
+        返回首页
+        <i class="el-icon-d-arrow-right"></i>
+      </el-button>
+    </div>
+  </div>
 </template>
 
 <script>
-export default {
-  
-}
+export default {};
 </script>
 
 <style lang="scss" scoped>
-		* {
-			margin: 0;
-			padding: 0;
-		}
-		html ,
-		body {
-			min-width: 960px;
-			width: 100%;
-			height: 100%;
-		}
-		a {
-			text-decoration: none;
-			color: #fff;
-		}
-		.bigCon {
-			width: 100%;
-			height: 100%;
-		}
-		.con {
-			padding: 8% 10% 0;
-			width: 80%;
-			height: 65%;
-			background-color:#87CEFA;
-		}
-		.con > p {
-			color: #fff;
-		}
-		.notf {
-			font-size: 85px;
-			font-weight: bolder;
-		}
-		.mes {
-			margin-top: 20px;
-			font-size: 38px;
-		}
-		.reHome {
-			display: inline-block;
-			border: 1px solid #fff;
-			padding: 4px 8px;
-			margin-top: 80px;
-		}
-		.reHome > a {
-			font-size: 18px;
-		}
+.bigCon {
+  width: 100%;
+}
+.con {
+  padding: 0 10% 0;
+  width: 80%;
+  height: 65%;
+}
+.notf {
+  font-size: 85px;
+  font-weight: bolder;
+	color: #409EFF;
+}
+.mes {
+  margin: 20px 0 80px;
+  font-size: 38px;
+	color: #606266;
+}
 </style>
