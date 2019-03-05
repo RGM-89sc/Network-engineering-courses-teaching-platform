@@ -28,7 +28,8 @@ import {
   InputNumber,
   Loading,
   ColorPicker,
-  Slider
+  Slider,
+  Card
 } from 'element-ui';
 
 Vue.config.productionTip = false;
@@ -58,6 +59,7 @@ Vue.use(InputNumber);
 Vue.use(Loading.directive);
 Vue.use(ColorPicker);
 Vue.use(Slider);
+Vue.use(Card);
 
 Vue.prototype.$loading = Loading.service;
 Vue.prototype.$message = Message;

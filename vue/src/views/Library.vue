@@ -1,22 +1,24 @@
 <template>
-  <el-row type="flex" justify="center">
-    <el-col :xs="24" :sm="20" :md="16" :lg="14" :xl="12">
-      <router-view :user="user"></router-view>
-    </el-col>
-  </el-row>
+  <MainLayout>
+    <router-view :user="user"></router-view>
+  </MainLayout>
 </template>
 
 <script>
+import MainLayout from '../components/MainLayout';
+
 export default {
   props: {
     user: {
       type: Object,
       default: {}
     }
+  },
+  components: {
+    MainLayout
   }
 };
 </script>
 
 <style lang="scss" scoped>
-
 </style>

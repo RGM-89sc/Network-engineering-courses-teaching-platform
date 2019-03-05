@@ -14,8 +14,14 @@ export default new Router({
     },
     {
       path: '/',
-      name: 'course',
-      component: () => import('./views/Course.vue')
+      component: () => import('./views/Course.vue'),
+      children: [
+        {
+          path: '',
+          name: 'all_course',
+          component: () => import('./components/AllCourse.vue')
+        }
+      ]
     },
     {
       path: '/library',
