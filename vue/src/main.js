@@ -2,6 +2,8 @@ import Vue from 'vue';
 import App from './App.vue';
 import router from './router';
 import axios from 'axios';
+import CKEditor from '@ckeditor/ckeditor5-vue';
+import '@ckeditor/ckeditor5-build-classic/build/translations/zh-cn.js';
 import {
   Header,
   Menu,
@@ -19,7 +21,11 @@ import {
   Dropdown,
   DropdownMenu,
   DropdownItem,
+  Pagination,
+  Table,
+  TableColumn
 } from 'element-ui';
+
 
 Vue.config.productionTip = false;
 
@@ -27,6 +33,9 @@ Vue.prototype.$http = axios;
 
 Vue.prototype.$ELEMENT = { size: 'large', zIndex: 3000 };
 
+Vue.use(TableColumn);
+Vue.use(CKEditor);
+Vue.use(Table);
 Vue.use(Header);
 Vue.use(Menu);
 Vue.use(MenuItem);
@@ -42,7 +51,8 @@ Vue.use(Button);
 Vue.use(Dropdown);
 Vue.use(DropdownMenu);
 Vue.use(DropdownItem);
-
+Vue.use(Pagination);
+//富文本编辑器
 Vue.prototype.$message = Message;
 
 Vue.prototype.$getLoginState = function () {
