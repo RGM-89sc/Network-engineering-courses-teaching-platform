@@ -56,7 +56,7 @@
 
 <script>
 import pdf from 'vue-pdf';
-import PDFViewerSkeleton from './skeleton/PDFViewer';
+import PDFViewerSkeleton from '../../components/skeleton/PDFViewer';
 
 export default {
   data() {

@@ -6,5 +6,6 @@ server/public/static/courseware/*
 server/public/static/img/avatar/*
 server/public/static/img/exam/*
 server/public/static/img/post/*
+server/public/static/img/courses/*
 server/public/static/software/*
 server/public/static/video/*

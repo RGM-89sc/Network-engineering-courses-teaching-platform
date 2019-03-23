@@ -49,6 +49,42 @@ module.exports = app => {
   // 获取资源
   router.post('/getResources', app.controllers.resources.getResources);
 
+  // 添加课程
+  router.post('/addNewCourse', auth.tch, app.controllers.courses.addNewCourse);
+  // 删除课程
+  router.post('/delCourse', auth.tch, app.controllers.courses.delCourse);
+  // 获取全部课程
+  router.get('/getCourses', app.controllers.courses.getCourses);
+  // 获取课程详情
+  router.post('/getCourseDetail', app.controllers.courses.getCourseDetail);
+
+  // 给课程添加章节
+  router.post('/addChapterToCourse', auth.tch, app.controllers.courses.addChapter);
+  // 删除课程章节
+  router.post('/delChapter', auth.tch, app.controllers.courses.delChapter);
+
+  // 添加/更新课程章节单元
+  router.post('/updatePart', auth.tch, app.controllers.courses.updatePart);
+  // 获取课程章节单元信息
+  router.post('/getPartDetail', auth.tch, app.controllers.courses.getPartDetail);
+  // 获取课程章节单元信息（不需要权限，用于直接查看内容）
+  router.post('/getPartDetailNoAuth', app.controllers.courses.getPartDetailNoAuth);
+
+  // 删除课程章节单元
+  router.post('/delPart', auth.tch, app.controllers.courses.delPart);
+
+  // 给课程添加插图
+  router.post('/uploadCourseImg', app.controllers.courses.uploadCourseImg);
+  // 给课程添加视频，接收视频文件分片
+  router.post('/uploadCourseVideoChunks', auth.tch, app.controllers.courses.uploadCourseVideoChunks);
+  // 给课程添加视频，合并视频文件分片
+  router.post('/mergeCourseVideoChunks', auth.tch, app.controllers.courses.mergeCourseVideoChunks);
+  // 删除课程视频
+  router.post('/delCourseVideo', auth.tch, app.controllers.courses.delCourseVideo);
+
+  // 学生开始学习课程
+  router.post('/startStudy', auth.stu, app.controllers.student.startStudy);
+  
 
   // 登录认证状态测试
   router.get('/testAuth', auth.all, (ctx) => {

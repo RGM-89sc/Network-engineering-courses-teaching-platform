@@ -148,5 +148,53 @@ module.exports = {
           errMsg: err.message
         }
       });
+  },
+
+  async startStudy(ctx) {
+    const { courseID } = ctx.request.body;
+    const stu = ctx.state.user;
+
+    const stuStudy = await db.student.findOne({ id: stu.id });
+    const isStudiedOrStudying = stuStudy.study.some(s => {
+      return s.courseID === courseID;
+    });
+    if (isStudiedOrStudying) {
+      return ctx.body = {
+        code: 1
+      }
+    }
+
+    await db.student.updateOne(
+      { id: stu.id },
+      {
+        $push: {
+          study: {
+            courseID
+          }
+        }
+      }
+    ).then(async docs => {
+      await db.courses.updateOne(
+        { courseID },
+        {
+          $push: {
+            stus: {
+              id: stu.id,
+              avatar: stu.avatar,
+              username: stu.username
+            }
+          }
+        }
+      );
+    }).then(docs => {
+      return ctx.body = {
+        code: 1
+      };
+    }).catch(err => {
+      return ctx.body = {
+        code: -1,
+        errMsg: err.message
+      }
+    });
   }
 };

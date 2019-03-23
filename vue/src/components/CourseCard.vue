@@ -1,18 +1,17 @@
 <template>
-  <el-card class="course" :body-style="{ padding: '15px' }" shadow="hover">
+  <el-card class="course" :body-style="{ padding: '15px' }">
     <div class="cover">
-      <img :src="course.cover" style="width: 100%;">
+      <img :src="$serverBaseUrl + course.cover" style="width: 100%;">
     </div>
     <div>
-      <span class="title">{{course.title}}</span>
-      <span class="teacher">教师：{{course.teacher}}</span>
+      <span class="title">{{course.coursename}}</span>
+      <span class="teacher">教师：{{course.tch[0].username}}</span>
       <div class="control">
-        <el-button type="text" class="button">进入课程</el-button>
+        <el-button type="text" class="button" @click="$router.push({ path: `/course/${course.courseID}` })">进入课程</el-button>
       </div>
     </div>
   </el-card>
 </template>
-
 
 <script>
 export default {

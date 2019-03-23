@@ -19,7 +19,22 @@ export default new Router({
         {
           path: '',
           name: 'all_course',
-          component: () => import('./components/AllCourse.vue')
+          component: () => import('./views/childrenViews/AllCourse.vue')
+        },
+        {
+          path: '/course/:course_id',
+          name: 'course_detail',
+          component: () => import('./views/childrenViews/CourseDetail.vue')
+        },
+        {
+          path: '/course/:course_id/pd',
+          name: 'course_part_detail',
+          component: () => import('./views/childrenViews/CoursePartDetail.vue')
+        },
+        {
+          path: '/editCourse',
+          name: 'edit_chapter',
+          component: () => import('./views/childrenViews/editCourse.vue'),
         }
       ]
     },
@@ -30,12 +45,12 @@ export default new Router({
         {
           path: '',
           name: 'show_resources',
-          component: () => import('./components/Resources.vue')
+          component: () => import('./views/childrenViews/Resources.vue')
         },
         {
           path: ':filename',
           name: 'preview_courseware',
-          component: () => import('./components/PreviewCourseware.vue')
+          component: () => import('./views/childrenViews/PreviewCourseware.vue')
         }
       ]
     },

@@ -2,25 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const db = require('../tools/mountModel');
 const omit = require('../tools/omitObjProp');
-
-function encodeFilename(filename) {
-  return filename.replace('+', '%2B')
-    .replace(' ', '-')
-    .replace('/', '%2F')
-    .replace('?', '%3F')
-    .replace('#', '%23')
-    .replace('&', '%26')
-    .replace('=', '%3D');
-}
-
-function decodeFilename(filename) {
-  return filename.replace('%2B', '+')
-    .replace('%2F', '/')
-    .replace('%3F', '?')
-    .replace('%23', '#')
-    .replace('%26', '&')
-    .replace('%3D', '=');
-}
+const { decodeFilename, encodeFilename } = require('../tools/filenameTools');
 
 module.exports = {
   async updateResources(ctx) {

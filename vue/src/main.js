@@ -3,6 +3,7 @@ import App from './App.vue';
 import router from './router';
 import http from './http';
 import getLoginState from './getLoginState';
+import CKEditor from '@ckeditor/ckeditor5-vue';
 import {
   Header,
   Menu,
@@ -29,12 +30,16 @@ import {
   Loading,
   ColorPicker,
   Slider,
-  Card
+  Card,
+  Timeline,
+  TimelineItem,
 } from 'element-ui';
 
 Vue.config.productionTip = false;
 
 Vue.prototype.$ELEMENT = { size: 'large', zIndex: 3000 };
+
+Vue.use(CKEditor);
 
 Vue.use(Header);
 Vue.use(Menu);
@@ -60,6 +65,8 @@ Vue.use(Loading.directive);
 Vue.use(ColorPicker);
 Vue.use(Slider);
 Vue.use(Card);
+Vue.use(Timeline);
+Vue.use(TimelineItem);
 
 Vue.prototype.$loading = Loading.service;
 Vue.prototype.$message = Message;

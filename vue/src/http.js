@@ -5,6 +5,8 @@ const http = axios.create({
   withCredentials: true // 允许携带cookie
 });
 
+http.all = axios.all;
+
 //添加请求拦截器
 http.interceptors.request.use(config => {
   // 在发送请求之前做些什么
