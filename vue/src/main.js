@@ -4,6 +4,8 @@ import router from './router';
 import http from './http';
 import getLoginState from './getLoginState';
 import CKEditor from '@ckeditor/ckeditor5-vue';
+import dayjs from 'dayjs';
+import 'dayjs/locale/zh-cn';
 import {
   Header,
   Menu,
@@ -33,6 +35,10 @@ import {
   Card,
   Timeline,
   TimelineItem,
+  RadioGroup,
+  Radio,
+  CheckboxGroup,
+  Checkbox
 } from 'element-ui';
 
 Vue.config.productionTip = false;
@@ -67,6 +73,10 @@ Vue.use(Slider);
 Vue.use(Card);
 Vue.use(Timeline);
 Vue.use(TimelineItem);
+Vue.use(RadioGroup);
+Vue.use(Radio);
+Vue.use(CheckboxGroup);
+Vue.use(Checkbox);
 
 Vue.prototype.$loading = Loading.service;
 Vue.prototype.$message = Message;
@@ -76,6 +86,8 @@ Vue.prototype.$confirm = MessageBox.confirm;
 Vue.prototype.$http = http;
 
 Vue.prototype.$getLoginState = getLoginState;
+dayjs.locale('zh-cn');
+Vue.prototype.$dayjs = dayjs;
 
 Vue.prototype.$serverBaseUrl = 'http://localhost:9000';
 

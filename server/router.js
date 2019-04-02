@@ -84,6 +84,23 @@ module.exports = app => {
 
   // 学生开始学习课程
   router.post('/startStudy', auth.stu, app.controllers.student.startStudy);
+
+  // 创建作业
+  router.post('/addExercisePaper', auth.tch, app.controllers.exercises.addExercisePaper);
+  // 更新作业
+  router.post('/updateExercisePaper', auth.tch, app.controllers.exercises.updateExercisePaper);
+  // 获取某一课程的某一作业
+  router.post('/getExercisePaper', app.controllers.exercises.getExercisePaper);
+  // 获取某一课程的所有作业
+  router.post('/getExercisePapers', app.controllers.exercises.getExercisePapers);
+  // 删除作业
+  router.post('/delExercisePaper', auth.tch, app.controllers.exercises.delExercisePaper);
+  // 上传题目的配图
+  router.post('/uploadQuestionImg', auth.tch, app.controllers.exercises.uploadQuestionImg);
+  // 删除上传的题目配图
+  router.post('/delQuestionImg', auth.tch, app.controllers.exercises.delQuestionImg);
+  // 删除上传的题目所有配图
+  router.post('/delQuestionImgs', auth.tch, app.controllers.exercises.delQuestionImgs);
   
 
   // 登录认证状态测试

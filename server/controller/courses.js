@@ -440,7 +440,10 @@ module.exports = {
         }
         // 删除本次使用的chunk
         setTimeout(() => {
-          fs.unlinkSync(chunkTmpDir + i);
+          const p = chunkTmpDir + i;
+          if (fs.existsSync(p)) {
+            fs.unlinkSync(p);
+          }
         }, 0);
       }
       // 删除chunk的文件夹
@@ -468,7 +471,10 @@ module.exports = {
 
     try {
       setTimeout(() => {
-        fs.unlinkSync(path.join(__dirname, `../public/static/video/content_${courseID}_${chapter}_${part}_${filename}`));
+        const p = path.join(__dirname, `../public/static/video/content_${courseID}_${chapter}_${part}_${filename}`);
+        if (fs.existsSync(p)) {
+          fs.unlinkSync(p);
+        }
       }, 0);
     } catch (e) {
       return ctx.body = {

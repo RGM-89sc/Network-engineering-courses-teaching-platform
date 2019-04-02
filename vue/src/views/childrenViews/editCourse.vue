@@ -291,36 +291,48 @@ export default {
       this.uploadVideoScuessDialogVis = true;
     },
     delVideo(file, fileList) {
+      // 只要用户点击了删除，进入了这个文件，文件都会消失，但数据还在，所以下面这两行代码是为了更新一下响应，躲过这个“bug”
+      this.videoes.push({});
+      this.videoes.pop();
+
       this.$confirm('此操作将删除该视频, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
-      }).then(() => {
-        this.$http
-          .post('/api/delCourseVideo', {
-            filename: file.name,
-            courseID: this.courseID,
-            chapter: this.chapter,
-            part: this.part
-          })
-          .then(res => {
-            if (res.data.code === 1) {
-              this.$message({
-                type: 'success',
-                message: '删除成功!'
-              });
-            }
-            if (res.data.code === -1) {
-              this.$alert('发生了错误导致视频删除失败', '删除失败', {
-                confirmButtonText: '确定'
-              });
-              console.log(res.data.errMsg);
-            }
-          })
-          .catch(err => {
-            console.log(err);
-          });
-      });
+      })
+        .then(() => {
+          this.$http
+            .post('/api/delCourseVideo', {
+              filename: file.name,
+              courseID: this.courseID,
+              chapter: this.chapter,
+              part: this.part
+            })
+            .then(res => {
+              if (res.data.code === 1) {
+                this.$message({
+                  type: 'success',
+                  message: '删除成功!'
+                });
+                this.videoes = this.videoes.filter(video => {
+                  if (video.name === file.name) {
+                    return false;
+                  }
+                  return true;
+                });
+              }
+              if (res.data.code === -1) {
+                this.$alert('发生了错误导致视频删除失败', '删除失败', {
+                  confirmButtonText: '确定'
+                });
+                console.log(res.data.errMsg);
+              }
+            })
+            .catch(err => {
+              console.log(err);
+            });
+        })
+        .catch(err => {});
     },
     copyUploadVideoScuessUrl() {
       const input = document.getElementById('uploaded-video-url');
