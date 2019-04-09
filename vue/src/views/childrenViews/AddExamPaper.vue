@@ -21,42 +21,54 @@
             <el-option label="多选题" value="Multiple"></el-option>
           </el-select>
         </el-input>
-        <MultipleChoice
+        <ExamMultipleChoice
           :questionType="choiceQuestion.questionType"
           :courseid="courseID"
-          :exerciseid="exerciseID"
+          :exerciseid="examID"
           :questionid="choiceQuestion.id"
           v-model="choiceQuestion.detail"
           class="question-setting"
-        ></MultipleChoice>
+        ></ExamMultipleChoice>
       </el-card>
     </el-row>
     <el-row class="control">
       <el-button plain @click="addQuestion">添加题目</el-button>
     </el-row>
-    <el-row class="add-exerise">
-      <el-col :span="20">
-        <el-input placeholder="请输入作业名称（必填）" v-model="exerciseName">
-          <template slot="prepend">作业名称：</template>
-        </el-input>
-      </el-col>
-      <el-col :span="4" style="text-align: right;">
-        <el-button type="primary" @click="addExercisePaper">创建作业</el-button>
-      </el-col>
+    <el-row class="add-exam">
+      <el-form label-width="100px">
+        <el-form-item label="考试名称：">
+          <el-input placeholder="请输入作业名称（必填）" v-model="examName"></el-input>
+        </el-form-item>
+        <el-form-item label="考试时长：">
+          <el-input-number :min="30" v-model="examTiming" :step="5"></el-input-number>
+        </el-form-item>
+        <el-form-item label="考试有效期：">
+          <el-date-picker
+            v-model="startEndTime"
+            type="datetimerange"
+            range-separator="至"
+            start-placeholder="开始日期"
+            end-placeholder="结束日期"
+          ></el-date-picker>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="addExamPaper">发布考试</el-button>
+        </el-form-item>
+      </el-form>
     </el-row>
   </div>
 </template>
 
 <script>
-import MultipleChoice from '../../components/MultipleChoiceEdit';
+import ExamMultipleChoice from '../../components/ExamMultipleChoiceEdit';
 import uuid from 'uuid/v4';
 
 export default {
   data() {
     return {
       courseID: '',
-      exerciseID: '',
-      exerciseName: '',
+      examID: '',
+      examName: '',
       choiceQuestions: [
         {
           id: 0,
@@ -64,7 +76,9 @@ export default {
           problem: '',
           detail: {}
         }
-      ]
+      ],
+      startEndTime: [new Date(), new Date()],
+      examTiming: 60
     };
   },
   props: {
@@ -75,7 +89,7 @@ export default {
   },
   created() {
     this.courseID = this.$route.params.course_id;
-    this.exerciseID = uuid()
+    this.examID = uuid()
       .split('-')
       .join('');
   },
@@ -111,24 +125,41 @@ export default {
         return false;
       });
     },
-    addExercisePaper() {
-      this.$confirm('此操作将创建作业, 是否继续?', '提示', {
+    addExamPaper() {
+      this.$confirm('考试发布后无法修改, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       })
         .then(() => {
-          if (this.checkQuestionsInfo() && this.exerciseName) {
+          if (
+            (this.startEndTime[1] - this.startEndTime[0]) / 1000 / 60 <
+            this.examTiming
+          ) {
+            this.$message({
+              message: '考试有效期不能少于考试时长！',
+              type: 'error'
+            });
+          }
+          if (
+            this.checkQuestionsInfo() &&
+            this.examName &&
+            this.startEndTime.length === 2 &&
+            this.examTiming
+          ) {
             this.$http
-              .post('/api/addExercisePaper', {
+              .post('/api/addExamPaper', {
                 courseID: this.courseID,
-                exerciseID: this.exerciseID,
-                exerciseName: this.exerciseName,
-                choiceQuestions: this.choiceQuestions
+                examID: this.examID,
+                examName: this.examName,
+                choiceQuestions: this.choiceQuestions,
+                startTime: this.startEndTime[0],
+                endTime: this.startEndTime[1],
+                examTiming: this.examTiming
               })
               .then(res => {
                 if (res.data.code === 1) {
-                  this.$router.replace({ path: `/exercise/${this.courseID}` });
+                  this.$router.replace({ path: `/exam/${this.courseID}` });
                 }
                 if (res.data.code === -1) {
                   this.$alert('发生了错误导致创建失败', '创建失败', {
@@ -191,7 +222,7 @@ export default {
     }
   },
   components: {
-    MultipleChoice
+    ExamMultipleChoice
   }
 };
 </script>
@@ -220,7 +251,7 @@ export default {
   text-align: center;
   margin-bottom: 30px;
 }
-.add-exerise {
+.add-exam {
   padding-top: 20px;
   border-top: 1px solid #ddd;
   margin-bottom: 20vh;

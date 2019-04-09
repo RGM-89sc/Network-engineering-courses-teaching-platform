@@ -63,7 +63,7 @@
         </el-row>
       </el-card>
     </el-row>
-    <el-row type="flex" justify="center">
+    <el-row type="flex" justify="center" class="submit">
       <el-button type="primary" @click="checkAnswer">提 交</el-button>
     </el-row>
   </div>
@@ -100,9 +100,6 @@ export default {
     }
   },
   methods: {
-    test() {
-      console.log(this.userAnswer);
-    },
     getExercisePaper() {
       this.$http
         .post('/api/getExercisePaper', {
@@ -253,5 +250,9 @@ export default {
 
 .red-font {
   color: red;
+}
+
+.submit {
+  margin-bottom: 100px;
 }
 </style>

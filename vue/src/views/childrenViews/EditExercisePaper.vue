@@ -83,9 +83,6 @@ export default {
     }
   },
   methods: {
-    test() {
-      console.log(this.choiceQuestions);
-    },
     // 检查表单必填项是否都已填好
     checkQuestionsInfo() {
       // 检查选项内容是否都填好了

@@ -24,17 +24,20 @@ export default new Router({
         {
           path: '/course/:course_id',
           name: 'course_detail',
-          component: () => import('./views/childrenViews/CourseDetail.vue')
+          component: () => import('./views/childrenViews/CourseDetail.vue'),
+          meta: { auth: 'all' }
         },
         {
           path: '/course/:course_id/pd',
           name: 'course_part_detail',
-          component: () => import('./views/childrenViews/CoursePartDetail.vue')
+          component: () => import('./views/childrenViews/CoursePartDetail.vue'),
+          meta: { auth: 'all' }
         },
         {
           path: '/editCourse',
           name: 'edit_chapter',
           component: () => import('./views/childrenViews/EditCourse.vue'),
+          meta: { auth: 'tch' }
         }
       ]
     },
@@ -45,7 +48,8 @@ export default new Router({
         {
           path: '',
           name: 'show_resources',
-          component: () => import('./views/childrenViews/Resources.vue')
+          component: () => import('./views/childrenViews/Resources.vue'),
+          meta: { auth: 'all' }
         },
         {
           path: ':filename',
@@ -71,12 +75,14 @@ export default new Router({
         {
           path: ':course_id/addExercisePaper',
           name: 'add_exercise_paper',
-          component: () => import('./views/childrenViews/AddExercisePaper.vue')
+          component: () => import('./views/childrenViews/AddExercisePaper.vue'),
+          meta: { auth: 'tch' }
         },
         {
           path: ':course_id/editExercisePaper',
           name: 'edit_exercise_paper',
-          component: () => import('./views/childrenViews/EditExercisePaper.vue')
+          component: () => import('./views/childrenViews/EditExercisePaper.vue'),
+          meta: { auth: 'tch' }
         },
         {
           path: ':course_id/exercisePaper',
@@ -87,8 +93,31 @@ export default new Router({
     },
     {
       path: '/exam',
-      name: 'exam',
-      component: () => import('./views/Exam.vue')
+      component: () => import('./views/Exam.vue'),
+      children: [
+        {
+          path: '',
+          name: 'all_exam',
+          component: () => import('./views/childrenViews/AllExam.vue')
+        },
+        {
+          path: ':course_id',
+          name: 'course_exam',
+          component: () => import('./views/childrenViews/CourseExam.vue')
+        },
+        {
+          path: ':course_id/addExamPaper',
+          name: 'add_exam_paper',
+          component: () => import('./views/childrenViews/AddExamPaper.vue'),
+          meta: { auth: 'tch' }
+        },
+        {
+          path: ':course_id/examPaper',
+          name: 'show_exam_paper',
+          component: () => import('./views/childrenViews/ExamPaper.vue'),
+          meta: { auth: 'all' }
+        }
+      ]
     },
     {
       path: '/qa',
@@ -97,12 +126,12 @@ export default new Router({
     },
     {
       path: '/myInfo',
-      name: 'myInfo',
+      name: 'my_info',
       component: () => import('./views/MyInfo.vue')
     },
     {
       path: '/emptyPage',
-      name: 'emptyPage',
+      name: 'empty_page',
       component: () => import('./views/EmptyPage.vue')
     }
   ]

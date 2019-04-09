@@ -56,7 +56,7 @@ module.exports = app => {
   // 获取全部课程
   router.get('/getCourses', app.controllers.courses.getCourses);
   // 获取课程详情
-  router.post('/getCourseDetail', app.controllers.courses.getCourseDetail);
+  router.post('/getCourseDetail', auth.all, app.controllers.courses.getCourseDetail);
 
   // 给课程添加章节
   router.post('/addChapterToCourse', auth.tch, app.controllers.courses.addChapter);
@@ -74,7 +74,7 @@ module.exports = app => {
   router.post('/delPart', auth.tch, app.controllers.courses.delPart);
 
   // 给课程添加插图
-  router.post('/uploadCourseImg', app.controllers.courses.uploadCourseImg);
+  router.post('/uploadCourseImg', auth.tch, app.controllers.courses.uploadCourseImg);
   // 给课程添加视频，接收视频文件分片
   router.post('/uploadCourseVideoChunks', auth.tch, app.controllers.courses.uploadCourseVideoChunks);
   // 给课程添加视频，合并视频文件分片
@@ -101,6 +101,27 @@ module.exports = app => {
   router.post('/delQuestionImg', auth.tch, app.controllers.exercises.delQuestionImg);
   // 删除上传的题目所有配图
   router.post('/delQuestionImgs', auth.tch, app.controllers.exercises.delQuestionImgs);
+
+  // 创建考试
+  router.post('/addExamPaper', auth.tch, app.controllers.exams.addExamPaper);
+  // 设置考试
+  router.post('/updateExamPaper', auth.tch, app.controllers.exams.updateExamPaper);
+  // 获取某一课程的某一考试
+  router.post('/getExamPaper', app.controllers.exams.getExamPaper);
+  // 获取某一课程的所有考试
+  router.post('/getExamPapers', app.controllers.exams.getExamPapers);
+  // 删除考试
+  router.post('/delExamPaper', auth.tch, app.controllers.exams.delExamPaper);
+  // 上传题目的配图
+  router.post('/uploadQuestionImg', auth.tch, app.controllers.exams.uploadQuestionImg);
+  // 删除上传的题目配图
+  router.post('/delQuestionImg', auth.tch, app.controllers.exams.delQuestionImg);
+  // 删除上传的题目所有配图
+  router.post('/delQuestionImgs', auth.tch, app.controllers.exams.delQuestionImgs);
+  // 考试评分
+  router.post('/handIn', auth.all, app.controllers.exams.handIn);
+  // 检查是否可以进入考试
+  router.post('/checkStuCanEnterExam', auth.all, app.controllers.exams.checkStuCanEnterExam);
   
 
   // 登录认证状态测试

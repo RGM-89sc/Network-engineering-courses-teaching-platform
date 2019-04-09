@@ -43,7 +43,6 @@
 export default {
   data() {
     return {
-      src: require('../assets/logo.png'),
       checkingAllStu: false
     };
   },

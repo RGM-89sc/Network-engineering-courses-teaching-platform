@@ -56,7 +56,7 @@ export default {
   },
   created() {
     this.courseID = this.$route.params.course_id;
-    this.coursename = window.localStorage.getItem('exercises.current_coursename');
+    this.coursename = window.sessionStorage.getItem('exercises.current_coursename');
     this.getExercisePapers();
   },
   methods: {

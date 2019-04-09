@@ -129,22 +129,10 @@ export default {
     }
   },
   created() {
-    this.auth();
     this.courseID = this.$route.params.course_id;
     this.getCourseDetail();
   },
   methods: {
-    auth() {
-      if (!this.user.id) {
-        // 未登录
-        return this.$router.replace({ path: '/auth' })
-      }
-      if (this.user.userType === 0) {
-        // 学生
-        
-
-      }
-    },
     getMaxPartID(part) {
       let ids = [];
       part.forEach(p => {
