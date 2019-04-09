@@ -39,7 +39,8 @@ import {
   Radio,
   CheckboxGroup,
   Checkbox,
-  DatePicker
+  DatePicker,
+  Tag
 } from 'element-ui';
 
 Vue.config.productionTip = false;
@@ -79,6 +80,7 @@ Vue.use(Radio);
 Vue.use(CheckboxGroup);
 Vue.use(Checkbox);
 Vue.use(DatePicker);
+Vue.use(Tag);
 
 Vue.prototype.$loading = Loading.service;
 Vue.prototype.$message = Message;

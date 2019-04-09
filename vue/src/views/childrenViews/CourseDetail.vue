@@ -37,6 +37,7 @@
                     class="part-title"
                     @click="$router.push({ path: `/course/${courseID}/pd?c=${ch.id}&p=${part.id}` })"
                   >{{part.title}}</span>
+                  <el-tag type="success" size="small" class="last-read" v-if="lastread[0] === ch.id && lastread[1] === part.id">上次看到这里</el-tag>
                 </el-col>
                 <el-col v-if="user.userType === 1" :span="6" class="control">
                   <el-button
@@ -119,7 +120,8 @@ export default {
         stamp: '',
         part: []
       },
-      addChapter: false
+      addChapter: false,
+      lastread: []
     };
   },
   props: {
@@ -161,6 +163,10 @@ export default {
         .then(res => {
           if (res.data.code === 1) {
             this.courseDetail = res.data.data;
+            const lastread = JSON.parse(window.localStorage.getItem(`course.${this.courseID}.lastread.part`));
+            if (lastread) {
+              this.lastread = lastread;
+            }
           }
         })
         .catch(err => {
@@ -321,6 +327,10 @@ export default {
 
     .part-title {
       cursor: pointer;
+    }
+
+    .last-read {
+      margin-left: 20px;
     }
   }
 

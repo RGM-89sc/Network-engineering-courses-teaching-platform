@@ -74,7 +74,8 @@ export default {
       choiceQuestions: [],
       userAnswer: {},
       examTiming: 60,
-      countdown: ''
+      countdown: '',
+      haveBeenHandIn: false
     };
   },
   created() {
@@ -94,33 +95,23 @@ export default {
     }
   },
   beforeRouteLeave(to, from, next) {
-    if (this.countdown !== '00:00:00') {
-      // 缓存答题进度和倒计时
-      window.localStorage.setItem(`exam.${this.examID}.countdown`, this.countdown);
+    if (!this.haveBeenHandIn && this.countdown !== '00:00:00') {
+      this.$confirm('考试途中不能退出, 是否交卷?', '提示', {
+        confirmButtonText: '交卷',
+        cancelButtonText: '取消',
+        type: 'warning'
+      })
+        .then(() => {
+          this.handInExamPaper();
+        })
+        .catch(() => {});
     }
-    window.localStorage.setItem(
-      `exam.${this.examID}.userAnswer`,
-      JSON.stringify(this.userAnswer)
-    );
-    next();
+    if (this.haveBeenHandIn) {
+      next();
+    }
   },
   methods: {
-    initUserAnswer() {
-      const userAnswer = JSON.parse(
-        window.localStorage.getItem(`exam.${this.examID}.userAnswer`)
-      );
-      if (userAnswer) {
-        Object.entries(userAnswer).forEach(([key, value]) => {
-          this.$set(this.userAnswer, key, value);
-        });
-      }
-    },
     initCountdown() {
-      const countdownFromLS = window.localStorage.getItem(`exam.${this.examID}.countdown`);
-      if (countdownFromLS) {
-        this.countdown = countdownFromLS;
-        return null;
-      }
       const hour = Math.floor(this.examTiming / 60);
       const mins = this.examTiming % 60;
       this.countdown = `${hour < 10 ? '0' + hour : hour}:${
@@ -181,7 +172,6 @@ export default {
             this.examTiming = res.data.data.examTiming;
             this.initCountdown();
             this.countdownTime();
-            this.initUserAnswer();
           }
           if (res.data.code === -1) {
             console.log(res.data.errMsg);
@@ -217,12 +207,11 @@ export default {
         })
         .then(res => {
           if (res.data.code === 1) {
-            window.localStorage.removeItem(`exam.${this.examID}.userAnswer`);
-            window.localStorage.removeItem(`exam.${this.examID}.countdown`);
+            this.haveBeenHandIn = true;
             this.$alert(`您的成绩为${res.data.data.score}`, '您的成绩', {
               confirmButtonText: '确定',
               callback: action => {
-                this.$router.push({ path: `/exam/${this.courseID}` });
+                this.$router.replace({ path: `/exam/${this.courseID}` });
               }
             });
           }

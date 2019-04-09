@@ -37,6 +37,10 @@ export default {
       this.startStudy();
     }
   },
+  beforeRouteLeave(to, from, next) {
+    window.localStorage.setItem(`course.${this.courseID}.lastread.part`, `[${this.chapter},${this.part}]`);
+    next();
+  },
   methods: {
     startStudy() {
       this.$http
