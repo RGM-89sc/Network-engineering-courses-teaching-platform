@@ -36,6 +36,7 @@
               v-for="selection in choiceQuestion.detail.selections"
               :key="selection.id"
               :label="selection.id"
+              @change="radio"
               class="question-selection"
             >{{selection.content}}</el-radio>
           </el-radio-group>
@@ -78,6 +79,12 @@ export default {
       haveBeenHandIn: false
     };
   },
+  props: {
+    user: {
+      type: Object,
+      default: {}
+    }
+  },
   created() {
     this.courseID = this.$route.params.course_id;
     this.examID = this.$route.query.id;
@@ -111,12 +118,31 @@ export default {
     }
   },
   methods: {
+    initUserAnswer() {
+      const userAnswer = JSON.parse(
+        window.sessionStorage.getItem(
+          `exam.${this.courseID}.${this.examID}.${this.user.id}.userAnswer`
+        )
+      );
+      if (userAnswer && JSON.stringify(userAnswer) !== '{}') {
+        Object.entries(userAnswer).forEach(([key, value]) => {
+          this.$set(this.userAnswer, key, value);
+        });
+      }
+    },
     initCountdown() {
-      const hour = Math.floor(this.examTiming / 60);
-      const mins = this.examTiming % 60;
-      this.countdown = `${hour < 10 ? '0' + hour : hour}:${
-        mins < 10 ? '0' + mins : mins
-      }:00`;
+      const countdown = window.sessionStorage.getItem(
+        `exam.${this.courseID}.${this.examID}.${this.user.id}.countdown`
+      );
+      if (countdown) {
+        this.countdown = countdown;
+      } else {
+        const hour = Math.floor(this.examTiming / 60);
+        const mins = this.examTiming % 60;
+        this.countdown = `${hour < 10 ? '0' + hour : hour}:${
+          mins < 10 ? '0' + mins : mins
+        }:00`;
+      }
     },
     autoEnding() {
       this.$alert('考试已结束，将自动交卷', '考试结束', {
@@ -157,6 +183,14 @@ export default {
         if (s === 0 && h === 0 && m === 15) {
           this.$message('离考试结束还有15分钟，请抓紧时间答题');
         }
+
+        if (s % 10 === 0) {
+          // 10秒缓存一次考试剩余时间
+          window.sessionStorage.setItem(
+            `exam.${this.courseID}.${this.examID}.${this.user.id}.countdown`,
+            this.countdown
+          );
+        }
       }, 1000);
     },
     getExamPaper() {
@@ -171,6 +205,7 @@ export default {
             this.choiceQuestions = res.data.data.choiceQuestions;
             this.examTiming = res.data.data.examTiming;
             this.initCountdown();
+            this.initUserAnswer();
             this.countdownTime();
           }
           if (res.data.code === -1) {
@@ -191,12 +226,22 @@ export default {
           });
         });
     },
+    saveUserAnswerToSS() {
+      window.sessionStorage.setItem(
+        `exam.${this.courseID}.${this.examID}.${this.user.id}.userAnswer`,
+        JSON.stringify(this.userAnswer)
+      );
+    },
+    radio(label) {
+      this.saveUserAnswerToSS();
+    },
     checkbox(id, label) {
       if (Array.isArray(this.userAnswer[id])) {
         this.userAnswer[id] = this.userAnswer[id].sort();
       } else {
         this.$set(this.userAnswer, id, [label]);
       }
+      this.saveUserAnswerToSS();
     },
     handInExamPaper() {
       this.$http
@@ -208,6 +253,13 @@ export default {
         .then(res => {
           if (res.data.code === 1) {
             this.haveBeenHandIn = true;
+            window.sessionStorage.removeItem(
+              `exam.${this.courseID}.${this.examID}.${this.user.id}.userAnswer`
+            );
+            window.sessionStorage.removeItem(
+              `exam.${this.courseID}.${this.examID}.${this.user.id}.countdown`
+            );
+
             this.$alert(`您的成绩为${res.data.data.score}`, '您的成绩', {
               confirmButtonText: '确定',
               callback: action => {

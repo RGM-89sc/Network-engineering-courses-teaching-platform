@@ -1,6 +1,12 @@
 <template>
   <el-header>
-    <el-menu :default-active="$route.path.replace(/(\/[^\/]+)(\/.+$)/, '$1')" class="el-menu-demo" mode="horizontal" :router="true">
+    <el-menu
+      :default-active="path"
+      class="el-menu-demo"
+      mode="horizontal"
+      :router="true"
+      ref="menu"
+    >
       <el-menu-item index="/">课程</el-menu-item>
       <el-menu-item index="/library">教学资源</el-menu-item>
       <el-menu-item index="/exercise">作业练习</el-menu-item>
@@ -26,7 +32,9 @@
 export default {
   name: 'baseHeader',
   data() {
-    return {};
+    return {
+      path: ''
+    };
   },
   props: {
     user: {
@@ -34,6 +42,13 @@ export default {
     }
   },
   created() {},
+  watch: {
+    '$route.path': function() {
+      const path = this.$route.path.replace(/(\/[^\/]+)(\/.+$)/, '$1');
+      this.path = path;
+      this.$refs.menu.activeIndex = path;
+    }
+  },
   methods: {
     logout() {
       let url;
