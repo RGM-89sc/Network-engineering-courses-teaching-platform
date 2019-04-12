@@ -41,6 +41,8 @@ module.exports = app => {
   router.post('/tchChangeAvatar', auth.tch, app.controllers.teacher.changeAvatar);
   // 教师修改密码
   router.post('/tchChangePW', auth.tch, app.controllers.teacher.changePW);
+  // 教师查看自己的信息
+  router.get('/getMyCourses', auth.tch, app.controllers.teacher.getMyCourses);
 
   // 教师上传资源
   router.post('/updateResources', auth.tch, app.controllers.resources.updateResources);
@@ -81,6 +83,9 @@ module.exports = app => {
   router.post('/mergeCourseVideoChunks', auth.tch, app.controllers.courses.mergeCourseVideoChunks);
   // 删除课程视频
   router.post('/delCourseVideo', auth.tch, app.controllers.courses.delCourseVideo);
+  // 获取课程学生的信息
+  router.post('/getCourseStus', auth.tch, app.controllers.courses.getCourseStus);
+  
 
   // 学生开始学习课程
   router.post('/startStudy', auth.stu, app.controllers.student.startStudy);

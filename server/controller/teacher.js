@@ -166,5 +166,14 @@ module.exports = {
           errMsg: err.message
         }
       });
+  },
+
+  async getMyCourses(ctx) {
+    const teaching =  ctx.state.user.teaching || [];
+    
+    ctx.body = {
+      code: 1,
+      data: teaching
+    }
   }
 };

@@ -126,8 +126,19 @@ export default new Router({
     },
     {
       path: '/myInfo',
-      name: 'my_info',
-      component: () => import('./views/MyInfo.vue')
+      component: () => import('./views/MyInfo.vue'),
+      children: [
+        {
+          path: '',
+          name: 'my_courses',
+          component: () => import('./views/childrenViews/MyCourses.vue')
+        },
+        {
+          path: 'courseDetail',
+          name: 'my_course_detail',
+          component: () => import('./views/childrenViews/MyCourseDetail.vue')
+        }
+      ]
     },
     {
       path: '/emptyPage',

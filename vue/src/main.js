@@ -40,7 +40,9 @@ import {
   CheckboxGroup,
   Checkbox,
   DatePicker,
-  Tag
+  Tag,
+  Tabs,
+  TabPane
 } from 'element-ui';
 
 Vue.config.productionTip = false;
@@ -81,6 +83,8 @@ Vue.use(CheckboxGroup);
 Vue.use(Checkbox);
 Vue.use(DatePicker);
 Vue.use(Tag);
+Vue.use(Tabs);
+Vue.use(TabPane);
 
 Vue.prototype.$loading = Loading.service;
 Vue.prototype.$message = Message;

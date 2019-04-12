@@ -44,7 +44,10 @@ export default {
   created() {},
   watch: {
     '$route.path': function() {
-      const path = this.$route.path.replace(/(\/[^\/]+)(\/.+$)/, '$1');
+      let path = this.$route.path.replace(/(\/[^\/]+)(\/.+$)/, '$1');
+      if (path === '/course') {
+        path = '/'
+      }
       this.path = path;
       this.$refs.menu.activeIndex = path;
     }

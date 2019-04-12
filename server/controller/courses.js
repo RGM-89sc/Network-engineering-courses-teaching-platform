@@ -486,5 +486,53 @@ module.exports = {
     ctx.body = {
       code: 1
     }
-  }
+  },
+
+  async getCourseStus(ctx) {
+    const { courseID } = ctx.request.body;
+    const tchID = ctx.state.user.id;
+
+    await db.courses.aggregate([
+      {
+        $match: { courseID, tchID }
+      },
+      {
+        $lookup: {
+          from: "students",
+          localField: "stus.id",
+          foreignField: "id",
+          as: "stus"
+        }
+      },
+      {
+        $project: {
+          _id: 0,
+          __v: 0,
+          content: 0,
+          stus: { 
+            _id: 0,
+            __v: 0,
+            password: 0,
+            created: 0,
+            study: {
+              _id: 0,
+              __v: 0
+            }
+          }
+        }
+      }
+    ])
+      .then(docs => {
+        return ctx.body = {
+          code: 1,
+          data: docs[0]
+        }
+      })
+      .catch(err => {
+        return ctx.body = {
+          code: -1,
+          errMsg: err.message
+        }
+      });
+  },
 };
