@@ -175,5 +175,48 @@ module.exports = {
       code: 1,
       data: teaching
     }
+  },
+  
+  async resetStuExamScore(ctx) {
+    const { stuID, courseID, examID } = ctx.request.body;
+
+    let cIndex;
+    try {
+      const stu = await db.student.findOne({ id: stuID });
+      stu.study.some((s, index) => {
+        if (s.courseID === courseID) {
+          cIndex = index;
+          return true;
+        }
+        return false;
+      });
+    } catch (err) {
+      return ctx.body = {
+        code: -1,
+        errMsg: err.message
+      }
+    }
+
+    await db.student.updateOne(
+      { id: stuID },
+      {
+        $pull: {
+          [`study.${cIndex}.exams`]: {
+            examID
+          }
+        }
+      }
+    )
+      .then(docs => {
+        return ctx.body = {
+          code: 1,
+        };
+      })
+      .catch(err => {
+        return ctx.body = {
+          code: -1,
+          errMsg: err.message
+        };
+      });
   }
 };

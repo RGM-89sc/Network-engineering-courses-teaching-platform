@@ -38,7 +38,7 @@ export default {
     }
   },
   beforeRouteLeave(to, from, next) {
-    window.localStorage.setItem(`course.${this.courseID}.lastread.part`, `[${this.chapter},${this.part}]`);
+    window.localStorage.setItem(`course.${this.courseID}.${this.user.id}.lastread.part`, `[${this.chapter},${this.part}]`);
     next();
   },
   methods: {

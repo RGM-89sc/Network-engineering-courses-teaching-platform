@@ -3,9 +3,7 @@
     <TheBaseHeader :user.sync="user"/>
 
     <el-main @login="updateLoginState">
-      <transition name="slide-fade">
-        <router-view :user="user"></router-view>
-      </transition>
+      <router-view :user="user"></router-view>
     </el-main>
   </div>
 </template>

@@ -196,5 +196,83 @@ module.exports = {
         errMsg: err.message
       }
     });
+  },
+
+  async getMyCourses(ctx) {
+    const stuID = ctx.state.user.id;
+
+    await db.student.aggregate([
+      {
+        $match: { id: stuID }
+      },
+      {
+        $lookup: {
+          from: "courses",
+          localField: "study.courseID",
+          foreignField: "courseID",
+          as: "courses"
+        }
+      },
+      {
+        $project: {
+          _id: 0, __v: 0, password: 0, faculty: 0, major: 0, grade: 0, sclass: 0, avatar: 0, created: 0,
+          courses: { _id: 0, __v: 0, created: 0, stus: 0, content: 0 }
+        }
+      }
+    ])
+      .then(docs => {
+        return ctx.body = {
+          code: 1,
+          data: docs[0]
+        }
+      })
+      .catch(err => {
+        return ctx.body = {
+          code: -1,
+          errMsg: err.message
+        }
+      });
+  },
+
+  async getMyCourseExams(ctx) {
+    const { courseID } = ctx.request.body;
+    const stuID = ctx.state.user.id;
+
+    let stuExam, courseExams;
+    try {
+      const stu = await db.student.findOne({ id: stuID });
+      stu.study.some(s => {
+        if (s.courseID === courseID) {
+          stuExam = s;
+          return true;
+        }
+        return false;
+      });
+
+      courseExams = await db.exams.find({ courseID }, { _id: 0, __v: 0, 'choiceQuestions': 0 });
+    } catch (err) {
+      return ctx.body = {
+        code: -1,
+        errMsg: err.message
+      }
+    }
+
+    await db.courses.findOne({ courseID }, { _id: 0, __v: 0, content: 0, stus: 0, created: 0 })
+      .then(docs => {
+        return ctx.body = {
+          code: 1,
+          data: {
+            course: docs,
+            stu: stuExam,
+            exams: courseExams
+          }
+        }
+      })
+      .catch(err => {
+        return ctx.body = {
+          code: -1,
+          errMsg: err.message
+        }
+      });
   }
 };

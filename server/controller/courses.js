@@ -49,7 +49,15 @@ module.exports = {
   },
 
   async delCourse(ctx) {
-    const { courseID } = ctx.request.body;
+    const { courseID, tchID } = ctx.request.body;
+    const id = ctx.state.user.id;
+
+    if (id !== tchID) {
+      return ctx.body = {
+        code: 0,
+        info: '您没有该操作的权限'
+      }
+    }
 
     await db.courses.deleteOne({ courseID })
       .then(docs => {
@@ -68,7 +76,15 @@ module.exports = {
   },
 
   async delChapter(ctx) {
-    const { courseID, chapter } = ctx.request.body;
+    const { courseID, chapter, tchID } = ctx.request.body;
+    const id = ctx.state.user.id;
+
+    if (id !== tchID) {
+      return ctx.body = {
+        code: 0,
+        info: '您没有该操作的权限'
+      }
+    }
 
     const course = await db.courses.findOne({ courseID });
     let stamp;
@@ -106,7 +122,15 @@ module.exports = {
   },
 
   async delPart(ctx) {
-    const { courseID, chapter, part } = ctx.request.body;
+    const { courseID, chapter, part, tchID } = ctx.request.body;
+    const id = ctx.state.user.id;
+
+    if (id !== tchID) {
+      return ctx.body = {
+        code: 0,
+        info: '您没有该操作的权限'
+      }
+    }
 
     const course = await db.courses.findOne({ courseID });
     let stamp, chapterIndex;
@@ -211,7 +235,15 @@ module.exports = {
   },
 
   async addChapter(ctx) {
-    const { courseID, newChapter } = ctx.request.body;
+    const { courseID, newChapter, tchID } = ctx.request.body;
+    const id = ctx.state.user.id;
+
+    if (id !== tchID) {
+      return ctx.body = {
+        code: 0,
+        info: '您没有该操作的权限'
+      }
+    }
 
     await db.courses.updateOne({ courseID }, {
       $push: {
@@ -232,7 +264,15 @@ module.exports = {
   },
 
   async updatePart(ctx) {
-    const { courseID, chapter, part, title, content } = ctx.request.body;
+    const { courseID, chapter, part, title, content, tchID } = ctx.request.body;
+    const id = ctx.state.user.id;
+
+    if (id !== tchID) {
+      return ctx.body = {
+        code: 0,
+        info: '您没有该操作的权限'
+      }
+    }
 
     let course = await db.courses.findOne({ courseID });
 
@@ -331,6 +371,7 @@ module.exports = {
         }
       });
       partDetail.videoes = partVideoes;
+      partDetail.tchID = course.tchID;
     } catch (e) {
       return ctx.body = {
         code: -1,
@@ -467,7 +508,15 @@ module.exports = {
   },
 
   async delCourseVideo(ctx) {
-    const { filename, courseID, chapter, part } = ctx.request.body;
+    const { filename, courseID, chapter, part, tchID } = ctx.request.body;
+    const id = ctx.state.user.id;
+
+    if (id !== tchID) {
+      return ctx.body = {
+        code: 0,
+        info: '您没有该操作的权限'
+      }
+    }
 
     try {
       setTimeout(() => {
@@ -488,9 +537,19 @@ module.exports = {
     }
   },
 
-  async getCourseStus(ctx) {
+  async getCourseStusAndExams(ctx) {
     const { courseID } = ctx.request.body;
     const tchID = ctx.state.user.id;
+
+    let courseExams;
+    try {
+      courseExams = await db.exams.find({ courseID }, { _id: 0, __v: 0, 'choiceQuestions': 0 });
+    } catch(err) {
+      return ctx.body = {
+        code: -1,
+        errMsg: err.message
+      };
+    }
 
     await db.courses.aggregate([
       {
@@ -525,7 +584,10 @@ module.exports = {
       .then(docs => {
         return ctx.body = {
           code: 1,
-          data: docs[0]
+          data: {
+            course: docs[0],
+            exams: courseExams
+          }
         }
       })
       .catch(err => {

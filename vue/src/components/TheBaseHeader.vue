@@ -42,6 +42,9 @@ export default {
     }
   },
   created() {},
+  mounted() {
+    this.path = '/';
+  },
   watch: {
     '$route.path': function() {
       let path = this.$route.path.replace(/(\/[^\/]+)(\/.+$)/, '$1');

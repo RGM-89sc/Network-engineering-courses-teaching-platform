@@ -100,6 +100,7 @@ export default {
       courseID: '',
       chapter: 0,
       part: 0,
+      tchID: '',
 
       editor: ClassicEditor,
       editorData: '',
@@ -224,6 +225,7 @@ export default {
             this.videoes.forEach(video => {
               this.uploadVideoScuessUrl[video.name] = video.url;
             });
+            this.tchID = res.data.data.tchID;
           }
           if (res.data.code === -1) {
             console.log(res.data.errMsg);
@@ -267,11 +269,18 @@ export default {
               chapter: this.chapter,
               part: this.part,
               title: this.partInfo.title,
-              content: this.editorData
+              content: this.editorData,
+              tchID: this.tchID
             })
             .then(res => {
               if (res.data.code === 1) {
                 this.$router.push({ path: `/course/${this.courseID}` });
+              }
+              if (res.data.code === 0) {
+                this.$message({
+                  message: res.data.info,
+                  type: 'warning'
+                });
               }
               if (res.data.code === -1) {
                 this.$alert('发生了错误导致该操作执行失败', '发生错误', {
@@ -306,7 +315,8 @@ export default {
               filename: file.name,
               courseID: this.courseID,
               chapter: this.chapter,
-              part: this.part
+              part: this.part,
+              tchID: this.tchID
             })
             .then(res => {
               if (res.data.code === 1) {

@@ -9,6 +9,7 @@ const path = require('path');
 const routerInit = require('./router');
 const connectDB = require('./tools/connectDB');
 const randomStr = require('./tools/randomStr');
+const mkdir = require('./tools/mkdir');
 
 const port = 9000;
 const app = new Koa();
@@ -47,6 +48,8 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 routerInit(app);
+
+mkdir();  // 创建资源文件夹
 
 app.on('error', (err, ctx) => {
   logger.error(err);

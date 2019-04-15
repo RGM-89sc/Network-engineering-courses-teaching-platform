@@ -25,7 +25,10 @@ module.exports = app => {
   router.post('/stuChangeAvatar', auth.stu, app.controllers.student.changeAvatar);
   // 学生修改密码
   router.post('/stuChangePW', auth.stu, app.controllers.student.changePW);
-
+  // 学生查看自己的课程信息
+  router.get('/stuGetMyCourses', auth.stu, app.controllers.student.getMyCourses);
+  // 学生查看自己考试的信息
+  router.post('/getMyCourseExams', auth.stu, app.controllers.student.getMyCourseExams);
 
   // 获取教师信息
   router.post('/getTchInfoById', auth.all, app.controllers.teacher.getInfoById);
@@ -41,8 +44,10 @@ module.exports = app => {
   router.post('/tchChangeAvatar', auth.tch, app.controllers.teacher.changeAvatar);
   // 教师修改密码
   router.post('/tchChangePW', auth.tch, app.controllers.teacher.changePW);
-  // 教师查看自己的信息
-  router.get('/getMyCourses', auth.tch, app.controllers.teacher.getMyCourses);
+  // 教师查看自己的课程信息
+  router.get('/tchGetMyCourses', auth.tch, app.controllers.teacher.getMyCourses);
+  // 重置某个学生的某个考试
+  router.post('/resetStuExamScore', auth.tch, app.controllers.teacher.resetStuExamScore);
 
   // 教师上传资源
   router.post('/updateResources', auth.tch, app.controllers.resources.updateResources);
@@ -84,7 +89,7 @@ module.exports = app => {
   // 删除课程视频
   router.post('/delCourseVideo', auth.tch, app.controllers.courses.delCourseVideo);
   // 获取课程学生的信息
-  router.post('/getCourseStus', auth.tch, app.controllers.courses.getCourseStus);
+  router.post('/getCourseStusAndExams', auth.tch, app.controllers.courses.getCourseStusAndExams);
   
 
   // 学生开始学习课程

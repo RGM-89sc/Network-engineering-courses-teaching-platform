@@ -5,7 +5,11 @@
         <el-col :span="14" class="course-name">
           <span v-if="courseDetail">{{courseDetail.coursename}}</span>
         </el-col>
-        <el-col :span="10" class="toolsbar" v-if="user.userType === 1">
+        <el-col
+          :span="10"
+          class="toolsbar"
+          v-if="user.userType === 1 && user.id === courseDetail.tchID"
+        >
           <el-button type="primary" size="small" icon="el-icon-edit" @click="addChapter = true">新建章节</el-button>
           <el-button type="danger" size="small" icon="el-icon-delete" @click="delCourse">删除课程</el-button>
         </el-col>
@@ -37,9 +41,18 @@
                     class="part-title"
                     @click="$router.push({ path: `/course/${courseID}/pd?c=${ch.id}&p=${part.id}` })"
                   >{{part.title}}</span>
-                  <el-tag type="success" size="small" class="last-read" v-if="lastread[0] === ch.id && lastread[1] === part.id">上次看到这里</el-tag>
+                  <el-tag
+                    type="success"
+                    size="small"
+                    class="last-read"
+                    v-if="lastread[0] === ch.id && lastread[1] === part.id"
+                  >上次看到这里</el-tag>
                 </el-col>
-                <el-col v-if="user.userType === 1" :span="6" class="control">
+                <el-col
+                  v-if="user.userType === 1 && user.id === courseDetail.tchID"
+                  :span="6"
+                  class="control"
+                >
                   <el-button
                     type="text"
                     @click="$router.push({ path: `/editCourse?id=${courseID}&c=${ch.id}&p=${part.id}` })"
@@ -48,7 +61,7 @@
                 </el-col>
               </el-row>
             </el-card>
-            <el-row class="ch-control" v-if="user.userType === 1">
+            <el-row class="ch-control" v-if="user.userType === 1 && user.id === courseDetail.tchID">
               <el-button
                 plain
                 icon="el-icon-edit"
@@ -73,7 +86,7 @@
     </el-col>
 
     <el-dialog
-      v-if="user.userType === 1"
+      v-if="user.userType === 1 && user.id === courseDetail.tchID"
       title="添加章节"
       :visible.sync="addChapter"
       width="30%"
@@ -163,10 +176,17 @@ export default {
         .then(res => {
           if (res.data.code === 1) {
             this.courseDetail = res.data.data;
-            const lastread = JSON.parse(window.localStorage.getItem(`course.${this.courseID}.lastread.part`));
+            const lastread = JSON.parse(
+              window.localStorage.getItem(
+                `course.${this.courseID}.${this.user.id}.lastread.part`
+              )
+            );
             if (lastread) {
               this.lastread = lastread;
             }
+          }
+          if (res.data.code === -1) {
+            this.$message.error('加载失败');
           }
         })
         .catch(err => {
@@ -177,6 +197,7 @@ export default {
       this.$http
         .post('/api/addChapterToCourse', {
           courseID: this.courseID,
+          tchID: this.courseDetail.tchID,
           newChapter: {
             id: this.getMaxChapterID() + 1,
             stamp: this.newChapter.stamp,
@@ -187,6 +208,12 @@ export default {
           if (res.data.code === 1) {
             this.addChapter = false;
             this.$router.push({ path: '/emptyPage' });
+          }
+          if (res.data.code === 0) {
+            this.$message({
+              message: res.data.info,
+              type: 'warning'
+            });
           }
           if (res.data.code === -1) {
             this.$alert('发生了错误导致章节添加失败', '添加失败', {
@@ -208,11 +235,18 @@ export default {
         .then(() => {
           this.$http
             .post('/api/delCourse', {
-              courseID: this.courseID
+              courseID: this.courseID,
+              tchID: this.courseDetail.tchID
             })
             .then(res => {
               if (res.data.code === 1) {
                 this.$router.push({ path: '/emptyPage' });
+              }
+              if (res.data.code === 0) {
+                this.$message({
+                  message: res.data.info,
+                  type: 'warning'
+                });
               }
               if (res.data.code === -1) {
                 this.$alert('发生了错误导致课程删除失败', '删除失败', {
@@ -237,11 +271,18 @@ export default {
           this.$http
             .post('/api/delChapter', {
               courseID: this.courseID,
+              tchID: this.courseDetail.tchID,
               chapter
             })
             .then(res => {
               if (res.data.code === 1) {
                 this.$router.push({ path: '/emptyPage' });
+              }
+              if (res.data.code === 0) {
+                this.$message({
+                  message: res.data.info,
+                  type: 'warning'
+                });
               }
               if (res.data.code === -1) {
                 this.$alert('发生了错误导致删除失败', '删除失败', {
@@ -266,12 +307,19 @@ export default {
           this.$http
             .post('/api/delPart', {
               courseID: this.courseID,
+              tchID: this.courseDetail.tchID,
               chapter,
               part
             })
             .then(res => {
               if (res.data.code === 1) {
                 this.$router.push({ path: '/emptyPage' });
+              }
+              if (res.data.code === 0) {
+                this.$message({
+                  message: res.data.info,
+                  type: 'warning'
+                });
               }
               if (res.data.code === -1) {
                 this.$alert('发生了错误导致删除失败', '删除失败', {
