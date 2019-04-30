@@ -4,6 +4,7 @@ const path = require('path');
 const db = require('../tools/mountModel');
 const omit = require('../tools/omitObjProp');
 const passport = require('../libs/authStrategy');
+const { serverURL, loginMaxAge } = require('../config.js');
 
 const saltRounds = 10;
 
@@ -31,7 +32,7 @@ module.exports = {
         info: '该工号已存在'
       }
     }
-    
+
     const hash = await bcrypt.hash(password, saltRounds);
     await db.teacher.create({
       id, username, password: hash, faculty
@@ -65,7 +66,7 @@ module.exports = {
           {
             httpOnly: false,
             overwrite: false,
-            maxAge: 1000 * 60 * 60 * 3
+            maxAge: loginMaxAge
           }
         );
 
@@ -123,30 +124,50 @@ module.exports = {
   async changeAvatar(ctx) {
     const userid = ctx.state.user.id;
     const avatar = ctx.request.files.avatar;
-    const name = `tch_${userid + path.extname(avatar.name)}`;
+    const extName = path.extname(avatar.name);
+    const name = `tch_${userid + extName}`;
 
     fs.renameSync(avatar.path, path.join(__dirname, `../public/static/img/avatar/${name}`));
 
-    if (ctx.state.user.avatar === '/static/img/avatar/default.jpg') {
-      await db.teacher.updateOne({ id: userid }, {
-        avatar: `/static/img/avatar/${name}`
+    await db.teacher.updateOne({ id: userid }, {
+      avatar: `/static/img/avatar/${name}`
+    })
+      .then(docs => {
+        if (ctx.state.user.avatar !== '/static/img/avatar/default.jpg' && path.extname(ctx.state.user.avatar) !== extName) {
+          setTimeout(() => {
+            try {
+              fs.unlinkSync(path.join(__dirname, `../public${ctx.state.user.avatar}`));
+            } catch (err) { }
+          }, 0);
+        }
+
+        ctx.cookies.set('loginState',
+          encodeURI(JSON.stringify({
+            id: ctx.state.user.id,
+            username: ctx.state.user.username,
+            avatar: `/static/img/avatar/${name}`,
+            userType: ctx.state.user.userType
+          })),
+          {
+            httpOnly: false,
+            overwrite: true,
+            maxAge: loginMaxAge
+          }
+        );
+
+        ctx.body = {
+          code: 1,
+          data: {
+            avatarUrl: `${serverURL}/static/img/avatar/${name}`
+          }
+        };
       })
-        .then(docs => {
-          ctx.body = {
-            code: 1
-          };
-        })
-        .catch(err => {
-          ctx.body = {
-            code: -1,
-            errMsg: err.message
-          };
-        });
-      return null;
-    }
-    ctx.body = {
-      code: 1
-    };
+      .catch(err => {
+        ctx.body = {
+          code: -1,
+          errMsg: err.message
+        };
+      });
   },
 
   // change password
@@ -169,14 +190,14 @@ module.exports = {
   },
 
   async getMyCourses(ctx) {
-    const teaching =  ctx.state.user.teaching || [];
-    
+    const teaching = ctx.state.user.teaching || [];
+
     ctx.body = {
       code: 1,
       data: teaching
     }
   },
-  
+
   async resetStuExamScore(ctx) {
     const { stuID, courseID, examID } = ctx.request.body;
 

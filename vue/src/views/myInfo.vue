@@ -2,7 +2,7 @@
   <MainLayout>
     <el-tabs v-model="activeName" type="card" @tab-click="tabChange">
       <el-tab-pane label="账户配置" name="account-conf">
-        <AccountConf :user="user"></AccountConf>
+        <AccountConf :user.sync="user"></AccountConf>
       </el-tab-pane>
       <el-tab-pane label="我的课程" name="my-courses">
         <router-view :user="user"></router-view>

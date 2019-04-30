@@ -42,7 +42,8 @@ import {
   DatePicker,
   Tag,
   Tabs,
-  TabPane
+  TabPane,
+  Divider
 } from 'element-ui';
 
 Vue.config.productionTip = false;
@@ -85,6 +86,7 @@ Vue.use(DatePicker);
 Vue.use(Tag);
 Vue.use(Tabs);
 Vue.use(TabPane);
+Vue.use(Divider);
 
 Vue.prototype.$loading = Loading.service;
 Vue.prototype.$message = Message;

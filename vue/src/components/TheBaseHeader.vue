@@ -15,7 +15,7 @@
       <el-menu-item index="/auth" v-if="!user.id">登录/注册</el-menu-item>
       <el-dropdown v-else trigger="click" @command="userCommand">
         <span class="el-dropdown-link">
-          <img class="avatar" :src="user.avatar">
+          <img class="avatar" :src="$serverBaseUrl + user.avatar">
           {{user.username}}
           <i class="el-icon-arrow-down el-icon--right"></i>
         </span>

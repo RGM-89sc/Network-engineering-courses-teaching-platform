@@ -3,7 +3,7 @@
     <TheBaseHeader :user.sync="user"/>
 
     <el-main @login="updateLoginState">
-      <router-view :user="user"></router-view>
+      <router-view :user.sync="user"></router-view>
     </el-main>
   </div>
 </template>

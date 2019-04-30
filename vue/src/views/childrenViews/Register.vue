@@ -101,6 +101,8 @@ export default {
     const validatePassword = (rule, value, callback) => {
       if (value === '') {
         callback(new Error('请输入密码'));
+      } else if (value.length < 6 || value.length > 16) {
+        callback(new Error('密码应至少6个字符且不多于16个字符'));
       } else {
         callback();
       }
