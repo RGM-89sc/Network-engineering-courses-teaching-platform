@@ -20,9 +20,7 @@ const coursesSchema = new mongoose.Schema({
   },
   stus: [
     {
-      id: String,
-      avatar: String,
-      username: String
+      id: String
     }
   ],
   content: [  // 课程内容，一个元素为一个章节

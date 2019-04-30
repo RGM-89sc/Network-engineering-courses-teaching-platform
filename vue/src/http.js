@@ -1,4 +1,5 @@
 import axios from 'axios';
+import router from './router';
 
 const http = axios.create({
   baseURL: process.env.VUE_APP_BASE_API,
@@ -24,6 +25,13 @@ http.interceptors.response.use(response => {
 }, error => {
   // 对响应错误做点什么
   // console.log(error);
+  if (error.response) {
+    switch (error.response.status) {
+      case 401:
+        router.replace({ path: '/auth' });
+        break;
+    }
+  }
   return Promise.reject(error);
 });
 

@@ -220,11 +220,33 @@ module.exports = {
         }
       }
     ])
-      .then(docs => {
-        return ctx.body = {
-          code: 1,
-          data: docs[0]
-        }
+      .then(async docs => {
+        await db.courses.aggregate([
+          {
+            $match: { courseID }
+          },
+          {
+            $lookup: {
+              from: "students",
+              localField: "stus.id",
+              foreignField: "id",
+              as: "stus"
+            }
+          },
+          {
+            $project: {
+              _id: 0, __v: 0,
+              stus: { _id: 0, __v: 0, password: 0, created: 0, study: 0, sclass: 0, grade: 0, major: 0, faculty: 0 }
+            }
+          }
+        ])
+          .then(docs2 => {
+            docs[0].stus = docs2[0].stus;
+            return ctx.body = {
+              code: 1,
+              data: docs[0]
+            }
+          });
       })
       .catch(err => {
         return ctx.body = {
@@ -544,7 +566,7 @@ module.exports = {
     let courseExams;
     try {
       courseExams = await db.exams.find({ courseID }, { _id: 0, __v: 0, 'choiceQuestions': 0 });
-    } catch(err) {
+    } catch (err) {
       return ctx.body = {
         code: -1,
         errMsg: err.message
@@ -568,7 +590,7 @@ module.exports = {
           _id: 0,
           __v: 0,
           content: 0,
-          stus: { 
+          stus: {
             _id: 0,
             __v: 0,
             password: 0,

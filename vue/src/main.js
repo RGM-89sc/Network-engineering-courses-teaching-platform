@@ -43,7 +43,8 @@ import {
   Tag,
   Tabs,
   TabPane,
-  Divider
+  Divider,
+  ButtonGroup
 } from 'element-ui';
 
 Vue.config.productionTip = false;
@@ -87,6 +88,7 @@ Vue.use(Tag);
 Vue.use(Tabs);
 Vue.use(TabPane);
 Vue.use(Divider);
+Vue.use(ButtonGroup);
 
 Vue.prototype.$loading = Loading.service;
 Vue.prototype.$message = Message;
@@ -100,33 +102,6 @@ dayjs.locale('zh-cn');
 Vue.prototype.$dayjs = dayjs;
 
 Vue.prototype.$serverBaseUrl = 'http://localhost:9000';
-
-// 路由鉴权
-router.beforeEach((to, from, next) => {
-  if (to.meta.auth) {
-    const userType = window.sessionStorage.getItem('user.userType');
-    if (to.meta.auth === 'all') {
-      if (userType !== '0' && userType !== '1') {
-        return next({ path: '/auth' });  // 登录界面
-      }
-    } else if (to.meta.auth === 'tch') {
-      if (!userType) {
-        return next({ path: '/auth' });  // 登录界面
-      }
-      if (userType !== '1') {
-        return next({ path: '/noAuthorization' });
-      }
-    } else if (to.meta.auth === 'stu') {
-      if (!userType) {
-        return next({ path: '/auth' });  // 登录界面
-      }
-      if (userType !== '0') {
-        return next({ path: 'noAuthorization' });
-      }
-    }
-  }
-  next();
-});
 
 new Vue({
   router,
