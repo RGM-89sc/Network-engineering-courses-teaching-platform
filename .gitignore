@@ -10,3 +10,5 @@ server/public/static/img/post/*
 server/public/static/img/courses/*
 server/public/static/software/*
 server/public/static/video/*
+
+!server/public/static/img/avatar/default.jpg
