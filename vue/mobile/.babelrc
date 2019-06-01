@@ -1,0 +1,8 @@
+{
+  "plugins": [
+    ["import", {
+      "libraryName": "mand-mobile",
+      "libraryDirectory": "lib"
+    }]
+  ]
+}

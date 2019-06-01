@@ -10,8 +10,11 @@ const routerInit = require('./router');
 const connectDB = require('./tools/connectDB');
 const randomStr = require('./tools/randomStr');
 const mkdir = require('./tools/mkdir');
+const config = require('./config.js');
 
-const port = 9000;
+const corsWhiteList = config.corsWhiteList;
+const loginMaxAge = config.loginMaxAge;
+const port = config.port;
 const app = new Koa();
 const logger = log4js.getLogger();
 logger.level = 'debug';
@@ -19,7 +22,13 @@ logger.level = 'debug';
 connectDB('mongodb://localhost:27017/ncw', { useNewUrlParser: true });
 
 app.use(cors({
-  origin: 'http://localhost:8082', 
+  // origin: ctx => {
+  //   if (corsWhiteList.includes(ctx.request.header.origin)) {
+  //     return ctx.request.header.origin;
+  //   }
+  //   return false;
+  // },
+  origin: ctx => ctx.request.header.origin,
   exposeHeaders: ['WWW-Authenticate', 'Server-Authorization'],
   maxAge: 5,
   credentials: true,
@@ -40,7 +49,7 @@ app.use(static(path.join(__dirname, './public/')));
 app.keys = [ randomStr(128) ];
 app.use(session({
   key: 'ncw:sess', // cookie中存储会话ID的字符串
-  maxAge: 1000 * 60 * 60 * 3, // cookie的过期时间
+  maxAge: loginMaxAge, // cookie的过期时间
   httpOnly: true
 }));
 

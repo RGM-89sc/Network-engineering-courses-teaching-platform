@@ -4,11 +4,12 @@ node_modules/
 npm-debug.log
 server/public/static/courseware/*
 server/public/static/img/avatar/*
+!server/public/static/img/avatar/default.jpg
 server/public/static/img/exam/*
 server/public/static/img/exercises/*
 server/public/static/img/post/*
 server/public/static/img/courses/*
 server/public/static/software/*
 server/public/static/video/*
-
-!server/public/static/img/avatar/default.jpg
+server/public/d/**
+server/public/m/**

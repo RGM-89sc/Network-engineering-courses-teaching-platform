@@ -81,7 +81,7 @@ module.exports = app => {
   router.post('/delPart', auth.tch, app.controllers.courses.delPart);
 
   // 给课程添加插图
-  router.post('/uploadCourseImg', auth.tch, app.controllers.courses.uploadCourseImg);
+  router.post('/uploadCourseImg', /*auth.tch,*/ app.controllers.courses.uploadCourseImg); // ckfinder的xhr没有设置xhr.withCredentials = true;无法验证身份，位置：node_modules\@ckeditor\ckeditor5-adapter-ckfinder\src\uploadadapter.js 第127行_initRequest()
   // 给课程添加视频，接收视频文件分片
   router.post('/uploadCourseVideoChunks', auth.tch, app.controllers.courses.uploadCourseVideoChunks);
   // 给课程添加视频，合并视频文件分片
