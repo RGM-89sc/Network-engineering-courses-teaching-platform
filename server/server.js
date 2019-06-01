@@ -11,6 +11,7 @@ const connectDB = require('./tools/connectDB');
 const randomStr = require('./tools/randomStr');
 const mkdir = require('./tools/mkdir');
 const config = require('./config.js');
+const judgeDeviceType = require('./middleware/judgeDeviceType');
 
 const corsWhiteList = config.corsWhiteList;
 const loginMaxAge = config.loginMaxAge;
@@ -43,10 +44,12 @@ app.use(koaBody({
   }
 }));
 
+app.use(judgeDeviceType);
+
 // 提供静态服务，可以直接访问这个目录里的资源
 app.use(static(path.join(__dirname, './public/')));
 
-app.keys = [ randomStr(128) ];
+app.keys = [randomStr(128)];
 app.use(session({
   key: 'ncw:sess', // cookie中存储会话ID的字符串
   maxAge: loginMaxAge, // cookie的过期时间
