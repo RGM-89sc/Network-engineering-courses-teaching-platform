@@ -19,5 +19,6 @@ module.exports = {
     'http://localhost:8087',
     'http://localhost:8088',
     'http://localhost:8089',
+    'http://localhost:8090',
   ]
 };

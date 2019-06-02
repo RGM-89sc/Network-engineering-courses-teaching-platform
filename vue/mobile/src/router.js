@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import Router from 'vue-router';
+import getLoginState from './getLoginState';
 
 Vue.use(Router);
 
@@ -152,23 +153,24 @@ let router = new Router({
 // 路由鉴权
 router.beforeEach((to, from, next) => {
   if (to.meta.auth) {
-    const userType = window.sessionStorage.getItem('user.userType');
+    const loginState = getLoginState() || {};
+    const userType = loginState.userType;
     if (to.meta.auth === 'all') {
-      if (userType !== '0' && userType !== '1') {
+      if (userType !== 0 && userType !== 1) {
         return next({ path: '/auth' });  // 登录界面
       }
     } else if (to.meta.auth === 'tch') {
       if (!userType) {
         return next({ path: '/auth' });  // 登录界面
       }
-      if (userType !== '1') {
+      if (userType !== 1) {
         return next({ path: '/noAuthorization' });
       }
     } else if (to.meta.auth === 'stu') {
       if (!userType) {
         return next({ path: '/auth' });  // 登录界面
       }
-      if (userType !== '0') {
+      if (userType !== 0) {
         return next({ path: 'noAuthorization' });
       }
     }

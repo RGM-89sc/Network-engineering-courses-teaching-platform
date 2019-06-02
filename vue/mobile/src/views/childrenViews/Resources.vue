@@ -23,7 +23,8 @@
       <div class="header">
         <span class="title">资源下载</span>
         <div class="tool-bar">
-          <md-button class="filter-btn" type="link" @click="searchPanelShow = true">搜索</md-button>
+          <md-button v-if="user && user.userType === 1" class="search-btn" type="link" @click="updateResource">上传</md-button>
+          <md-button class="search-btn" type="link" @click="searchPanelShow = true">搜索</md-button>
           <md-button class="filter-btn" type="link" @click="isFilterSelectorShow = true">筛选</md-button>
         </div>
       </div>
@@ -57,67 +58,12 @@
 
     <md-selector
       v-model="isOperateSelectorShow"
-      :data="/\.pdf$/i.test(currentFile.filename) ? [{ value: 'preview', text: '在线预览' }, { value: 'download', text: '下载' }] : [{ value: 'download', text: '下载' }]"
+      :data="fileOperate"
       max-height="320px"
       title="操作"
       @choose="resourceOperate"
     ></md-selector>
-    <!-- 
-      <el-col :span="5">
-        <el-input placeholder="请输入搜索内容" prefix-icon="el-icon-search" v-model="search" size="small"></el-input>
-      </el-col>
-    </el-row>-->
-    <!-- <el-row class="resources-list">
-      <el-table :data="resources" v-loading="loading" style="width: 100%">
-        <el-table-column v-if="user.userType === 1" prop="filename">
-    <template slot="header" slot-scope="scope">-->
-    <!-- slot-scope="scope"不能去掉，去掉了就不会显示这个模板 -->
-    <!-- <el-button type="primary" size="small" @click="updateResource">
-              <i class="el-icon-upload el-icon--left"></i>上传资源
-            </el-button>
-          </template>
-          <template slot-scope="scope">
-            <a
-              :href="scope.row.href"
-              class="download-link"
-              :download="scope.row.filename"
-            >{{scope.row.filename}}</a>
-            <el-button
-              v-if="/\.pdf$/i.test(scope.row.filename)"
-              type="text"
-              style="margin-left: 10px;"
-              size="small"
-              @click="$router.push({ path: `/library/${encodeFilename(scope.row.filename)}` })"
-            >在线预览</el-button>
-          </template>
-        </el-table-column>
 
-        <el-table-column v-else prop="filename" label="下载">
-          <template slot-scope="scope">
-            <a
-              :href="scope.row.href"
-              class="download-link"
-              :download="scope.row.filename"
-            >{{scope.row.filename}}</a>
-            <el-button
-              v-if="/\.pdf$/i.test(scope.row.filename)"
-              type="text"
-              style="margin-left: 10px;"
-              size="small"
-              @click="$router.push({ path: `/library/${encodeFilename(scope.row.filename)}` })"
-            >在线预览</el-button>
-          </template>
-    </el-table-column>-->
-
-    <!-- <el-table-column prop="date" label="日期" align="right" width="180"></el-table-column>
-
-        <el-table-column v-if="user.userType === 1" label="操作" align="right" width="100">
-          <template slot-scope="scope">
-            <el-button type="danger" size="small" @click="delResource(scope.row)">删除</el-button>
-          </template>
-        </el-table-column>
-      </el-table>
-    </el-row>-->
     <!-- <el-dialog v-if="user.userType === 1" title="上传资源" :visible.sync="updateDialogVisible">
       <el-row type="flex" justify="center" style="margin-bottom: 20px;">
         <span style="line-height: 32px;">上传到类别：</span>
@@ -245,6 +191,21 @@ export default {
       if (this.classify === 'software') {
         return '请打包成单个文件后再上传';
       }
+    },
+    fileOperate() {
+      let operateArr;
+      if (/\.pdf$/i.test(this.currentFile.filename)) {
+        operateArr = [
+          { value: 'preview', text: '在线预览' },
+          { value: 'download', text: '下载' }
+        ];
+      } else {
+        operateArr = [{ value: 'download', text: '下载' }];
+      }
+      if (this.user.userType === 1) {
+        operateArr.push({ value: 'delete', text: '删除' });
+      }
+      return operateArr;
     }
   },
   props: {
@@ -275,27 +236,29 @@ export default {
         a.href = this.currentFile.href;
         a.download = this.currentFile.filename;
         a.click();
+      } else if (value === 'delete') {
+        this.delResource(this.currentFile);
       }
     },
     encodeFilename(filename) {
       return filename
-        .replace('+', '%2B')
-        .replace(' ', '-')
-        .replace('/', '%2F')
-        .replace('?', '%3F')
-        .replace('#', '%23')
-        .replace('&', '%26')
-        .replace('=', '%3D');
+        .replace(/\+/g, '%2B')
+        .replace(/ /g, '-')
+        .replace(/\//g, '%2F')
+        .replace(/\?/g, '%3F')
+        .replace(/#/g, '%23')
+        .replace(/&/g, '%26')
+        .replace(/=/g, '%3D');
     },
 
     decodeFilename(filename) {
       return filename
-        .replace('%2B', '+')
-        .replace('%2F', '/')
-        .replace('%3F', '?')
-        .replace('%23', '#')
-        .replace('%26', '&')
-        .replace('%3D', '=');
+        .replace(/%2B/g, '+')
+        .replace(/%2F/g, '/')
+        .replace(/%3F/g, '?')
+        .replace(/%23/g, '#')
+        .replace(/%26/g, '&')
+        .replace(/%3D/g, '=');
     },
     showMore() {
       this.skip += this.limit;
@@ -335,14 +298,13 @@ export default {
         });
     },
     delResource(resource) {
+      console.log(resource);
       const that = this;
-      this.$confirm('此操作将从服务器删除该文件, 是否继续?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      })
-        .then(() => {
-          // 确定
+      this.$dialog.confirm({
+        title: '提示',
+        content: '此操作将从服务器删除该文件, 是否继续?',
+        confirmText: '确定',
+        onConfirm: () => {
           this.$http
             .post('/api/delResources', {
               classify: resource.classify,
@@ -350,9 +312,11 @@ export default {
             })
             .then(res => {
               if (res.data.code === 1) {
-                that.$alert(`${resource.filename}已删除`, '删除成功', {
-                  confirmButtonText: '确定',
-                  callback: action => {
+                that.$dialog.succeed({
+                  title: '删除成功',
+                  content: `${resource.filename}已删除`,
+                  confirmText: '确定',
+                  onConfirm: () => {
                     that.$router.push({ path: '/emptyPage' });
                   }
                 });
@@ -361,20 +325,18 @@ export default {
             .catch(err => {
               console.log(err);
             });
-        })
-        .catch(() => {
-          // 取消
-        });
+        }
+      });
     },
     updateResource() {
-      this.updateDialogVisible = true;
-    },
-    clearFileList() {
-      this.updated = 0;
-      this.fileList = [];
+      const input = document.createElement('input');
+      input.type = 'file';
+      input.onchange = function() {
+        
+      }
+      input.click();
     },
     submitUpload() {
-      this.$refs.upload.submit();
       this.updating = true;
     },
     handleRemove(file, fileList) {},
@@ -391,9 +353,11 @@ export default {
       if (response.code === 0) {
         this.updating = false;
         this.clearFileList();
-        this.$alert(response.info, '上传失败', {
-          confirmButtonText: '确定',
-          callback: action => {
+        this.$dialog.failed({
+          title: '上传失败',
+          content: response.info,
+          confirmText: '确定',
+          onConfirm: () => {
             this.$router.push({ path: '/emptyPage' });
           }
         });
@@ -401,8 +365,11 @@ export default {
       if (response.code === -1) {
         this.updating = false;
         this.clearFileList();
-        this.$alert('发生了错误导致上传失败', '上传失败', {
-          confirmButtonText: '确定'
+        this.$dialog.failed({
+          title: '上传失败',
+          content: '发生了错误导致上传失败',
+          confirmText: '确定',
+          onConfirm: () => {}
         });
         console.log(response.errMsg);
       }

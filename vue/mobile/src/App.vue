@@ -35,14 +35,10 @@ export default {
     ]);
 
     this.user = this.$getLoginState() || {};
-    if (this.user.userType === 0 || this.user.userType === 1) {
-      window.sessionStorage.setItem('user.userType', this.user.userType);
-    }
   },
   methods: {
     updateLoginState(user) {
       this.user = user;
-      window.sessionStorage.setItem('user.userType', user.userType);
     }
   },
   components: {

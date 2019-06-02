@@ -24,7 +24,9 @@ export default {
     }
   },
   created() {
-    
+    if (!this.$getLoginState()) {
+      this.$emit('update:user', {});
+    }
   },
   methods: {
     changeTab(tab) {

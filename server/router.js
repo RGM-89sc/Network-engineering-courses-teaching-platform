@@ -58,7 +58,7 @@ module.exports = app => {
   router.post('/resetStuExamScore', auth.tch, teacher.resetStuExamScore);
 
   // 教师上传资源
-  router.post('/updateResources', auth.tch, resources.updateResources);
+  router.post('/uploadResources', auth.tch, resources.uploadResources);
   // 教师删除单个资源
   router.post('/delResources', auth.tch, resources.delResource);
   // 获取资源

@@ -5,7 +5,7 @@ const omit = require('../tools/omitObjProp');
 const { decodeFilename, encodeFilename } = require('../tools/filenameTools');
 
 module.exports = {
-  async updateResources(ctx) {
+  async uploadResources(ctx) {
     const { classify } = ctx.request.body;
     const file = ctx.request.files.file;
     const filename = encodeFilename(file.name);

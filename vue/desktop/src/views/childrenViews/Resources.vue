@@ -88,7 +88,7 @@
           drag
           multiple
           ref="upload"
-          :action="$serverBaseUrl + '/api/updateResources'"
+          :action="$serverBaseUrl + '/api/uploadResources'"
           :data="{ classify: updateClassify }"
           :with-credentials="true"
           :on-remove="handleRemove"
@@ -210,23 +210,23 @@ export default {
   methods: {
     encodeFilename(filename) {
       return filename
-        .replace('+', '%2B')
-        .replace(' ', '-')
-        .replace('/', '%2F')
-        .replace('?', '%3F')
-        .replace('#', '%23')
-        .replace('&', '%26')
-        .replace('=', '%3D');
+        .replace(/\+/g, '%2B')
+        .replace(/ /g, '-')
+        .replace(/\//g, '%2F')
+        .replace(/\?/g, '%3F')
+        .replace(/#/g, '%23')
+        .replace(/&/g, '%26')
+        .replace(/=/g, '%3D');
     },
 
     decodeFilename(filename) {
       return filename
-        .replace('%2B', '+')
-        .replace('%2F', '/')
-        .replace('%3F', '?')
-        .replace('%23', '#')
-        .replace('%26', '&')
-        .replace('%3D', '=');
+        .replace(/%2B/g, '+')
+        .replace(/%2F/g, '/')
+        .replace(/%3F/g, '?')
+        .replace(/%23/g, '#')
+        .replace(/%26/g, '&')
+        .replace(/%3D/g, '=');
     },
     showMore() {
       this.skip += this.limit;

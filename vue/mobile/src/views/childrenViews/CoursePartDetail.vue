@@ -1,7 +1,12 @@
 <template>
-  <div>
-    <Card>
-      <span class="part-title">{{partTitle}}</span>
+  <div class="gray-bg">
+    <Card round>
+      <div class="header">
+        <span class="part-title">{{partTitle}}</span>
+        <div class="tool-bar" v-if="user && user.userType === 1">
+          <md-button class="edit-btn" type="link">编辑</md-button>
+        </div>
+      </div>
       <CPContent v-if="content" :content="content"></CPContent>
     </Card>
   </div>
@@ -95,13 +100,13 @@ export default {
         .catch(err => {
           console.log(err);
           this.$dialog.confirm({
-              title: '提示',
-              content: '加载失败, 是否重新加载?',
-              confirmText: '确定',
-              onConfirm: () => {
-                this.$router.push({ path: '/emptyPage' });
-              }
-            });
+            title: '提示',
+            content: '加载失败, 是否重新加载?',
+            confirmText: '确定',
+            onConfirm: () => {
+              this.$router.push({ path: '/emptyPage' });
+            }
+          });
         });
     }
   },
@@ -113,10 +118,30 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.part-title {
-  display: block;
-  text-align: center;
-  font-size: 1.5rem;
-  font-weight: bold;
+.gray-bg {
+  background-color: rgb(240, 240, 240);
+}
+
+.header {
+  display: table;
+  margin: 0 0 1.5rem;
+  width: 100%;
+  vertical-align: middle;
+  border-bottom: 1px solid #eee;
+  overflow: hidden;
+
+  .part-title {
+    display: table-cell;
+    padding: 0.5rem;
+    font-size: 1.5rem;
+    font-weight: bold;
+    word-break:break-all;
+  }
+
+  .tool-bar {
+    display: table-cell;
+    vertical-align: middle;
+    text-align: right;
+  }
 }
 </style>

@@ -60,7 +60,6 @@ export default {
       // 检测到跳转到了auth并且cookie已过期，更新user数据
       if (path === '/auth' && !this.$getLoginState()) {
         this.$emit('update:user', {});
-        window.sessionStorage.removeItem('user.userType');
       }
     }
   },
@@ -79,7 +78,6 @@ export default {
         .then(res => {
           if (res.data.code === 1) {
             this.$emit('update:user', {});
-            window.sessionStorage.removeItem('user.userType');
             this.$router.push({ path: '/' });
           }
         })
