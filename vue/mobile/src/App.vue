@@ -61,4 +61,8 @@ li {
   min-height: calc(100vh - 7.4rem);
   overflow: hidden;
 }
+
+.gray-bg {
+  background-color: rgb(240, 240, 240);
+}
 </style>

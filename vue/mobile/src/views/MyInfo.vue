@@ -39,10 +39,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.gray-bg {
-  background-color: rgb(240, 240, 240);
-}
-
 .tabs {
   padding-top: 0;
 }

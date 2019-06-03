@@ -118,10 +118,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.gray-bg {
-  background-color: rgb(240, 240, 240);
-}
-
 .header {
   display: table;
   margin: 0 0 1.5rem;

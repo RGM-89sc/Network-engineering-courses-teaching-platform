@@ -23,7 +23,12 @@
       <div class="header">
         <span class="title">资源下载</span>
         <div class="tool-bar">
-          <md-button v-if="user && user.userType === 1" class="search-btn" type="link" @click="updateResource">上传</md-button>
+          <md-button
+            v-if="user && user.userType === 1"
+            class="search-btn"
+            type="link"
+            @click="isUploadClassifySelectorShow = true"
+          >上传</md-button>
           <md-button class="search-btn" type="link" @click="searchPanelShow = true">搜索</md-button>
           <md-button class="filter-btn" type="link" @click="isFilterSelectorShow = true">筛选</md-button>
         </div>
@@ -64,61 +69,13 @@
       @choose="resourceOperate"
     ></md-selector>
 
-    <!-- <el-dialog v-if="user.userType === 1" title="上传资源" :visible.sync="updateDialogVisible">
-      <el-row type="flex" justify="center" style="margin-bottom: 20px;">
-        <span style="line-height: 32px;">上传到类别：</span>
-        <el-select v-model="updateClassify" size="small" placeholder="请选择类别">
-          <el-option
-            v-for="item in updateClassifyOptions"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          ></el-option>
-        </el-select>
-      </el-row>
-    -->
-    <!-- <el-row type="flex" justify="center">
-        <el-upload
-          drag
-          multiple
-          ref="upload"
-          :action="$serverBaseUrl + '/api/updateResources'"
-          :data="{ classify: updateClassify }"
-          :with-credentials="true"
-          :on-remove="handleRemove"
-          :on-error="handleError"
-          :on-success="handleSuccess"
-          :file-list="fileList"
-          :auto-upload="false"
-        >
-          <i class="el-icon-upload"></i>
-          <div class="el-upload__text">
-            将文件拖到此处，或
-            <em>点击上传</em>
-          </div>
-          <div class="el-upload__tip" slot="tip">{{uploadTip}}</div>
-        </el-upload>
-      </el-row>
-    -->
-    <!-- <div slot="footer" class="dialog-footer">
-        <el-button @click="updateDialogVisible = false">取 消</el-button>
-        <el-button type="primary" :loading="updating" @click="submitUpload">开始上传</el-button>
-      </div>
-
-      <el-dialog
-        width="30%"
-        title="上传成功"
-        :visible.sync="updateSuccessDialogVisible"
-        :before-close="beforeSuccessDialogClose"
-        append-to-body
-      >
-        <span>{{updated}}个文件已成功上传</span>
-        <div slot="footer" class="dialog-footer">
-          <el-button @click="continueUpdate">继续上传</el-button>
-          <el-button type="primary" @click="$router.push({ path: '/emptyPage' })">返回资源列表</el-button>
-        </div>
-      </el-dialog>
-    </el-dialog>-->
+    <md-selector
+      v-model="isUploadClassifySelectorShow"
+      :data="uploadClassifyOptions[0]"
+      max-height="320px"
+      title="上传至分类"
+      @choose="({value}) => { this.uploadClassify = value; this.uploadResource() }"
+    ></md-selector>
   </div>
 </template>
 
@@ -132,6 +89,7 @@ export default {
       searchPanelShow: false,
       isOperateSelectorShow: false,
       isFilterSelectorShow: false,
+      isUploadClassifySelectorShow: false,
       classifyOptions: [
         [
           {
@@ -159,23 +117,21 @@ export default {
       limit: 15,
       gotAllResources: false,
 
-      updateDialogVisible: false,
-      updateClassifyOptions: [
-        {
-          value: 'courseware',
-          label: '课件'
-        },
-        {
-          value: 'software',
-          label: '软件'
-        }
+      uploadClassifyOptions: [
+        [
+          {
+            value: 'courseware',
+            text: '课件'
+          },
+          {
+            value: 'software',
+            text: '软件'
+          }
+        ]
       ],
-      updateClassify: 'courseware',
-      fileList: [],
-      updating: false,
-      updated: 0,
-
-      updateSuccessDialogVisible: false
+      uploadClassify: 'courseware',
+      uploading: false,
+      updated: 0
     };
   },
   computed: {
@@ -328,59 +284,65 @@ export default {
         }
       });
     },
-    updateResource() {
+    uploadResource() {
       const input = document.createElement('input');
       input.type = 'file';
-      input.onchange = function() {
-        
-      }
-      input.click();
-    },
-    submitUpload() {
-      this.updating = true;
-    },
-    handleRemove(file, fileList) {},
-    handleError(err, file, fileList) {},
-    handleSuccess(response, file, fileList) {
-      if (response.code === 1) {
-        this.updated++;
-        if (this.updated >= fileList.length) {
-          // 全部上传成功
-          this.updating = false;
-          this.updateSuccessDialogVisible = true;
-        }
-      }
-      if (response.code === 0) {
-        this.updating = false;
-        this.clearFileList();
-        this.$dialog.failed({
-          title: '上传失败',
-          content: response.info,
+      const that = this;
+      input.addEventListener('change', event => {
+        that.$dialog.confirm({
+          title: '提示',
+          content: `请确认是否上传文件：${input.files[0].name}`,
           confirmText: '确定',
           onConfirm: () => {
-            this.$router.push({ path: '/emptyPage' });
+            that.submitUpload(input.files[0]);
           }
         });
-      }
-      if (response.code === -1) {
-        this.updating = false;
-        this.clearFileList();
-        this.$dialog.failed({
-          title: '上传失败',
-          content: '发生了错误导致上传失败',
-          confirmText: '确定',
-          onConfirm: () => {}
+      });
+      input.click();
+    },
+    submitUpload(file) {
+      this.uploading = true;
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('classify', this.uploadClassify);
+      this.$http
+        .post('/api/uploadResources', formData)
+        .then(res => {
+          if (res.data.code === 1) {
+            this.$dialog.succeed({
+              title: '上传成功',
+              content: `文件：${file.name} 上传成功`,
+              confirmText: '确定',
+              onConfirm: () => {
+                this.$router.push({ path: '/emptyPage' });
+              }
+            });
+          }
+          if (res.data.code === 0) {
+            this.uploading = false;
+            this.$dialog.failed({
+              title: '上传失败',
+              content: res.data.info,
+              confirmText: '确定',
+              onConfirm: () => {
+                this.$router.push({ path: '/emptyPage' });
+              }
+            });
+          }
+          if (res.data.code === -1) {
+            this.uploading = false;
+            this.$dialog.failed({
+              title: '上传失败',
+              content: '发生了错误导致上传失败',
+              confirmText: '确定',
+              onConfirm: () => {}
+            });
+            console.log(res.data.errMsg);
+          }
+        })
+        .catch(err => {
+          console.log(err);
         });
-        console.log(response.errMsg);
-      }
-    },
-    continueUpdate() {
-      this.clearFileList();
-      this.updateSuccessDialogVisible = false;
-    },
-    beforeSuccessDialogClose(done) {
-      this.clearFileList();
-      done();
     },
     dateFormat(dateString) {
       const date = new Date(dateString);
@@ -394,10 +356,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.gray-bg {
-  background-color: rgb(240, 240, 240);
-}
-
 .search-panel {
   box-sizing: border-box;
   position: fixed;

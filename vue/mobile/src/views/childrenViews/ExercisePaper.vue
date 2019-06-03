@@ -178,10 +178,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.gray-bg {
-  background-color: rgb(240, 240, 240);
-}
-
 .header {
   padding: 0 1rem;
   text-align: center;

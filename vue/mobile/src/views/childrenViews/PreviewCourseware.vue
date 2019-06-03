@@ -90,10 +90,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.gray-bg {
-  background-color: rgb(240, 240, 240);
-}
-
 .title {
   display: block;
   padding: 1rem;

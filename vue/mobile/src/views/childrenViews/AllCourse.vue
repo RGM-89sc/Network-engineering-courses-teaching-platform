@@ -160,10 +160,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.gray-bg {
-  background-color: rgb(240, 240, 240);
-}
-
 .toolbar {
   display: table;
   position: fixed;

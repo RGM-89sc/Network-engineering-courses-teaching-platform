@@ -20,7 +20,7 @@
         <el-table-column v-if="user.userType === 1" prop="filename">
           <template slot="header" slot-scope="scope">
             <!-- slot-scope="scope"不能去掉，去掉了就不会显示这个模板 -->
-            <el-button type="primary" size="small" @click="updateResource">
+            <el-button type="primary" size="small" @click="uploadResource">
               <i class="el-icon-upload el-icon--left"></i>上传资源
             </el-button>
           </template>
@@ -70,12 +70,12 @@
       <span class="show-more" v-if="!gotAllResources" @click="showMore">显示更多</span>
     </el-row>
 
-    <el-dialog v-if="user.userType === 1" title="上传资源" :visible.sync="updateDialogVisible">
+    <el-dialog v-if="user.userType === 1" title="上传资源" :visible.sync="uploadDialogVisible">
       <el-row type="flex" justify="center" style="margin-bottom: 20px;">
         <span style="line-height: 32px;">上传到类别：</span>
-        <el-select v-model="updateClassify" size="small" placeholder="请选择类别">
+        <el-select v-model="uploadClassify" size="small" placeholder="请选择类别">
           <el-option
-            v-for="item in updateClassifyOptions"
+            v-for="item in uploadClassifyOptions"
             :key="item.value"
             :label="item.label"
             :value="item.value"
@@ -89,7 +89,7 @@
           multiple
           ref="upload"
           :action="$serverBaseUrl + '/api/uploadResources'"
-          :data="{ classify: updateClassify }"
+          :data="{ classify: uploadClassify }"
           :with-credentials="true"
           :on-remove="handleRemove"
           :on-error="handleError"
@@ -107,20 +107,20 @@
       </el-row>
 
       <div slot="footer" class="dialog-footer">
-        <el-button @click="updateDialogVisible = false">取 消</el-button>
+        <el-button @click="uploadDialogVisible = false">取 消</el-button>
         <el-button type="primary" :loading="updating" @click="submitUpload">开始上传</el-button>
       </div>
 
       <el-dialog
         width="30%"
         title="上传成功"
-        :visible.sync="updateSuccessDialogVisible"
+        :visible.sync="uploadSuccessDialogVisible"
         :before-close="beforeSuccessDialogClose"
         append-to-body
       >
-        <span>{{updated}}个文件已成功上传</span>
+        <span>{{uploaded}}个文件已成功上传</span>
         <div slot="footer" class="dialog-footer">
-          <el-button @click="continueUpdate">继续上传</el-button>
+          <el-button @click="continueUpload">继续上传</el-button>
           <el-button type="primary" @click="$router.push({ path: '/emptyPage' })">返回资源列表</el-button>
         </div>
       </el-dialog>
@@ -156,8 +156,8 @@ export default {
       limit: 15,
       gotAllResources: false,
 
-      updateDialogVisible: false,
-      updateClassifyOptions: [
+      uploadDialogVisible: false,
+      uploadClassifyOptions: [
         {
           value: 'courseware',
           label: '课件'
@@ -167,12 +167,12 @@ export default {
           label: '软件'
         }
       ],
-      updateClassify: 'courseware',
+      uploadClassify: 'courseware',
       fileList: [],
       updating: false,
-      updated: 0,
+      uploaded: 0,
 
-      updateSuccessDialogVisible: false
+      uploadSuccessDialogVisible: false
     };
   },
   computed: {
@@ -297,11 +297,11 @@ export default {
           // 取消
         });
     },
-    updateResource() {
-      this.updateDialogVisible = true;
+    uploadResource() {
+      this.uploadDialogVisible = true;
     },
     clearFileList() {
-      this.updated = 0;
+      this.uploaded = 0;
       this.fileList = [];
     },
     submitUpload() {
@@ -312,11 +312,11 @@ export default {
     handleError(err, file, fileList) {},
     handleSuccess(response, file, fileList) {
       if (response.code === 1) {
-        this.updated++;
-        if (this.updated >= fileList.length) {
+        this.uploaded++;
+        if (this.uploaded >= fileList.length) {
           // 全部上传成功
           this.updating = false;
-          this.updateSuccessDialogVisible = true;
+          this.uploadSuccessDialogVisible = true;
         }
       }
       if (response.code === 0) {
@@ -338,9 +338,9 @@ export default {
         console.log(response.errMsg);
       }
     },
-    continueUpdate() {
+    continueUpload() {
       this.clearFileList();
-      this.updateSuccessDialogVisible = false;
+      this.uploadSuccessDialogVisible = false;
     },
     beforeSuccessDialogClose(done) {
       this.clearFileList();

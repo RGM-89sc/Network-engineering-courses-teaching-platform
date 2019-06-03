@@ -11,7 +11,10 @@ let router = new Router({
     {
       path: '/auth',
       name: 'auth',
-      component: () => import('./views/Auth.vue')
+      component: () => import('./views/Auth.vue'),
+      meta: {
+        title: '登录&注册'
+      }
     },
     {
       path: '/',
@@ -20,25 +23,37 @@ let router = new Router({
         {
           path: '',
           name: 'all_course',
-          component: () => import('./views/childrenViews/AllCourse.vue')
+          component: () => import('./views/childrenViews/AllCourse.vue'),
+          meta: {
+            title: 'NCW'
+          }
         },
         {
           path: '/course/:course_id',
           name: 'course_detail',
           component: () => import('./views/childrenViews/CourseDetail.vue'),
-          meta: { auth: 'all' }
+          meta: { 
+            auth: 'all',
+            title: '课程详情'
+          }
         },
         {
           path: '/course/:course_id/pd',
           name: 'course_part_detail',
           component: () => import('./views/childrenViews/CoursePartDetail.vue'),
-          meta: { auth: 'all' }
+          meta: { 
+            auth: 'all',
+            title: '课程内容'
+          }
         },
         // {
         //   path: '/editCourse',
         //   name: 'edit_chapter',
         //   component: () => import('./views/childrenViews/EditCourse.vue'),
-        //   meta: { auth: 'tch' }
+        //   meta: { 
+        //     auth: 'tch',
+        //     title: '编辑课程'
+        //   }
         // }
       ]
     },
@@ -49,12 +64,18 @@ let router = new Router({
         {
           path: '',
           name: 'show_resources',
-          component: () => import('./views/childrenViews/Resources.vue')
+          component: () => import('./views/childrenViews/Resources.vue'),
+          meta: {
+            title: '全部资源'
+          }
         },
         {
           path: ':filename',
           name: 'preview_courseware',
-          component: () => import('./views/childrenViews/PreviewCourseware.vue')
+          component: () => import('./views/childrenViews/PreviewCourseware.vue'),
+          meta: {
+            title: '资源预览'
+          }
         }
       ]
     },
@@ -65,29 +86,44 @@ let router = new Router({
         {
           path: '',
           name: 'all_exercise',
-          component: () => import('./views/childrenViews/AllExercise.vue')
+          component: () => import('./views/childrenViews/AllExercise.vue'),
+          meta: {
+            title: '全部作业'
+          }
         },
         {
           path: ':course_id',
           name: 'course_exercise',
-          component: () => import('./views/childrenViews/CourseExercise.vue')
+          component: () => import('./views/childrenViews/CourseExercise.vue'),
+          meta: {
+            title: '课程作业'
+          }
         },
         // {
         //   path: ':course_id/addExercisePaper',
         //   name: 'add_exercise_paper',
         //   component: () => import('./views/childrenViews/AddExercisePaper.vue'),
-        //   meta: { auth: 'tch' }
+        //   meta: { 
+        //     auth: 'tch',
+        //     title: '添加作业'
+        //   }
         // },
         // {
         //   path: ':course_id/editExercisePaper',
         //   name: 'edit_exercise_paper',
         //   component: () => import('./views/childrenViews/EditExercisePaper.vue'),
-        //   meta: { auth: 'tch' }
+        //   meta: { 
+        //     auth: 'tch',
+        //     title: '编辑作业'
+        //   }
         // },
         {
           path: ':course_id/exercisePaper',
           name: 'show_exercise_paper',
-          component: () => import('./views/childrenViews/ExercisePaper.vue')
+          component: () => import('./views/childrenViews/ExercisePaper.vue'),
+          meta: {
+            title: '作业练习'
+          }
         }
       ]
     },
@@ -98,24 +134,36 @@ let router = new Router({
         {
           path: '',
           name: 'all_exam',
-          component: () => import('./views/childrenViews/AllExam.vue')
+          component: () => import('./views/childrenViews/AllExam.vue'),
+          meta: {
+            title: '全部考试'
+          }
         },
         {
           path: ':course_id',
           name: 'course_exam',
-          component: () => import('./views/childrenViews/CourseExam.vue')
+          component: () => import('./views/childrenViews/CourseExam.vue'),
+          meta: {
+            title: '课程考试'
+          }
         },
         // {
         //   path: ':course_id/addExamPaper',
         //   name: 'add_exam_paper',
         //   component: () => import('./views/childrenViews/AddExamPaper.vue'),
-        //   meta: { auth: 'tch' }
+        //   meta: { 
+        //     auth: 'tch',
+        //     title: '添加考试'
+        //   }
         // },
         {
           path: ':course_id/examPaper',
           name: 'show_exam_paper',
           component: () => import('./views/childrenViews/ExamPaper.vue'),
-          meta: { auth: 'all' }
+          meta: { 
+            auth: 'all',
+            title: '考试'
+          }
         }
       ]
     },
@@ -133,12 +181,18 @@ let router = new Router({
           path: '',
           name: 'my_courses',
           component: () => import('./views/childrenViews/MyCourses.vue'),
+          meta: {
+            title: '我的信息'
+          }
         },
         {
           path: 'courseDetail',
           name: 'my_course_detail',
           component: () => import('./views/childrenViews/MyCourseDetail.vue'),
-          meta: { auth: 'all' },
+          meta: { 
+            auth: 'all',
+            title: '我的课程详情'
+          },
         }
       ]
     },
@@ -174,6 +228,9 @@ router.beforeEach((to, from, next) => {
         return next({ path: 'noAuthorization' });
       }
     }
+  }
+  if (to.meta.title) {
+    document.title = to.meta.title;
   }
   next();
 });
