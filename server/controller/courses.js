@@ -619,4 +619,57 @@ module.exports = {
         }
       });
   },
+
+  async addBulletin(ctx) {
+    const { courseID, content } = ctx.request.body;
+
+    await db.courses.updateOne(
+      { courseID },
+      {
+        $push: {
+          bulletins: {
+            content
+          }
+        }
+      }
+    ).then(docs => {
+      return ctx.body = {
+        code: 1,
+      }
+    }).catch(err => {
+      return ctx.body = {
+        code: -1,
+        errMsg: err.message
+      }
+    });
+  },
+
+  async getBulletins(ctx) {
+    const { courseID } = ctx.request.query;
+
+    await db.courses.findOne({ courseID }, { _d: 0, __v: 0 }).sort({ 'bulletins.created': -1 })
+      .then(docs => {
+        // 排序无效，需要下面的代码进行排序，这里注释掉，因为在前端会做排序
+        // const bulletins = docs.bulletins.sort((bulletin_a, bulletin_b) => {
+        //   if (bulletin_a.created < bulletin_b.created) {
+        //     return 1;
+        //   }
+        //   if (bulletin_a.created > bulletin_b.created) {
+        //     return -1;
+        //   }
+        //   return 0;
+        // });
+        const bulletins = docs.bulletins;
+        return ctx.body = {
+          code: 1,
+          data: bulletins
+        }
+      })
+      .catch(err => {
+        return ctx.body = {
+          code: -1,
+          errMsg: err.message
+        }
+      });
+  }
 };

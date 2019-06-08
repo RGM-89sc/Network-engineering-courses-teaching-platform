@@ -78,6 +78,11 @@ module.exports = app => {
   // 删除课程章节
   router.post('/delChapter', auth.tch, courses.delChapter);
 
+  // 教师发布课程公告
+  router.post('/addBulletin', auth.tch, courses.addBulletin);
+  // 获取课程公告
+  router.get('/getBulletins', auth.all, courses.getBulletins);
+
   // 添加/更新课程章节单元
   router.post('/updatePart', auth.tch, courses.updatePart);
   // 获取课程章节单元信息

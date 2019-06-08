@@ -36,6 +36,15 @@ const coursesSchema = new mongoose.Schema({
       ]
     }
   ],
+  bulletins: [
+    {
+      content: String,
+      created: {
+        type: Date,
+        default: Date.now
+      }
+    }
+  ],
   created: {
     type: Date,
     default: Date.now

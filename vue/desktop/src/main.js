@@ -45,7 +45,9 @@ import {
   TabPane,
   Divider,
   ButtonGroup,
-  Progress
+  Progress,
+  Collapse,
+  CollapseItem
 } from 'element-ui';
 
 Vue.config.productionTip = false;
@@ -91,6 +93,9 @@ Vue.use(TabPane);
 Vue.use(Divider);
 Vue.use(ButtonGroup);
 Vue.use(Progress);
+Vue.use(Collapse);
+Vue.use(CollapseItem);
+
 
 Vue.prototype.$loading = Loading.service;
 Vue.prototype.$message = Message;
