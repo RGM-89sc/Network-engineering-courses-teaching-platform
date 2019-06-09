@@ -146,6 +146,18 @@ module.exports = app => {
   // 检查是否可以进入考试
   router.post('/checkStuCanEnterExam', auth.all, exams.checkStuCanEnterExam);
 
+  const qa = app.controllers.qa;
+
+  router.post('/uploadQuestion', auth.all, qa.uploadQuestion)
+  router.post('/deleteQuestion', auth.all, qa.deleteQuestion)
+  router.post('/modifyQuestion', auth.all, qa.modifyQuestion)
+  router.post('/deleteQuestionReply', auth.all, qa.deleteQuestionReply)
+  router.post('/uploadQaImage', qa.uploadQaImage)
+  router.post('/loadQuestion', qa.loadQuestion)
+  router.post('/updateQuestionReplys', qa.updateQuestionReplys);
+
+  router.get('/loadQuestions', qa.loadQuestions)
+
   app.use(router.routes())
     .use(router.allowedMethods());
 };

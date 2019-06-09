@@ -7,8 +7,7 @@ Vue.use(Router);
 let router = new Router({
   mode: 'history',
   base: process.env.BASE_URL,
-  routes: [
-    {
+  routes: [{
       path: '/auth',
       name: 'auth',
       component: () => import('./views/Auth.vue'),
@@ -19,8 +18,7 @@ let router = new Router({
     {
       path: '/',
       component: () => import('./views/Course.vue'),
-      children: [
-        {
+      children: [{
           path: '',
           name: 'all_course',
           component: () => import('./views/childrenViews/AllCourse.vue'),
@@ -32,7 +30,7 @@ let router = new Router({
           path: '/course/:course_id',
           name: 'course_detail',
           component: () => import('./views/childrenViews/CourseDetail.vue'),
-          meta: { 
+          meta: {
             auth: 'all',
             title: '课程详情'
           }
@@ -41,7 +39,7 @@ let router = new Router({
           path: '/course/:course_id/pd',
           name: 'course_part_detail',
           component: () => import('./views/childrenViews/CoursePartDetail.vue'),
-          meta: { 
+          meta: {
             auth: 'all',
             title: '课程内容'
           }
@@ -50,7 +48,7 @@ let router = new Router({
           path: '/editCourse',
           name: 'edit_chapter',
           component: () => import('./views/childrenViews/EditCourse.vue'),
-          meta: { 
+          meta: {
             auth: 'tch',
             title: '编辑课程'
           }
@@ -60,8 +58,7 @@ let router = new Router({
     {
       path: '/library',
       component: () => import('./views/Library.vue'),
-      children: [
-        {
+      children: [{
           path: '',
           name: 'show_resources',
           component: () => import('./views/childrenViews/Resources.vue'),
@@ -82,8 +79,7 @@ let router = new Router({
     {
       path: '/exercise',
       component: () => import('./views/Exercise.vue'),
-      children: [
-        {
+      children: [{
           path: '',
           name: 'all_exercise',
           component: () => import('./views/childrenViews/AllExercise.vue'),
@@ -103,7 +99,7 @@ let router = new Router({
           path: ':course_id/addExercisePaper',
           name: 'add_exercise_paper',
           component: () => import('./views/childrenViews/AddExercisePaper.vue'),
-          meta: { 
+          meta: {
             auth: 'tch',
             title: '添加作业'
           }
@@ -112,7 +108,7 @@ let router = new Router({
           path: ':course_id/editExercisePaper',
           name: 'edit_exercise_paper',
           component: () => import('./views/childrenViews/EditExercisePaper.vue'),
-          meta: { 
+          meta: {
             auth: 'tch',
             title: '编辑作业'
           }
@@ -130,8 +126,7 @@ let router = new Router({
     {
       path: '/exam',
       component: () => import('./views/Exam.vue'),
-      children: [
-        {
+      children: [{
           path: '',
           name: 'all_exam',
           component: () => import('./views/childrenViews/AllExam.vue'),
@@ -151,7 +146,7 @@ let router = new Router({
           path: ':course_id/addExamPaper',
           name: 'add_exam_paper',
           component: () => import('./views/childrenViews/AddExamPaper.vue'),
-          meta: { 
+          meta: {
             auth: 'tch',
             title: '添加考试'
           }
@@ -160,7 +155,7 @@ let router = new Router({
           path: ':course_id/examPaper',
           name: 'show_exam_paper',
           component: () => import('./views/childrenViews/ExamPaper.vue'),
-          meta: { 
+          meta: {
             auth: 'all',
             title: '考试'
           }
@@ -169,15 +164,24 @@ let router = new Router({
     },
     {
       path: '/qa',
-      name: 'qa',
-      component: () => import('./views/Qa.vue')
+      component: () => import('./views/Qa.vue'),
+      children: [{
+        path: '',
+        name: 'qa_questions',
+        component: () => import('./views/childrenViews/QaQuestions.vue')
+      }, {
+        path: ':question_id',
+        name: 'qa_question',
+        component: () => import('./views/childrenViews/QaQuestion.vue')
+      }]
     },
     {
       path: '/myInfo',
       component: () => import('./views/MyInfo.vue'),
-      meta: { auth: 'all' },
-      children: [
-        {
+      meta: {
+        auth: 'all'
+      },
+      children: [{
           path: '',
           name: 'my_courses',
           component: () => import('./views/childrenViews/MyCourses.vue'),
@@ -189,7 +193,7 @@ let router = new Router({
           path: 'courseDetail',
           name: 'my_course_detail',
           component: () => import('./views/childrenViews/MyCourseDetail.vue'),
-          meta: { 
+          meta: {
             auth: 'all',
             title: '我的课程详情'
           },
@@ -211,21 +215,31 @@ router.beforeEach((to, from, next) => {
     const userType = loginState.userType;
     if (to.meta.auth === 'all') {
       if (userType !== 0 && userType !== 1) {
-        return next({ path: '/auth' });  // 登录界面
+        return next({
+          path: '/auth'
+        }); // 登录界面
       }
     } else if (to.meta.auth === 'tch') {
       if (!userType) {
-        return next({ path: '/auth' });  // 登录界面
+        return next({
+          path: '/auth'
+        }); // 登录界面
       }
       if (userType !== 1) {
-        return next({ path: '/noAuthorization' });
+        return next({
+          path: '/noAuthorization'
+        });
       }
     } else if (to.meta.auth === 'stu') {
       if (!userType) {
-        return next({ path: '/auth' });  // 登录界面
+        return next({
+          path: '/auth'
+        }); // 登录界面
       }
       if (userType !== 0) {
-        return next({ path: 'noAuthorization' });
+        return next({
+          path: 'noAuthorization'
+        });
       }
     }
   }

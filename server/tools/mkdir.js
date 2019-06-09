@@ -38,4 +38,9 @@ module.exports = () => {
   if (!fs.existsSync(path.join(__dirname, '../public/static/img/exercises'))) {
     fs.mkdirSync(path.join(__dirname, '../public/static/img/exercises'));
   }
+  const qaImageStoreRelativeURL = '../public/static/img/qa';
+  if (!fs.existsSync(path.join(__dirname, qaImageStoreRelativeURL))) {
+    fs.mkdirSync(path.join(__dirname, qaImageStoreRelativeURL));
+
+  }
 };

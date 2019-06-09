@@ -47,12 +47,19 @@ import {
   ButtonGroup,
   Progress,
   Collapse,
-  CollapseItem
+  CollapseItem,
+  Pagination,
+  Breadcrumb,
+  Link,
+  BreadcrumbItem,
 } from 'element-ui';
 
 Vue.config.productionTip = false;
 
-Vue.prototype.$ELEMENT = { size: 'large', zIndex: 3000 };
+Vue.prototype.$ELEMENT = {
+  size: 'large',
+  zIndex: 3000
+};
 
 Vue.use(CKEditor);
 
@@ -96,7 +103,10 @@ Vue.use(Progress);
 Vue.use(Collapse);
 Vue.use(CollapseItem);
 
-
+Vue.use(Link);
+Vue.use(Pagination);
+Vue.use(Breadcrumb);
+Vue.use(BreadcrumbItem);
 Vue.prototype.$loading = Loading.service;
 Vue.prototype.$message = Message;
 Vue.prototype.$alert = MessageBox.alert;
