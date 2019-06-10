@@ -244,12 +244,16 @@ export default {
 };
 </script>
 
-<style lang="scss">
-$FONT_SIZE: 16px;
+<style lang="scss" scoped>
 * {
   font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB',
     'Microsoft YaHei', '微软雅黑', Arial, sans-serif;
 }
+</style>
+
+<style lang="scss">
+$FONT_SIZE: 16px;
+
 .qad-question,
 .qad-reply {
   margin-bottom: 20px;
