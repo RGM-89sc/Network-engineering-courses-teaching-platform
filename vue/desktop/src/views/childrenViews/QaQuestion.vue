@@ -136,7 +136,8 @@ export default {
         content: ''
       },
       index: 0,
-      offset: 8
+      offset: 8,
+      currentPage: 1
     };
   },
   computed: {
@@ -218,6 +219,7 @@ export default {
                   message: '提交成功！',
                   type: 'success'
                 });
+                this.loadQuesiton();
               } else {
                 this.$message.error('提交失败！');
               }

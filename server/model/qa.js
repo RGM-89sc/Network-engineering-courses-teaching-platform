@@ -40,7 +40,7 @@ const qaSchema = new mongoose.Schema({
     },
     created: {
         type: Date,
-        default: Date.now()
+        default: Date.now
     },
     isReplyed: {
         type: Boolean,
@@ -62,7 +62,7 @@ const qaSchema = new mongoose.Schema({
         },
         created: {
             type: Date,
-            default: Date.now()
+            default: Date.now
 
         },
         content: {

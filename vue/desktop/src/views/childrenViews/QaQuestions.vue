@@ -83,10 +83,21 @@
         </el-col>
       </el-row>
     </div>
+    <RichInput
+      :question.sync="question"
+      :disabled="!isLogin"
+      :uploadImageUrl="
+        `${$serverBaseUrl}/api/uploadQaImage?questionerID=${user.id}`
+      "
+      @upload="upload"
+      mode="questioning"
+      ref="qaRichInput"
+    />
   </div>
 </template>
 
 <script>
+import RichInput from '@/components/TheBaseRichInput';
 export default {
   name: 'qaview',
   props: {
@@ -110,12 +121,26 @@ export default {
       offset: 8,
       /*Questions Data ENDS*/
       loading: true,
-      isLogin: false,
-      currentPage: 1
+      currentPage: 1,
+      question: {
+        title: '',
+        content: '',
+        questionerID: '',
+        questionerName: '',
+        questionerAvatar: '',
+        questionerType: '',
+        tag: '',
+        replys: []
+      },
+      uploadImageUrl: '',
+      richInputMode: ''
     };
   },
 
   computed: {
+    isLogin() {
+      return this.user.id;
+    },
     totalItems() {
       return this.questions.length;
     },
@@ -156,10 +181,73 @@ export default {
           console.log(err);
         })
         .finally(() => {});
+    },
+    beforeUploadQuestion(checkVals = { title: '标题', content: '问题内容' }) {
+      const Q = this.question;
+      for (let i in checkVals) {
+        if (Q[i] === '') {
+          this.emptyUploadToast(checkVals[i]);
+          return false;
+        }
+      }
+      return true;
+    },
+    uploadQuestion() {
+      this.$confirm('是否确认提交问题?', '确认提交', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      })
+        .then(() => {
+          const url = '/api/uploadQuestion';
+          this.$http
+            .post(url, this.question)
+            .then(res => {
+              if (res.data.code === 1) {
+                this.$message({
+                  message: '提交成功！',
+                  type: 'success'
+                });
+                this.loadQuestions();
+              } else {
+                this.$message.error('提交失败！');
+              }
+            })
+            .catch(err => {
+              this.$message.error('提交失败');
+              console.log(err);
+            });
+        })
+        .catch(() => {});
+    },
+    upload() {
+      this.beforeUploadQuestion() && this.uploadQuestion();
+    },
+    loginToast() {
+      this.$alert('请先登录！', '登录提示', {
+        confirmButtonText: '确定',
+        callback: action => {
+          this.$router.push({ path: '/auth' });
+        }
+      });
+    },
+    emptyUploadToast(message = '内容') {
+      this.$message.error(`${message}不能为空！`);
     }
   },
   created() {
     this.loadQuestions();
+    if (this.isLogin) {
+      const Q = this.question;
+      Q.questionerID = this.user.id;
+      Q.questionerName = this.user.username;
+      Q.questionerAvatar = this.user.avatar;
+      Q.questionerType = this.user.usertype;
+      // Q.questionerFaculty = this.user.faculty;
+    }
+  },
+  components: {
+    RichInput
   }
 };
 </script>
