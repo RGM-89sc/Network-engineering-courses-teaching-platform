@@ -377,11 +377,24 @@ module.exports = {
       });
       let partIndex;
       ch.part.some((p, index) => {
-        partIndex = index;
-        return p.id === part;
+        if (p.id === part) {
+          partIndex = index;
+          return true;
+        }
+        return false;
       });
-      partDetail = course.content[chapterIndex].part[partIndex];
-      partDetail = omit(partDetail, ['_id', '__v'], true);
+
+      if (partIndex === undefined) {
+        partDetail = {
+          id: part,
+          title: '',
+          content: ''
+        }
+      } else {
+        partDetail = course.content[chapterIndex].part[partIndex];
+        partDetail = omit(partDetail, ['_id'], true);
+      }
+  
       const videoes = fs.readdirSync(path.join(__dirname, '../public/static/video/'));
       let partVideoes = [];
       videoes.forEach(videoName => {

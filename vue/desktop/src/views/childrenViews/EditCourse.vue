@@ -187,6 +187,7 @@ export default {
     this.chapter = parseInt(this.$route.query.c);
     this.part = parseInt(this.$route.query.p);
     this.courseID = this.$route.query.id;
+    this.tchID = this.user.id;
     this.getPartDetail();
   },
   methods: {
@@ -220,12 +221,11 @@ export default {
         .then(res => {
           if (res.data.code === 1) {
             this.partInfo.title = res.data.data.title;
-            this.editorData = res.data.data.content;
+            this.editorData = res.data.data.content || '';
             this.videoes = res.data.data.videoes;
             this.videoes.forEach(video => {
               this.uploadVideoScuessUrl[video.name] = video.url;
             });
-            this.tchID = res.data.data.tchID;
           }
           if (res.data.code === -1) {
             console.log(res.data.errMsg);

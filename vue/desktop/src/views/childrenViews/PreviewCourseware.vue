@@ -14,10 +14,10 @@
           style="background-color: #eee;"
           @error="pdfError"
         ></pdf>
-        <span>{{currentPage}} / {{pageCount}}</span>
+        <!-- <span>{{currentPage}} / {{pageCount}}</span> -->
       </el-row>
       <el-row class="pdf-console">
-        <el-col class="tools" :span="15">
+        <el-col class="tools" :span="12">
           <i
             class="el-icon-edit"
             style="display: inline-block; margin-left: 1rem;cursor: pointer"
@@ -43,6 +43,9 @@
           :max="pageCount"
           style="margin-right: 1rem"
           ></el-input-number>-->
+        </el-col>
+        <el-col class="pagination" :span="3">
+          <span>{{currentPage}} / {{pageCount}}</span>
         </el-col>
         <el-col class="reading-progress" :span="8">
           <el-progress :percentage="readingProgress" :show-text="false"></el-progress>
@@ -313,6 +316,10 @@ export default {
   .tools {
     display: flex;
     align-items: center;
+  }
+
+  .pagination {
+    font-size: 1rem;
   }
 }
 
