@@ -45,7 +45,11 @@
           ></el-input-number>-->
         </el-col>
         <el-col class="pagination" :span="3">
-          <span>{{currentPage}} / {{pageCount}}</span>
+          <span>
+            <span id="currentPage" contenteditable="true" @blur="gotoPage" @keydown="checkKeyCode">
+              {{currentPage}}
+            </span> / {{pageCount}}
+          </span>
         </el-col>
         <el-col class="reading-progress" :span="8">
           <el-progress :percentage="readingProgress" :show-text="false"></el-progress>
@@ -194,6 +198,26 @@ export default {
     }
   },
   methods: {
+    checkKeyCode(event) {
+      // 禁止除左右方向键，退格，删除，数字0-9以外的键入
+      if (event.keyCode === 8 || event.keyCode === 46 || event.keyCode === 37 || event.keyCode === 39) {
+        return null;
+      }
+      if ((event.keyCode >= 96 && event.keyCode <= 105) || (event.keyCode >= 48 && event.keyCode <= 57)) {
+        return null;
+      }
+      event.preventDefault();
+    },
+    gotoPage(event) {
+      const inputPageNum = parseInt(event.target.innerText);
+      if (inputPageNum <= 0) {
+        this.currentPage = 1;
+      } else if (inputPageNum > 0 && inputPageNum < this.pageCount) {
+        this.currentPage = inputPageNum;
+      } else {
+        this.currentPage = this.pageCount;
+      }
+    },
     getElementPosition(element) {
       let x = 0,
         y = 0;
