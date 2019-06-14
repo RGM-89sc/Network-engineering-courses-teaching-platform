@@ -4,11 +4,11 @@
       <div class="header">
         <span class="title">{{courseName}}</span>
         <div class="tool-bar" v-if="user && user.userType === 1">
-          <md-button
+          <!-- <md-button
             class="add-exercise-paper"
             type="link"
             @click="$router.push({ path: `/exam/${courseID}/addExamPaper` })"
-          >发布考试</md-button>
+          >发布考试</md-button> -->
         </div>
       </div>
 

@@ -4,7 +4,7 @@
       <div class="header">
         <span class="title">{{coursename}}</span>
         <div class="tool-bar" v-if="user && user.userType === 1">
-          <md-button class="add-exercise-paper" type="link" @click="$router.push({ path: `${courseID}/addExercisePaper` })">新增试卷</md-button>
+          <!-- <md-button class="add-exercise-paper" type="link" @click="$router.push({ path: `${courseID}/addExercisePaper` })">新增试卷</md-button> -->
         </div>
       </div>
 
