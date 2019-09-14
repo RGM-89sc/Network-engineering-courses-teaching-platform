@@ -10,10 +10,15 @@
           class="add-course"
           type="primary"
           @click="addCourseDialogVis = true"
-        >添加课程</el-button>
+          >添加课程</el-button
+        >
       </el-col>
       <el-col :span="6" :offset="user.userType === 1 ? 0 : 6">
-        <el-input placeholder="请输入内容" prefix-icon="el-icon-search" v-model="search"></el-input>
+        <el-input
+          placeholder="请输入内容"
+          prefix-icon="el-icon-search"
+          v-model="search"
+        ></el-input>
       </el-col>
     </el-row>
 
@@ -33,10 +38,22 @@
             status-icon
             :rules="formRules"
           >
-            <el-form-item class="form-item" label="课程名称：" prop="newCourseName">
-              <el-input placeholder="请输入课程名称" v-model="newCourse.newCourseName" autocomplete="off"></el-input>
+            <el-form-item
+              class="form-item"
+              label="课程名称："
+              prop="newCourseName"
+            >
+              <el-input
+                placeholder="请输入课程名称"
+                v-model="newCourse.newCourseName"
+                autocomplete="off"
+              ></el-input>
             </el-form-item>
-            <el-form-item class="form-item" label="课程封面：" prop="newCourseCover">
+            <el-form-item
+              class="form-item"
+              label="课程封面："
+              prop="newCourseCover"
+            >
               <el-upload
                 accept=".jpg, .png, .jpeg"
                 :action="$serverBaseUrl + '/api/addNewCourse'"
@@ -51,7 +68,9 @@
                 :limit="1"
               >
                 <el-button size="small" type="primary">选择封面</el-button>
-                <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过{{newCourseCoverMaxSize}}kb</div>
+                <div slot="tip" class="el-upload__tip">
+                  只能上传jpg/png文件，且不超过{{ newCourseCoverMaxSize }}kb
+                </div>
               </el-upload>
             </el-form-item>
           </el-form>
@@ -60,20 +79,30 @@
 
       <div slot="footer">
         <el-button @click="addCourseDialogVis = false">取 消</el-button>
-        <el-button type="primary" @click="addNewCourse" :loading="addingNewCourse">确 定</el-button>
+        <el-button
+          type="primary"
+          @click="addNewCourse"
+          :loading="addingNewCourse"
+          >确 定</el-button
+        >
       </div>
     </el-dialog>
 
     <el-row v-show="courses.length === 0" class="no-course-box">
       <span class="no-course">暂无课程</span>
     </el-row>
-    <el-row class="course-bar" :gutter="20" v-for="i in Math.ceil(courses.length / 4)" :key="i">
+    <el-row
+      class="course-bar"
+      :gutter="20"
+      v-for="i in Math.ceil(courses.length / 4)"
+      :key="i"
+    >
       <el-col
         :span="6"
         v-for="(course, index) in courses.slice((i - 1) * 4, (i - 1) * 4 + 4)"
         :key="index"
       >
-        <CourseCard :course="course"/>
+        <CourseCard :course="course" />
       </el-col>
     </el-row>
   </div>
@@ -163,12 +192,16 @@ export default {
       }
     },
     beforeAddNewCourse(file) {
+      // if(typeof file === 'undefined'){
+      //   this.$message.error({
+      //     message:'请上传课程封面！'
+      //   })
+      //   return false;
+      // }
       if (file.size / 1024 > this.newCourseCoverMaxSize) {
         // 大于对封面大小的限制
         this.$confirm(
-          `课程封面图片大小不能超过${
-            this.newCourseCoverMaxSize
-          }KB，请重新选择课程封面`,
+          `课程封面图片大小不能超过${this.newCourseCoverMaxSize}KB，请重新选择课程封面`,
           '提示',
           {
             confirmButtonText: '确定',

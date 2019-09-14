@@ -2,13 +2,20 @@ const fs = require('fs');
 const path = require('path');
 const uuidV4 = require('uuid/v4');
 const db = require('../tools/mountModel');
-const { serverURL } = require('../config.js');
+const {
+  serverURL
+} = require('../config.js');
 const omit = require('../tools/omitObjProp');
-const { decodeFilename, encodeFilename } = require('../tools/filenameTools');
+const {
+  decodeFilename,
+  encodeFilename
+} = require('../tools/filenameTools');
 
 module.exports = {
   async addNewCourse(ctx) {
-    const { newCourseName } = ctx.request.body;
+    const {
+      newCourseName
+    } = ctx.request.body;
     const tchID = ctx.state.user.id;
     const file = ctx.request.files.file;
     const filepath = file.path;
@@ -16,18 +23,28 @@ module.exports = {
     const courseID = uuidV4().split('-').join('');
     const filename = `/static/img/courses/cover_${courseID}${extname}`;
 
-    if (await db.student.findOne({ coursename: newCourseName, tchID })) {
+    if (await db.student.findOne({
+        coursename: newCourseName,
+        tchID
+      })) {
       return ctx.body = {
         code: 0,
         info: '该课程已存在'
       };
     }
 
-    await db.courses.create({ courseID, coursename: newCourseName, cover: filename, tchID })
+    await db.courses.create({
+        courseID,
+        coursename: newCourseName,
+        cover: filename,
+        tchID
+      })
       .then(async docs => {
         fs.renameSync(filepath, path.join(__dirname, `../public${filename}`));
 
-        const tchDocs = await db.teacher.updateOne({ id: tchID }, {
+        const tchDocs = await db.teacher.updateOne({
+          id: tchID
+        }, {
           $push: {
             teaching: {
               courseID,
@@ -49,7 +66,10 @@ module.exports = {
   },
 
   async delCourse(ctx) {
-    const { courseID, tchID } = ctx.request.body;
+    const {
+      courseID,
+      tchID
+    } = ctx.request.body;
     const id = ctx.state.user.id;
 
     if (id !== tchID) {
@@ -58,10 +78,19 @@ module.exports = {
         info: '您没有该操作的权限'
       }
     }
-
-    await db.courses.deleteOne({ courseID })
-      .then(docs => {
-
+    await db.courses.deleteOne({
+        courseID
+      })
+      .then(async docs => {
+        await db.teacher.updateOne({
+          id
+        }, {
+          $pull: {
+            teaching: {
+              courseID
+            }
+          }
+        });
         return ctx.body = {
           code: 1,
           data: docs
@@ -76,7 +105,11 @@ module.exports = {
   },
 
   async delChapter(ctx) {
-    const { courseID, chapter, tchID } = ctx.request.body;
+    const {
+      courseID,
+      chapter,
+      tchID
+    } = ctx.request.body;
     const id = ctx.state.user.id;
 
     if (id !== tchID) {
@@ -86,7 +119,9 @@ module.exports = {
       }
     }
 
-    const course = await db.courses.findOne({ courseID });
+    const course = await db.courses.findOne({
+      courseID
+    });
     let stamp;
     course.content.some(c => {
       if (c.id === chapter) {
@@ -96,16 +131,15 @@ module.exports = {
       return false;
     });
 
-    await db.courses.updateOne(
-      { courseID },
-      {
+    await db.courses.updateOne({
+        courseID
+      }, {
         $pull: {
           content: {
             id: stamp
           }
         }
-      }
-    )
+      })
       .then(docs => {
 
         return ctx.body = {
@@ -122,7 +156,12 @@ module.exports = {
   },
 
   async delPart(ctx) {
-    const { courseID, chapter, part, tchID } = ctx.request.body;
+    const {
+      courseID,
+      chapter,
+      part,
+      tchID
+    } = ctx.request.body;
     const id = ctx.state.user.id;
 
     if (id !== tchID) {
@@ -132,7 +171,9 @@ module.exports = {
       }
     }
 
-    const course = await db.courses.findOne({ courseID });
+    const course = await db.courses.findOne({
+      courseID
+    });
     let stamp, chapterIndex;
     course.content.some((c, index) => {
       if (c.id === chapter) {
@@ -143,16 +184,17 @@ module.exports = {
       return false;
     });
 
-    await db.courses.updateOne(
-      { courseID, 'content.id': stamp, 'content.part.id': part },
-      {
+    await db.courses.updateOne({
+        courseID,
+        'content.id': stamp,
+        'content.part.id': part
+      }, {
         $pull: {
           [`content.${chapterIndex}.part`]: {
             id: part
           }
         }
-      }
-    )
+      })
       .then(async docs => {
         return ctx.body = {
           code: 1,
@@ -168,22 +210,35 @@ module.exports = {
   },
 
   async getCourses(ctx) {
-    await db.courses.aggregate([
-      {
-        $lookup: {
-          from: "teachers",
-          localField: "tchID",
-          foreignField: "id",
-          as: "tch"
+    await db.courses.aggregate([{
+          $lookup: {
+            from: "teachers",
+            localField: "tchID",
+            foreignField: "id",
+            as: "tch"
+          }
+        },
+        {
+          $project: {
+            _id: 0,
+            __v: 0,
+            tch: {
+              _id: 0,
+              __v: 0,
+              id: 0,
+              password: 0,
+              faculty: 0,
+              teaching: 0,
+              avatar: 0,
+              stus: 0,
+              content: 0,
+              created: 0
+            }
+          }
         }
-      },
-      {
-        $project: {
-          _id: 0, __v: 0,
-          tch: { _id: 0, __v: 0, id: 0, password: 0, faculty: 0, teaching: 0, avatar: 0, stus: 0, content: 0, created: 0 }
-        }
-      }
-    ]).sort({ created: 1 })
+      ]).sort({
+        created: 1
+      })
       .then(docs => {
         return ctx.body = {
           code: 1,
@@ -199,47 +254,68 @@ module.exports = {
   },
 
   async getCourseDetail(ctx) {
-    const { courseID } = ctx.request.body;
+    const {
+      courseID
+    } = ctx.request.body;
 
-    await db.courses.aggregate([
-      {
-        $match: { courseID }
-      },
-      {
-        $lookup: {
-          from: "teachers",
-          localField: "tchID",
-          foreignField: "id",
-          as: "tch"
-        }
-      },
-      {
-        $project: {
-          _id: 0, __v: 0,
-          tch: { _id: 0, __v: 0, password: 0, created: 0 }
-        }
-      }
-    ])
-      .then(async docs => {
-        await db.courses.aggregate([
-          {
-            $match: { courseID }
-          },
-          {
-            $lookup: {
-              from: "students",
-              localField: "stus.id",
-              foreignField: "id",
-              as: "stus"
-            }
-          },
-          {
-            $project: {
-              _id: 0, __v: 0,
-              stus: { _id: 0, __v: 0, password: 0, created: 0, study: 0, sclass: 0, grade: 0, major: 0, faculty: 0 }
+    await db.courses.aggregate([{
+          $match: {
+            courseID
+          }
+        },
+        {
+          $lookup: {
+            from: "teachers",
+            localField: "tchID",
+            foreignField: "id",
+            as: "tch"
+          }
+        },
+        {
+          $project: {
+            _id: 0,
+            __v: 0,
+            tch: {
+              _id: 0,
+              __v: 0,
+              password: 0,
+              created: 0
             }
           }
-        ])
+        }
+      ])
+      .then(async docs => {
+        await db.courses.aggregate([{
+              $match: {
+                courseID
+              }
+            },
+            {
+              $lookup: {
+                from: "students",
+                localField: "stus.id",
+                foreignField: "id",
+                as: "stus"
+              }
+            },
+            {
+              $project: {
+                _id: 0,
+                __v: 0,
+                stus: {
+                  _id: 0,
+                  __v: 0,
+                  password: 0,
+                  created: 0,
+                  study: 0,
+                  sclass: 0,
+                  grade: 0,
+                  major: 0,
+                  faculty: 0
+                }
+              }
+            }
+          ])
           .then(docs2 => {
             docs[0].stus = docs2[0].stus;
             return ctx.body = {
@@ -257,7 +333,11 @@ module.exports = {
   },
 
   async addChapter(ctx) {
-    const { courseID, newChapter, tchID } = ctx.request.body;
+    const {
+      courseID,
+      newChapter,
+      tchID
+    } = ctx.request.body;
     const id = ctx.state.user.id;
 
     if (id !== tchID) {
@@ -267,11 +347,13 @@ module.exports = {
       }
     }
 
-    await db.courses.updateOne({ courseID }, {
-      $push: {
-        content: newChapter
-      }
-    })
+    await db.courses.updateOne({
+        courseID
+      }, {
+        $push: {
+          content: newChapter
+        }
+      })
       .then(docs => {
         return ctx.body = {
           code: 1
@@ -286,7 +368,14 @@ module.exports = {
   },
 
   async updatePart(ctx) {
-    const { courseID, chapter, part, title, content, tchID } = ctx.request.body;
+    const {
+      courseID,
+      chapter,
+      part,
+      title,
+      content,
+      tchID
+    } = ctx.request.body;
     const id = ctx.state.user.id;
 
     if (id !== tchID) {
@@ -296,7 +385,9 @@ module.exports = {
       }
     }
 
-    let course = await db.courses.findOne({ courseID });
+    let course = await db.courses.findOne({
+      courseID
+    });
 
     let ch, stamp, chapterIndex;
     course.content.some((c, index) => {
@@ -314,40 +405,37 @@ module.exports = {
       return p.id === part;
     });
     if (!haveThisPart) {
-      await db.courses.updateOne(
-        { courseID, 'content.id': stamp },
-        {
-          $push: {
-            [`content.${chapterIndex}.part`]: {
-              id: part,
-              title,
-              content
-            }
+      await db.courses.updateOne({
+        courseID,
+        'content.id': stamp
+      }, {
+        $push: {
+          [`content.${chapterIndex}.part`]: {
+            id: part,
+            title,
+            content
           }
         }
-      ).catch(err => {
+      }).catch(err => {
         return ctx.body = {
           code: -1,
           errMsg: err.message
         }
       });
     } else {
-      await db.courses.updateOne(
-        {
-          courseID,
-          'content.id': stamp,
-          'content.part.id': part
-        },
-        {
-          $set: {
-            [`content.${chapterIndex}.part.${partIndex}`]: {
-              id: part,
-              title,
-              content
-            }
+      await db.courses.updateOne({
+        courseID,
+        'content.id': stamp,
+        'content.part.id': part
+      }, {
+        $set: {
+          [`content.${chapterIndex}.part.${partIndex}`]: {
+            id: part,
+            title,
+            content
           }
         }
-      ).catch(err => {
+      }).catch(err => {
         return ctx.body = {
           code: -1,
           errMsg: err.message
@@ -361,11 +449,17 @@ module.exports = {
   },
 
   async getPartDetail(ctx) {
-    const { courseID, chapter, part } = ctx.request.body;
+    const {
+      courseID,
+      chapter,
+      part
+    } = ctx.request.body;
 
     let partDetail;
     try {
-      const course = await db.courses.findOne({ courseID });
+      const course = await db.courses.findOne({
+        courseID
+      });
       let ch, chapterIndex;
       course.content.some((c, index) => {
         if (c.id === chapter) {
@@ -394,7 +488,7 @@ module.exports = {
         partDetail = course.content[chapterIndex].part[partIndex];
         partDetail = omit(partDetail, ['_id'], true);
       }
-  
+
       const videoes = fs.readdirSync(path.join(__dirname, '../public/static/video/'));
       let partVideoes = [];
       videoes.forEach(videoName => {
@@ -421,11 +515,17 @@ module.exports = {
   },
 
   async getPartDetailNoAuth(ctx) {
-    const { courseID, chapter, part } = ctx.request.body;
+    const {
+      courseID,
+      chapter,
+      part
+    } = ctx.request.body;
 
     let partDetail;
     try {
-      const course = await db.courses.findOne({ courseID });
+      const course = await db.courses.findOne({
+        courseID
+      });
       let ch, chapterIndex;
       course.content.some((c, index) => {
         if (c.id === chapter) {
@@ -456,7 +556,11 @@ module.exports = {
   },
 
   async uploadCourseImg(ctx) {
-    const { courseID, chapter, part } = ctx.request.query;
+    const {
+      courseID,
+      chapter,
+      part
+    } = ctx.request.query;
     const file = ctx.request.files.upload;
     const filepath = file.path;
     const extname = path.extname(file.name);
@@ -466,15 +570,18 @@ module.exports = {
     fs.renameSync(filepath, path.join(__dirname, `../public/static/img/courses/${filename}`));
 
     ctx.body = {
-      uploaded: 1,   //写死的
-      fileName: filename,  //图片名
-      url: serverURL + '/static/img/courses/' + filename  //上传服务器的图片的url
+      uploaded: 1, //写死的
+      fileName: filename, //图片名
+      url: serverURL + '/static/img/courses/' + filename //上传服务器的图片的url
     };
   },
 
   // 接收视频文件的分片
   async uploadCourseVideoChunks(ctx) {
-    const { index, hash } = ctx.request.body;
+    const {
+      index,
+      hash
+    } = ctx.request.body;
     const file = ctx.request.files.file;
     const filepath = file.path;
     const chunkTmpDir = path.join(__dirname, `../public/static/video/${hash}/`);
@@ -490,7 +597,15 @@ module.exports = {
   },
 
   async mergeCourseVideoChunks(ctx) {
-    const { name, total, ext, hash, courseID, chapter, part } = ctx.request.body;
+    const {
+      name,
+      total,
+      ext,
+      hash,
+      courseID,
+      chapter,
+      part
+    } = ctx.request.body;
     const filename = encodeFilename(name);
     const filePath = path.join(__dirname, `../public/static/video/content_${courseID}_${chapter}_${part}_${filename}`);
     const chunkTmpDir = path.join(__dirname, `../public/static/video/${hash}/`);
@@ -501,7 +616,7 @@ module.exports = {
     if (chunks.length !== total || chunks.length === 0) {
       return ctx.body = {
         code: -1,
-        errMsg: '上传失败'  // 分片总数不符合预期
+        errMsg: '上传失败' // 分片总数不符合预期
       };
     }
 
@@ -543,7 +658,13 @@ module.exports = {
   },
 
   async delCourseVideo(ctx) {
-    const { filename, courseID, chapter, part, tchID } = ctx.request.body;
+    const {
+      filename,
+      courseID,
+      chapter,
+      part,
+      tchID
+    } = ctx.request.body;
     const id = ctx.state.user.id;
 
     if (id !== tchID) {
@@ -573,12 +694,20 @@ module.exports = {
   },
 
   async getCourseStusAndExams(ctx) {
-    const { courseID } = ctx.request.body;
+    const {
+      courseID
+    } = ctx.request.body;
     const tchID = ctx.state.user.id;
 
     let courseExams;
     try {
-      courseExams = await db.exams.find({ courseID }, { _id: 0, __v: 0, 'choiceQuestions': 0 });
+      courseExams = await db.exams.find({
+        courseID
+      }, {
+        _id: 0,
+        __v: 0,
+        'choiceQuestions': 0
+      });
     } catch (err) {
       return ctx.body = {
         code: -1,
@@ -586,36 +715,38 @@ module.exports = {
       };
     }
 
-    await db.courses.aggregate([
-      {
-        $match: { courseID, tchID }
-      },
-      {
-        $lookup: {
-          from: "students",
-          localField: "stus.id",
-          foreignField: "id",
-          as: "stus"
-        }
-      },
-      {
-        $project: {
-          _id: 0,
-          __v: 0,
-          content: 0,
-          stus: {
+    await db.courses.aggregate([{
+          $match: {
+            courseID,
+            tchID
+          }
+        },
+        {
+          $lookup: {
+            from: "students",
+            localField: "stus.id",
+            foreignField: "id",
+            as: "stus"
+          }
+        },
+        {
+          $project: {
             _id: 0,
             __v: 0,
-            password: 0,
-            created: 0,
-            study: {
+            content: 0,
+            stus: {
               _id: 0,
-              __v: 0
+              __v: 0,
+              password: 0,
+              created: 0,
+              study: {
+                _id: 0,
+                __v: 0
+              }
             }
           }
         }
-      }
-    ])
+      ])
       .then(docs => {
         return ctx.body = {
           code: 1,
@@ -634,18 +765,20 @@ module.exports = {
   },
 
   async addBulletin(ctx) {
-    const { courseID, content } = ctx.request.body;
+    const {
+      courseID,
+      content
+    } = ctx.request.body;
 
-    await db.courses.updateOne(
-      { courseID },
-      {
-        $push: {
-          bulletins: {
-            content
-          }
+    await db.courses.updateOne({
+      courseID
+    }, {
+      $push: {
+        bulletins: {
+          content
         }
       }
-    ).then(docs => {
+    }).then(docs => {
       return ctx.body = {
         code: 1,
       }
@@ -658,9 +791,18 @@ module.exports = {
   },
 
   async getBulletins(ctx) {
-    const { courseID } = ctx.request.query;
+    const {
+      courseID
+    } = ctx.request.query;
 
-    await db.courses.findOne({ courseID }, { _d: 0, __v: 0 }).sort({ 'bulletins.created': -1 })
+    await db.courses.findOne({
+        courseID
+      }, {
+        _d: 0,
+        __v: 0
+      }).sort({
+        'bulletins.created': -1
+      })
       .then(docs => {
         // 排序无效，需要下面的代码进行排序，这里注释掉，因为在前端会做排序
         // const bulletins = docs.bulletins.sort((bulletin_a, bulletin_b) => {
@@ -684,5 +826,23 @@ module.exports = {
           errMsg: err.message
         }
       });
+  },
+  async getFourHottestCourses(ctx) {
+    await db.courses.find({}, {
+      __v: 0,
+      _id: 0
+    }).sort({
+      'stus.length': -1
+    }).limit(4).then(docs => {
+      return ctx.body = {
+        data: docs,
+        code: 1
+      }
+    }).catch(err => {
+      return ctx.body = {
+        code: -1,
+        errMsg: err.message
+      }
+    })
   }
 };

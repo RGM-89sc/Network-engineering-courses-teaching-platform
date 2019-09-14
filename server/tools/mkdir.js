@@ -43,4 +43,16 @@ module.exports = () => {
     fs.mkdirSync(path.join(__dirname, qaImageStoreRelativeURL));
 
   }
+
+  const newsImageStoreRelativeURL = '../public/static/img/news';
+  if (!fs.existsSync(path.join(__dirname, newsImageStoreRelativeURL))) {
+    fs.mkdirSync(path.join(__dirname, newsImageStoreRelativeURL));
+
+  }
+
+  const techInfoImageStoreRelativeURL = '../public/static/img/techInfo';
+  if (!fs.existsSync(path.join(__dirname, techInfoImageStoreRelativeURL))) {
+    fs.mkdirSync(path.join(__dirname, techInfoImageStoreRelativeURL));
+
+  }
 };

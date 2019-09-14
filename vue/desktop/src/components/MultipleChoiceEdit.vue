@@ -7,13 +7,24 @@
       shadow="never"
       class="selection"
     >
-      <el-input placeholder="请输入选项内容（必填）" v-model="selection.content" @blur="setPractice">
-        <template slot="prepend">{{selection.id}}.</template>
+      <el-input
+        placeholder="请输入选项内容（必填）"
+        v-model="selection.content"
+        @blur="setPractice"
+      >
+        <template slot="prepend"
+          >{{ selection.id }}.</template
+        >
       </el-input>
     </div>
     <el-row class="control">
       <el-button type="primary" @click="addSelection">添加选项</el-button>
-      <el-button type="danger" @click="delLastSelection" v-if="practiceSelections.length > 2">删除最后一项</el-button>
+      <el-button
+        type="danger"
+        @click="delLastSelection"
+        v-if="practiceSelections.length > 2"
+        >删除最后一项</el-button
+      >
     </el-row>
     <el-form label-width="100px">
       <el-form-item label="正确答案：" class="answer-setting">
@@ -59,7 +70,11 @@
     <el-row class="upload-img">
       <el-upload
         :action="$serverBaseUrl + '/api/uploadQuestionImg'"
-        :data="{ courseID: courseid, exerciseID: exerciseid,  questionID: questionid }"
+        :data="{
+          courseID: courseid,
+          exerciseID: exerciseid,
+          questionID: questionid
+        }"
         accept=".jpg, .png"
         :with-credentials="true"
         :before-upload="beforeImgUpload"
@@ -69,7 +84,9 @@
         list-type="picture"
       >
         <el-button type="primary">上传配图</el-button>
-        <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+        <div slot="tip" class="el-upload__tip">
+          只能上传jpg/png文件，且不超过500kb
+        </div>
       </el-upload>
     </el-row>
   </div>
@@ -89,7 +106,7 @@ export default {
   watch: {
     questionType(oldValue, newValue) {
       this.setPractice();
-    },
+    }
   },
   model: {
     prop: 'detail',
@@ -118,7 +135,10 @@ export default {
     }
   },
   created() {
-    this.practiceSelections = this.detail.selections || [{ id: 'A', content: '' }, { id: 'B', content: '' }];
+    this.practiceSelections = this.detail.selections || [
+      { id: 'A', content: '' },
+      { id: 'B', content: '' }
+    ];
     this.uploadImgs = this.detail.imgs || [];
     this.practiceAnalyze = this.detail.analyze;
     if (this.questionType === 'Exclusive' && this.detail.selections) {

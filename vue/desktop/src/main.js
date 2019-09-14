@@ -52,6 +52,8 @@ import {
   Breadcrumb,
   Link,
   BreadcrumbItem,
+  Carousel,
+  CarouselItem
 } from 'element-ui';
 
 Vue.config.productionTip = false;
@@ -102,7 +104,8 @@ Vue.use(ButtonGroup);
 Vue.use(Progress);
 Vue.use(Collapse);
 Vue.use(CollapseItem);
-
+Vue.use(Carousel);
+Vue.use(CarouselItem);
 Vue.use(Link);
 Vue.use(Pagination);
 Vue.use(Breadcrumb);

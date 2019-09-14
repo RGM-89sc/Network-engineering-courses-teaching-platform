@@ -20,15 +20,17 @@ const app = new Koa();
 const logger = log4js.getLogger();
 logger.level = 'debug';
 
-connectDB('mongodb://localhost:27017/ncw', { useNewUrlParser: true });
+connectDB('mongodb://localhost:27017/ncw', {
+  useNewUrlParser: true
+});
 
 app.use(cors({
-  // origin: ctx => {
-  //   if (corsWhiteList.includes(ctx.request.header.origin)) {
-  //     return ctx.request.header.origin;
-  //   }
-  //   return false;
-  // },
+  origin: ctx => {
+    if (corsWhiteList.includes(ctx.request.header.origin)) {
+      return ctx.request.header.origin;
+    }
+    return false;
+  },
   origin: ctx => ctx.request.header.origin,
   exposeHeaders: ['WWW-Authenticate', 'Server-Authorization'],
   maxAge: 5,
@@ -61,7 +63,7 @@ app.use(passport.session());
 
 routerInit(app);
 
-mkdir();  // 创建资源文件夹
+mkdir(); // 创建资源文件夹
 
 app.on('error', (err, ctx) => {
   logger.error(err);

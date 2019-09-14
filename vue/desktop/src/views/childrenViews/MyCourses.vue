@@ -1,26 +1,42 @@
 <template>
   <div>
-    <el-card v-for="course in courses" :key="course.courseID" class="course" shadow="hover">
+    <el-card
+      v-for="course in courses"
+      :key="course.courseID"
+      class="course"
+      shadow="always"
+    >
       <el-row>
         <el-col :span="18" class="course-name">
-          <span @click="$router.push({ path: `/course/${course.courseID}` })">{{course.coursename}}</span>
+          <span @click="$router.push({ path: `/course/${course.courseID}` })">{{
+            course.coursename
+          }}</span>
         </el-col>
         <el-col :span="6" class="manipulate">
           <el-button
             type="text"
-            @click="$router.push({ path: `/myInfo/courseDetail?id=${course.courseID}` })"
-          >统计信息</el-button>
+            @click="
+              $router.push({
+                path: `/myInfo/courseDetail?id=${course.courseID}`
+              })
+            "
+            >统计信息</el-button
+          >
         </el-col>
       </el-row>
     </el-card>
     <el-row v-if="courses.length === 0" class="no-course">
       <span v-if="user && user.userType === 0">
         您还没有开始学习任何课程，去
-        <el-button type="text" @click="$router.push({ path: '/' })">挑选课程</el-button>吧
+        <el-button type="text" @click="$router.push({ path: '/course' })"
+          >挑选课程</el-button
+        >吧
       </span>
       <span v-if="user && user.userType === 1">
         您还没有教授任何课程，去
-        <el-button type="text" @click="$router.push({ path: '/' })">开设课程</el-button>吧
+        <el-button type="text" @click="$router.push({ path: '/course' })"
+          >开设课程</el-button
+        >吧
       </span>
     </el-row>
   </div>

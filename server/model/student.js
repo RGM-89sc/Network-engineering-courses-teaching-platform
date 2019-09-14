@@ -34,27 +34,27 @@ const stuSchema = new mongoose.Schema({
     type: String,
     default: '/static/img/avatar/default.png'
   },
-  study: [
-    {
-      courseID: String,
-      progress: {
+  study: [{
+    courseID: String,
+    progress: {
+      type: Number,
+      default: 0
+    },
+    exams: [{
+      examID: String,
+      examScore: {
         type: Number,
-        default: 0
-      },
-      exams: [
-        {
-          examID: String,
-          examScore: {
-            type: Number,
-            default: -1
-          }
-        }
-      ]
-    }
-  ],
+        default: -1
+      }
+    }]
+  }],
   created: {
     type: Date,
     default: Date.now
+  },
+  articles: {
+    type: Array,
+    default: []
   }
 });
 

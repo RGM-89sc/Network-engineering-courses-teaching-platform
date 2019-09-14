@@ -1,5 +1,5 @@
 <template>
-  <el-row type="flex" justify="center">
+  <el-row class="main-layout" type="flex" justify="center">
     <el-col :xs="xs" :sm="sm" :md="md" :lg="lg" :xl="xl">
       <slot></slot>
     </el-col>
@@ -28,9 +28,9 @@ export default {
     xl: {
       type: Number,
       default: 12
-    },
+    }
   }
-}
+};
 </script>
 
 

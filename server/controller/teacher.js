@@ -4,16 +4,27 @@ const path = require('path');
 const db = require('../tools/mountModel');
 const omit = require('../tools/omitObjProp');
 const passport = require('../libs/authStrategy');
-const { serverURL, loginMaxAge } = require('../config.js');
+const {
+  serverURL,
+  loginMaxAge
+} = require('../config.js');
 
 const saltRounds = 10;
 
 module.exports = {
   // get info by id
   async getInfoById(ctx) {
-    const { id } = ctx.request.body;
+    const {
+      id
+    } = ctx.request.body;
 
-    await db.teacher.findOne({ id }, { password: 0, _id: 0, __v: 0 })
+    await db.teacher.findOne({
+        id
+      }, {
+        password: 0,
+        _id: 0,
+        __v: 0
+      })
       .then(docs => {
         ctx.body = {
           code: 1,
@@ -24,9 +35,16 @@ module.exports = {
 
   // register
   async register(ctx) {
-    const { id, username, password, faculty } = ctx.request.body;
+    const {
+      id,
+      username,
+      password,
+      faculty
+    } = ctx.request.body;
 
-    if (await db.teacher.findOne({ id })) {
+    if (await db.teacher.findOne({
+        id
+      })) {
       return ctx.body = {
         code: 0,
         info: '该工号已存在'
@@ -35,8 +53,11 @@ module.exports = {
 
     const hash = await bcrypt.hash(password, saltRounds);
     await db.teacher.create({
-      id, username, password: hash, faculty
-    })
+        id,
+        username,
+        password: hash,
+        faculty
+      })
       .then(docs => {
         ctx.body = {
           code: 1,
@@ -62,8 +83,7 @@ module.exports = {
             username: user.username,
             avatar: user.avatar,
             userType: user.userType
-          })),
-          {
+          })), {
             httpOnly: false,
             overwrite: false,
             maxAge: loginMaxAge
@@ -91,12 +111,10 @@ module.exports = {
   // logout
   async logout(ctx) {
     ctx.logout(ctx.state.user);
-    ctx.cookies.set('loginState', '',
-      {
-        httpOnly: false,
-        overwrite: false,
-      }
-    );
+    ctx.cookies.set('loginState', '', {
+      httpOnly: false,
+      overwrite: false,
+    });
     ctx.body = {
       code: 1
     };
@@ -104,9 +122,24 @@ module.exports = {
 
   // update student info
   async updateStuInfo(ctx) {
-    const { id, username, faculty, major, grade, sclass } = ctx.request.body;
+    const {
+      id,
+      username,
+      faculty,
+      major,
+      grade,
+      sclass
+    } = ctx.request.body;
 
-    await db.student.updateOne({ id }, { username, faculty, major, grade, sclass })
+    await db.student.updateOne({
+        id
+      }, {
+        username,
+        faculty,
+        major,
+        grade,
+        sclass
+      })
       .then(docs => {
         ctx.body = {
           code: 1
@@ -129,15 +162,17 @@ module.exports = {
 
     fs.renameSync(avatar.path, path.join(__dirname, `../public/static/img/avatar/${name}`));
 
-    await db.teacher.updateOne({ id: userid }, {
-      avatar: `/static/img/avatar/${name}`
-    })
+    await db.teacher.updateOne({
+        id: userid
+      }, {
+        avatar: `/static/img/avatar/${name}`
+      })
       .then(docs => {
         if (ctx.state.user.avatar !== '/static/img/avatar/default.jpg' && path.extname(ctx.state.user.avatar) !== extName) {
           setTimeout(() => {
             try {
               fs.unlinkSync(path.join(__dirname, `../public${ctx.state.user.avatar}`));
-            } catch (err) { }
+            } catch (err) {}
           }, 0);
         }
 
@@ -147,8 +182,7 @@ module.exports = {
             username: ctx.state.user.username,
             avatar: `/static/img/avatar/${name}`,
             userType: ctx.state.user.userType
-          })),
-          {
+          })), {
             httpOnly: false,
             overwrite: true,
             maxAge: loginMaxAge
@@ -172,10 +206,16 @@ module.exports = {
 
   // change password
   async changePW(ctx) {
-    const { password } = ctx.request.body;
+    const {
+      password
+    } = ctx.request.body;
 
     const hash = await bcrypt.hash(password, saltRounds);
-    await db.teacher.updateOne({ id: ctx.state.user.id }, { password: hash })
+    await db.teacher.updateOne({
+        id: ctx.state.user.id
+      }, {
+        password: hash
+      })
       .then(docs => {
         ctx.body = {
           code: 1
@@ -199,11 +239,17 @@ module.exports = {
   },
 
   async resetStuExamScore(ctx) {
-    const { stuID, courseID, examID } = ctx.request.body;
+    const {
+      stuID,
+      courseID,
+      examID
+    } = ctx.request.body;
 
     let cIndex;
     try {
-      const stu = await db.student.findOne({ id: stuID });
+      const stu = await db.student.findOne({
+        id: stuID
+      });
       stu.study.some((s, index) => {
         if (s.courseID === courseID) {
           cIndex = index;
@@ -218,16 +264,15 @@ module.exports = {
       }
     }
 
-    await db.student.updateOne(
-      { id: stuID },
-      {
+    await db.student.updateOne({
+        id: stuID
+      }, {
         $pull: {
           [`study.${cIndex}.exams`]: {
             examID
           }
         }
-      }
-    )
+      })
       .then(docs => {
         return ctx.body = {
           code: 1,
@@ -239,5 +284,12 @@ module.exports = {
           errMsg: err.message
         };
       });
+  },
+  async getMyArticles(ctx) {
+    const articles = ctx.state.user.articles || [];
+    return ctx.body = {
+      data: articles,
+      code: 1
+    }
   }
 };

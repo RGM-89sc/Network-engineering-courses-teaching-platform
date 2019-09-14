@@ -2,6 +2,8 @@
 node_modules/
 */npm-debug.log
 npm-debug.log
+server/public/*
+!server/public/static
 server/public/static/courseware/*
 server/public/static/img/avatar/*
 !server/public/static/img/avatar/default.jpg
@@ -9,6 +11,7 @@ server/public/static/img/exam/*
 server/public/static/img/exercises/*
 server/public/static/img/post/*
 server/public/static/img/courses/*
+server/public/static/img/news/*
 server/public/static/software/*
 server/public/static/video/*
 server/public/d/**

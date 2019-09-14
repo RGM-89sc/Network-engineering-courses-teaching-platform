@@ -1,16 +1,31 @@
 <template>
-  <el-card shadow="hover" class="tch-card">
+  <el-card shadow="always" class="tch-card">
     <div slot="header">
       <span>教师简介</span>
     </div>
     <el-row class="avatar-box">
-      <img :src="tch.avatar ? tch.avatar : $serverBaseUrl + '/static/img/avatar/default.jpg'" alt class="avatar">
-      <span class="tch-name">{{tch.username}}</span>
+      <img
+        :src="
+          tch.avatar
+            ? tch.avatar
+            : $serverBaseUrl + '/static/img/avatar/default.jpg'
+        "
+        alt
+        class="avatar"
+      />
+      <span class="tch-name">{{ tch.username }}</span>
     </el-row>
     <el-row class="other-courses-box">
       <span class="other-course-title">其他课程</span>
-      <span class="no-other-course" v-if="teaching.length === 0">暂无该教师的其他课程</span>
-      <span class="other-course" v-for="(course, index) in teaching" :key="index">{{course.coursename}}</span>
+      <span class="no-other-course" v-if="teaching.length === 0"
+        >暂无该教师的其他课程</span
+      >
+      <span
+        class="other-course"
+        v-for="(course, index) in teaching"
+        :key="index"
+        >{{ course.coursename }}</span
+      >
     </el-row>
   </el-card>
 </template>

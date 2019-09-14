@@ -1,4 +1,6 @@
-const router = require('koa-router')({ prefix: '/api' });
+const router = require('koa-router')({
+  prefix: '/api'
+});
 const log4js = require('log4js');
 const controllersInit = require('./tools/controllersInit');
 const auth = require('./middleware/auth');
@@ -103,7 +105,7 @@ module.exports = app => {
   router.post('/delCourseVideo', auth.tch, courses.delCourseVideo);
   // 获取课程学生的信息
   router.post('/getCourseStusAndExams', auth.tch, courses.getCourseStusAndExams);
-  
+
 
   // 学生开始学习课程
   router.post('/startStudy', auth.stu, student.startStudy);
@@ -157,6 +159,20 @@ module.exports = app => {
   router.post('/updateQuestionReplys', qa.updateQuestionReplys);
 
   router.get('/loadQuestions', qa.loadQuestions)
+
+  const news = app.controllers.news;
+  router.post('/getNewsArticle', news.getNewsArticle);
+  router.post('/postNewsArticle', auth.all, news.postNewsArticle)
+  router.post('/postNewsArticleImage', news.postNewsArticleImage)
+  router.post('/delNewsArticle', news.delNewsArticle)
+  router.get('/getAllNewsArticle', news.getAllNewsArticle);
+  //教师查看自己发布的文章
+  router.get('/tchGetMyArticles', auth.tch, teacher.getMyArticles)
+  //学生查看自己发布的文章
+  router.get('/stuGetMyArticles', auth.stu, student.getMyArticles)
+
+  router.get('/getFourHottestCourses', courses.getFourHottestCourses)
+  // router.post('/delNewsArticle', news.delNewsArticle);
 
   app.use(router.routes())
     .use(router.allowedMethods());

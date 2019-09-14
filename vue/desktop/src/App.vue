@@ -1,9 +1,11 @@
 <template>
   <div id="app">
-    <TheBaseHeader :user.sync="user"/>
+    <TheBaseHeader :user.sync="user" />
 
     <el-main @login="updateLoginState">
-      <router-view :user.sync="user"></router-view>
+      <transition name="slide-fade" mode="out-in">
+        <router-view :user.sync="user"></router-view>
+      </transition>
     </el-main>
   </div>
 </template>

@@ -2,12 +2,21 @@
   <div>
     <el-row class="header">
       <span>
-        <i class="el-icon-arrow-left icon" title="返回" @click="$router.go(-1)"></i>
-        统计信息 - {{courseName}}
+        <i
+          class="el-icon-arrow-left icon"
+          title="返回"
+          @click="$router.go(-1)"
+        ></i>
+        统计信息 - {{ courseName }}
       </span>
     </el-row>
     <el-row>
-      <el-table :data="courseExams" border style="width: 100%" v-loading="loadingData">
+      <el-table
+        :data="courseExams"
+        border
+        style="width: 100%"
+        v-loading="loadingData"
+      >
         <el-table-column prop="examName" label="试卷"></el-table-column>
         <el-table-column prop="examScore" label="成绩"></el-table-column>
       </el-table>

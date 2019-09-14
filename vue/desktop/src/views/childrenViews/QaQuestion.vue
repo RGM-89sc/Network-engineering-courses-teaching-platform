@@ -1,44 +1,49 @@
 <template>
-  <div class="qad">
-    <el-card class="qad-question" shadow="hover">
-      <el-row type="flex" justify="space-between" class="qad-question__main">
-        <el-col :span="3">
-          <el-card class="qad-questioner-info" shadow="hover">
+  <div class="qad__wrapper">
+    <el-card class="question" shadow="always">
+      <el-row type="flex" justify="space-between" class="question__main">
+        <el-card class="user-info" shadow="never">
+          <el-row type="flex" justify="space-between">
             <a
-              class="qad-questioner-info-avatar"
-              :style="{ backgroundImage: `url(${question.questionerAvatar})` }"
+              class="user-avatar"
+              :style="{
+                backgroundImage: `url(${question.questionerAvatar})`
+              }"
               href="/myInfo"
             ></a>
-            <el-link
-              class="qad-questioner-name"
-              type="primary"
-              href="/myInfo"
-              >{{ question.questionerName }}</el-link
-            >
-            <p v-if="question.questionerFaculty">
-              {{ question.questionerFaculty }}
-            </p>
-            <p v-if="question.questionerMajor">
-              {{ question.questionerMajor }}
-            </p>
-            <p>{{ question.questionerType }}</p>
-            <p>{{ question.created }}</p>
-          </el-card></el-col
-        >
-        <el-col :span="20">
-          <div class="qad-question__desc">
-            <div class="qad-question__title">
+            <div class="question-meta__wrapper">
+              <el-link class="user-name" type="primary" href="/myInfo">{{
+                question.questionerName
+              }}</el-link>
+              <div class="question-created normal-info-font">
+                {{ question.created }}
+              </div>
+            </div>
+          </el-row>
+          <p v-if="question.questionerFaculty">
+            {{ question.questionerFaculty }}
+          </p>
+          <p v-if="question.questionerMajor">
+            {{ question.questionerMajor }}
+          </p>
+          <p>{{ question.questionerType }}</p>
+        </el-card>
+        <el-col :span="19">
+          <div class="question__desc">
+            <div class="question__title">
               <h1>{{ question.title }}</h1>
             </div>
             <div
               v-html="question.content"
-              class="qad-question__content ck-content"
+              class="question__content ck-content"
             ></div>
           </div>
         </el-col>
       </el-row>
       <el-row type="flex" justify="space-between">
-        <el-col :span="3"> {{ question.replys.length }} 个回答 </el-col>
+        <el-col :span="3" class="normal-info-font">
+          {{ question.replys.length }} 个回答
+        </el-col>
         <el-col :span="6">
           <el-tag
             :key="tag"
@@ -55,30 +60,33 @@
     <el-card
       v-for="(reply, index) in question.replys"
       :key="index"
-      class="qad-reply"
-      shadow="hover"
+      class="reply"
+      shadow="always"
     >
-      <el-row type="flex" justify="space-between" class="qad-reply__main">
-        <el-col :span="3">
-          <el-card class="qad-replyer-info" shadow="hover">
+      <el-row type="flex" justify="space-between" class="reply__main">
+        <el-card class="user-info" shadow="never">
+          <el-row type="flex" justify="space-between">
             <a
-              class="qad-replyer-info-avatar"
-              :style="{ backgroundImage: `url(${reply.replyerAvatar})` }"
-              :href="reply.replyerAvatar"
+              class="user-avatar"
+              :style="{
+                backgroundImage: `url(${reply.replyerAvatar})`
+              }"
+              href="/myInfo"
             ></a>
-            <el-link
-              :underline="false"
-              class="qad-replyer-name"
-              type="primary"
-              >{{ reply.replyerName }}</el-link
-            >
-            <p>{{ reply.created }}</p>
-          </el-card></el-col
-        >
-        <el-col :span="20">
-          <div class="qad-reply__desc">
+            <div class="question-meta__wrapper">
+              <el-link class="user-name" type="primary" href="/myInfo">{{
+                reply.replyerName
+              }}</el-link>
+              <div class="reply-created normal-info-font">
+                {{ reply.created }}
+              </div>
+            </div>
+          </el-row>
+        </el-card>
+        <el-col :span="19">
+          <div class="reply__desc">
             <div
-              class="qad-reply__content ck ck-content"
+              class="reply__content ck ck-content"
               v-html="reply.content"
             ></div>
           </div>
@@ -118,7 +126,6 @@
 <script>
 import RichInput from '@/components/TheBaseRichInput';
 export default {
-  name: 'qad',
   props: {
     // question: {
     //   type: Object
@@ -160,18 +167,14 @@ export default {
         .post(url, { qaID: qaID })
         .then(res => {
           if (res.data.code === 1) {
-            const totalMinutesPerDay = 1440;
             this.question = res.data.data;
-            console.log(this.$dayjs().utcOffset(this.question.created));
-            console.log(this.$dayjs(Date.now()));
             this.question.created = this.$dayjs(this.question.created).format(
-              'YYYY-MM-DD 提问'
+              'YYYY-MM-D'
             );
             const replys = this.question.replys;
             for (let i of replys) {
-              i.created = this.$dayjs(i.created).format('YYYY-MM-DD 回答');
+              i.created = this.$dayjs(i.created).format('YYYY-MM-DD');
             }
-            console.log(this.user);
           } else {
             this.$message.error('问题加载失败！');
             this.$router.push({ path: '/qa' });
@@ -256,45 +259,52 @@ export default {
 
 <style lang="scss">
 $FONT_SIZE: 16px;
-
-.qad-question,
-.qad-reply {
+.normal-info-font {
+  color: #999;
+  font-size: 14px;
+}
+.question,
+.reply {
   margin-bottom: 20px;
 }
-.qad-question__main,
-.qad-reply__main {
+.question__main,
+.reply__main {
   margin-bottom: 20px;
   padding-bottom: 20px;
   border-bottom: 1px solid #e4e6e8;
 }
-.qad-question__title {
-  border-bottom: 1px solid #eee;
+.question__title {
   h2 {
     margin-top: 5px;
     margin-bottom: 1em;
   }
 }
-.qad-questioner-info,
-.qad-replyer-info {
-  p {
-    color: #999;
-    font-size: 13px;
+.user-info {
+  height: 100px;
+  .question-meta__wrapper {
+    padding-left: 15px;
   }
   .el-card__body {
-    padding: 0;
-    padding-left: 5px;
+    padding: 20px;
+    padding-left: 10px;
+    border: 0;
+  }
+  .el-row {
+    align-items: center;
   }
 }
-.qad-questioner-info-avatar,
-.qad-replyer-info-avatar {
+.user-avatar {
   display: block;
+  box-sizing: border-box;
   border-radius: 50%;
-  width: 48px;
-  height: 48px;
+  width: 40px;
+  height: 40px;
   background-size: 100% 100%;
-  margin: 5px 0;
+  border: 1px solid rgba(192, 192, 192, 0.5);
 }
-.qad-question__footer {
+.question__footer {
   margin-top: 20px;
+}
+.user-name {
 }
 </style>

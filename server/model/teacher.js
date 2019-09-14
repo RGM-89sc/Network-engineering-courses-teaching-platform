@@ -29,6 +29,10 @@ const tchSchema = new mongoose.Schema({
   created: {
     type: Date,
     default: Date.now
+  },
+  articles: {
+    type: Array,
+    default: []
   }
 });
 
