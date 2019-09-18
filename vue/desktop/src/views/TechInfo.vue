@@ -1,15 +1,27 @@
 <template>
-    <div>
-
-    </div>
+  <MainLayout>
+    <router-view :user.sync="user"></router-view>
+  </MainLayout>
 </template>
 
 <script>
-    export default {
-        
+import MainLayout from '../components/MainLayout';
+
+export default {
+  data() {
+    return {};
+  },
+  props: {
+    user: {
+      type: Object,
+      default: {}
     }
+  },
+  components: {
+    MainLayout
+  }
+};
 </script>
 
 <style lang="scss" scoped>
-
 </style>

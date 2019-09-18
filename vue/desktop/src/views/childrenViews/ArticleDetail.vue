@@ -14,15 +14,12 @@
             <div class="article__created item_padding">
               {{ formatDate(article.created, $dayjs(Date.now())) }}
             </div>
-            <span class="item_padding">{{ article.views }}次浏览&nbsp;·</span>
+            <span class="item_padding"
+              >{{ article.views }}次浏览&nbsp;&nbsp;&nbsp;·</span
+            >
             <span
               class="article__good-btn item_padding"
-              @click="
-                () => {
-                  !isGood ? ++article.goods : --article.goods;
-                  isGood = !isGood;
-                }
-              "
+              @click="goodClickHandler"
             >
               {{ article.goods }}次点赞
             </span>
@@ -57,26 +54,45 @@ export default {
           : `${hour}小时前`
         : `${minute}分钟前`;
     },
-    getNewsArticle() {
+    getArticle() {
       const url = '';
       this.$http
-        .post(`/api/getNewsArticle`, {
-          articleID: this.$route.params.news_id
+        .post(`/api/getArticle`, {
+          articleID: this.$route.params.article_id
         })
         .then(res => {
           if (res.data.code === 1) {
             this.article = res.data.data;
           }
-          console.log(this.article);
         })
         .catch(err => {
           console.log(err);
         });
+    },
+    incInfo(infoType, count = 1) {
+      this.$http
+        .post('/api/updateArticleInfo', {
+          articleID: this.$route.params.news_id,
+          infoType
+        })
+        .then(() => {})
+        .catch(err => {
+          console.log(err);
+        });
+    },
+    goodClickHandler() {
+      !this.isGood
+        ? ++this.article.goods && this.incInfo('goods')
+        : --this.article.goods && this.incInfo('goods', -1);
+      this.isGood = !this.isGood;
     }
   },
   computed: {},
   created() {
     this.getNewsArticle();
+  },
+  mounted() {
+    this.incInfo('views');
   }
 };
 </script>
@@ -90,7 +106,7 @@ export default {
   color: #999;
 }
 .news-article {
-  > .article-title {
+  > .article__title {
     font-size: 36px;
   }
 }

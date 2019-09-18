@@ -2,29 +2,64 @@
   <div>
     <el-row class="header">
       <span>
-        <i class="el-icon-arrow-left icon" title="返回" @click="$router.go(-1)"></i>
-        统计信息 - {{courseName}}
+        <i
+          class="el-icon-arrow-left icon"
+          title="返回"
+          @click="
+            $emit('changeCourseComponent', {
+              from: 'myCourseDetail',
+              to: 'myCourses'
+            })
+          "
+        ></i>
+        统计信息 - {{ courseName }}
       </span>
     </el-row>
     <el-row>
-      <el-table :data="stus" border style="width: 100%" v-loading="loadingStusData">
+      <el-table
+        :data="stus"
+        border
+        style="width: 100%"
+        v-loading="loadingStusData"
+      >
         <el-table-column type="index" :index="1"></el-table-column>
         <el-table-column prop="id" label="学号"></el-table-column>
         <el-table-column prop="username" label="姓名"></el-table-column>
         <el-table-column label="考试成绩">
           <template slot-scope="scope">
-            <el-button type="text" size="small" @click="checkStuExamResult(scope.row)">查看该生所有考试成绩</el-button>
+            <el-button
+              type="text"
+              size="small"
+              @click="checkStuExamResult(scope.row)"
+              >查看该生所有考试成绩</el-button
+            >
           </template>
         </el-table-column>
       </el-table>
     </el-row>
-    <el-dialog :title="currentStuID + ' - ' + currentStuName" :visible.sync="checkingStuExamReslt">
+    <el-dialog
+      :title="currentStuID + ' - ' + currentStuName"
+      :visible.sync="checkingStuExamReslt"
+    >
       <el-table :data="currentStuExams">
-        <el-table-column property="examName" label="试卷" width="150"></el-table-column>
-        <el-table-column property="examScore" label="成绩" width="200"></el-table-column>
+        <el-table-column
+          property="examName"
+          label="试卷"
+          width="150"
+        ></el-table-column>
+        <el-table-column
+          property="examScore"
+          label="成绩"
+          width="200"
+        ></el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
-            <el-button type="danger" size="mini" @click="resetStuExam(scope.row.examID)">重置成绩</el-button>
+            <el-button
+              type="danger"
+              size="mini"
+              @click="resetStuExam(scope.row.examID)"
+              >重置成绩</el-button
+            >
           </template>
         </el-table-column>
       </el-table>
@@ -36,7 +71,6 @@
 export default {
   data() {
     return {
-      courseID: '',
       loadingStusData: true,
       courseName: '',
       courseExams: [],
@@ -51,10 +85,13 @@ export default {
     user: {
       type: Object,
       default: {}
+    },
+    courseID: {
+      type: String,
+      default: ''
     }
   },
   created() {
-    this.courseID = this.$route.query.id;
     this.getCourseStusAndExams();
   },
   methods: {

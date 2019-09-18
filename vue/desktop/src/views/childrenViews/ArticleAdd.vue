@@ -24,7 +24,7 @@
             v-model="article.summary"
         /></el-col>
 
-        <el-button @click="postNewsArticle" type="primary">发布文章</el-button>
+        <el-button @click="postArticle" type="primary">发布文章</el-button>
       </el-row>
     </el-card>
   </div>
@@ -69,7 +69,7 @@ export default {
         avatarURL: '',
         views: 0,
         goods: 0,
-        tags: ['新闻动态'],
+        tags: [],
         content: '',
         summary: '',
         posterURL: '/static/img/poster.png'
@@ -124,7 +124,7 @@ export default {
         },
         ckfinder: {
           // Upload the images to the server using the CKFinder QuickUpload command.
-          uploadUrl: `${this.$serverBaseUrl}/api/postNewsArticleImage?articleID=${this.$route.query.articleID}`,
+          uploadUrl: `${this.$serverBaseUrl}/api/postArticleImage?articleID=${this.$route.query.articleID}&type=${this.$route.query.type}`,
           options: {
             resourceType: '.jpg,.jpeg,.png'
           }
@@ -139,14 +139,13 @@ export default {
     //判断
     beforePost() {
       const article = this.article;
-      console.log(article);
       return article.summary === '' ||
         article.title === '' ||
         article.content === ''
         ? false
         : true;
     },
-    postNewsArticle() {
+    postArticle() {
       if (!this.beforePost()) {
         this.$alert('请将 内容/标题/概述 填写完整！', '发布失败', {
           confirmButtonText: '确定',
@@ -158,11 +157,13 @@ export default {
           cacelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          const url = '/api/postNewsArticle';
+          const url = '/api/postArticle';
           this.article.articleID = this.$route.query.articleID;
           this.article.authorName = this.user.username;
           this.article.authorID = this.user.id;
           this.article.avatarURL = this.user.avatar;
+          this.article.articleType = this.$route.query.articleType;
+          this.article.tags.push(this.article.articleType);
           this.$http
             .post(url, this.article)
             .then(res => {
@@ -171,7 +172,10 @@ export default {
                   message: '发布成功！',
                   type: 'success'
                 });
+                console.log('asdasd');
+                this.$router.push({ path: '/news' });
               } else {
+                this.$message.error('发布失败！');
                 console.log(res.data.errMsg);
               }
             })

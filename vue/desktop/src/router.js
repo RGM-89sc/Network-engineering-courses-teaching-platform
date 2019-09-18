@@ -3,7 +3,6 @@ import Router from "vue-router";
 import getLoginState from "./getLoginState";
 
 Vue.use(Router);
-
 let router = new Router({
   mode: "history",
   base: process.env.BASE_URL,
@@ -180,25 +179,20 @@ let router = new Router({
             },
             {
               path: "library",
-              component: () => import("./views/Library.vue"),
+              name: "show_resources",
+              component: () => import("./views/childrenViews/courseViews/Resources.vue"),
+              meta: {
+                title: "课程资源"
+              },
               children: [{
-                  path: "",
-                  name: "show_resources",
-                  component: () => import("./views/childrenViews/courseViews/Resources.vue"),
-                  meta: {
-                    title: "课程资源"
-                  }
-                },
-                {
-                  path: ":filename",
-                  name: "preview_courseware",
-                  component: () =>
-                    import("./views/childrenViews/courseViews/PreviewCourseware.vue"),
-                  meta: {
-                    title: "实验平台"
-                  }
+                path: ":filename",
+                name: "preview_courseware",
+                component: () =>
+                  import("./views/childrenViews/courseViews/PreviewCourseware.vue"),
+                meta: {
+                  title: "课件"
                 }
-              ]
+              }]
             }
           ]
         }
@@ -229,35 +223,67 @@ let router = new Router({
         }
       ]
     },
-    //技术前沿
-    {
-      path: "/techinfo",
-      component: () => import("./views/TechInfo.vue")
-    },
     //新闻动态
     {
       path: "/news",
       component: () => import("./views/News.vue"),
       children: [{
           path: '',
-          name: 'news_list',
+          name: 'article_news_list',
           component: () =>
-            import("./views/childrenViews/NewsList.vue"),
+            import("./views/childrenViews/ArticleList.vue"),
           meta: {
-            title: '新闻动态列表'
-          }
+            title: '新闻动态|文章列表'
+          },
+          props: {
+            articleType: 'news'
+          },
         }, {
-          path: 'article/:news_id',
-          name: 'news_detail',
-          component: () => import('./views/childrenViews/NewsDetail.vue'),
+          path: 'article/:article_id',
+          name: 'article_news_detail',
+          component: () => import('./views/childrenViews/ArticleDetail.vue'),
           meta: {
-            title: '新闻动态详情'
+            title: '新闻动态|文章详情'
           }
         },
         {
-          path: ':news_id',
-          name: '/newsAddArticle',
-          component: () => import('./views/childrenViews/NewsAddArticle.vue'),
+          path: 'addArticle',
+          name: 'article_news_add',
+          component: () => import('./views/childrenViews/ArticleAdd.vue'),
+          meta: {
+            auth: 'all',
+            title: '发布文章'
+          }
+        }
+      ]
+    },
+    //技术前沿
+    {
+      path: "/techInfo",
+      component: () => import("./views/TechInfo.vue"),
+      children: [{
+          path: '',
+          name: 'article_techInfo_list',
+          component: () =>
+            import("./views/childrenViews/ArticleList.vue"),
+          meta: {
+            title: '技术前沿|文章列表'
+          },
+          props: {
+            articleType: 'techInfo'
+          },
+        }, {
+          path: '/article/:article_id',
+          name: 'article_techInfo_detail',
+          component: () => import('./views/childrenViews/ArticleDetail.vue'),
+          meta: {
+            title: '新闻动态|文章详情'
+          }
+        },
+        {
+          path: 'addArticle',
+          name: 'article_techInfo_add',
+          component: () => import('./views/childrenViews/ArticleAdd.vue'),
           meta: {
             auth: 'all',
             title: '发布文章'

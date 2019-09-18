@@ -10,6 +10,9 @@ const resourcesSchema = new mongoose.Schema({
     require: true,
     unique: true
   },
+  courseID: {
+    type: String
+  },
   created: {
     type: Date,
     default: Date.now

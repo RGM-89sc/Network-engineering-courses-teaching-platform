@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const newsSchema = new mongoose.Schema({
+const articleSchema = new mongoose.Schema({
     articleID: {
         type: String,
         required: true
@@ -15,6 +15,11 @@ const newsSchema = new mongoose.Schema({
     avatarURL: {
         type: String,
         default: '/static/img/avatar/default.png'
+    },
+    articleType: {
+        type: String,
+        required: true,
+        default: 'news'
     },
     tags: {
         type: Array,
@@ -49,4 +54,4 @@ const newsSchema = new mongoose.Schema({
     }
 });
 
-module.exports = mongoose.model('news', newsSchema)
+module.exports = mongoose.model('article', articleSchema)

@@ -73,7 +73,11 @@ const qaSchema = new mongoose.Schema({
             type: Boolean,
             default: false
         }
-    }]
+    }],
+    replysLength: {
+        type: Number,
+        default: 0
+    }
 });
 
 module.exports = mongoose.model('qa', qaSchema)

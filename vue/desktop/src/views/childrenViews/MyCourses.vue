@@ -16,8 +16,10 @@
           <el-button
             type="text"
             @click="
-              $router.push({
-                path: `/myInfo/courseDetail?id=${course.courseID}`
+              $emit('changeCourseComponent', {
+                from: 'myCourses',
+                to: 'myCourseDetail',
+                courseID: course.courseID
               })
             "
             >统计信息</el-button
@@ -70,6 +72,7 @@ export default {
         .then(res => {
           if (res.data.code === 1) {
             this.courses = res.data.data;
+            console.log(this.courses);
           }
           if (res.data.code === -1) {
             this.$message.error('加载失败');

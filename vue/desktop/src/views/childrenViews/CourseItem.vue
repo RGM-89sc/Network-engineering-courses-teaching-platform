@@ -5,7 +5,10 @@
         <TheBaseNavSideBar />
       </el-col>
       <el-col :span="21">
-        <router-view :user.sync="user"></router-view>
+        <router-view
+          :user.sync="user"
+          :courseID="$route.params.course_id"
+        ></router-view>
       </el-col>
     </el-row>
   </div>

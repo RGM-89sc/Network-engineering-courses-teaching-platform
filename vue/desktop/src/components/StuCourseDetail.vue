@@ -5,7 +5,12 @@
         <i
           class="el-icon-arrow-left icon"
           title="返回"
-          @click="$router.go(-1)"
+          @click="
+            $emit('changeCourseComponent', {
+              from: 'myCourseDetail',
+              to: 'myCourses'
+            })
+          "
         ></i>
         统计信息 - {{ courseName }}
       </span>
@@ -28,7 +33,6 @@
 export default {
   data() {
     return {
-      courseID: '',
       loadingData: true,
       courseName: '',
       courseExams: []
@@ -38,10 +42,13 @@ export default {
     user: {
       type: Object,
       default: {}
+    },
+    courseID: {
+      type: String,
+      default: ''
     }
   },
   created() {
-    this.courseID = this.$route.query.id;
     this.getMyCourseExams();
   },
   methods: {

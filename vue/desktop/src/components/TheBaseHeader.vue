@@ -13,7 +13,7 @@
       >
         <el-menu-item index="/course">课程</el-menu-item>
         <el-menu-item index="/qa">答疑</el-menu-item>
-        <el-menu-item index="/techinfo">技术前沿</el-menu-item>
+        <el-menu-item index="/techInfo">技术前沿</el-menu-item>
         <el-menu-item index="/news">新闻动态</el-menu-item>
         <el-menu-item index="/library">实验平台</el-menu-item>
       </el-menu>
@@ -78,9 +78,6 @@ export default {
   watch: {
     '$route.path': function() {
       let path = this.$route.path.replace(/(\/[^\/]+)(\/.+$)/, '$1');
-      if (path === '/course') {
-        path = '/';
-      }
       this.path = path;
       this.$refs.menu.activeIndex = path;
       this.canLinkActive = path == '/auth' ? true : false;
@@ -128,7 +125,7 @@ export default {
 header {
   min-width: 970px;
   border-bottom: 1px solid #ddd;
-  height: 61px;
+  height: 61px !important;
   overflow: hidden;
   display: flex;
   justify-content: space-between;

@@ -1,13 +1,15 @@
 <template>
   <el-card class="course" :body-style="{ padding: '15px' }">
     <div class="cover">
-      <img :src="$serverBaseUrl + course.cover" style="width: 100%;">
+      <img :src="$serverBaseUrl + course.cover" style="width: 100%;" />
     </div>
     <div>
-      <span class="title">{{course.coursename}}</span>
-      <span class="teacher">教师：{{course.tch[0].username}}</span>
+      <span class="title">{{ course.coursename }}</span>
+      <span class="teacher">教师：{{ course.tch[0].username }}</span>
       <div class="control">
-        <el-button type="text" class="button" @click="$router.push({ path: `/course/${course.courseID}` })">进入课程</el-button>
+        <el-button type="text" class="button" @click="enterCourse"
+          >进入课程</el-button
+        >
       </div>
     </div>
   </el-card>
@@ -19,6 +21,19 @@ export default {
     course: {
       type: Object,
       default: {}
+    }
+  },
+  methods: {
+    enterCourse() {
+      window.sessionStorage.setItem(
+        'exercises.current_coursename',
+        this.course.coursename
+      );
+      window.sessionStorage.setItem(
+        'exams.current_coursename',
+        this.course.coursename
+      );
+      this.$router.push({ path: `/course/${this.course.courseID}` });
     }
   }
 };

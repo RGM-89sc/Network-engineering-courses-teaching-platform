@@ -43,14 +43,16 @@ module.exports = () => {
     fs.mkdirSync(path.join(__dirname, qaImageStoreRelativeURL));
 
   }
+  if (!fs.existsSync(path.join(__dirname, '../public/static/img/article'))) {
+    fs.mkdirSync(path.join(__dirname, '../public/static/img/article'));
 
-  const newsImageStoreRelativeURL = '../public/static/img/news';
+  }
+  const newsImageStoreRelativeURL = '../public/static/img/article/news';
   if (!fs.existsSync(path.join(__dirname, newsImageStoreRelativeURL))) {
     fs.mkdirSync(path.join(__dirname, newsImageStoreRelativeURL));
 
   }
-
-  const techInfoImageStoreRelativeURL = '../public/static/img/techInfo';
+  const techInfoImageStoreRelativeURL = '../public/static/img/article/techInfo';
   if (!fs.existsSync(path.join(__dirname, techInfoImageStoreRelativeURL))) {
     fs.mkdirSync(path.join(__dirname, techInfoImageStoreRelativeURL));
 

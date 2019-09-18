@@ -30,10 +30,18 @@ const tchSchema = new mongoose.Schema({
     type: Date,
     default: Date.now
   },
-  articles: {
-    type: Array,
-    default: []
-  }
+  articles: [{
+    articleID: String,
+    authorID: String,
+    title: String,
+    created: Date,
+    articleType: String
+  }],
+  //回答过的问题
+  questionReplys: [{
+    qaID: String,
+    created: Date
+  }]
 });
 
 module.exports = mongoose.model('Teacher', tchSchema);

@@ -150,30 +150,38 @@ module.exports = app => {
 
   const qa = app.controllers.qa;
 
-  router.post('/uploadQuestion', auth.all, qa.uploadQuestion)
-  router.post('/deleteQuestion', auth.all, qa.deleteQuestion)
-  router.post('/modifyQuestion', auth.all, qa.modifyQuestion)
+  router.post('/uploadQaQuestion', auth.all, qa.uploadQaQuestion)
+  router.post('/delQaQuestion', auth.stu, qa.delQaQuestion)
+  router.post('/modifyQaQuestion', auth.all, qa.modifyQaQuestion)
   router.post('/deleteQuestionReply', auth.all, qa.deleteQuestionReply)
   router.post('/uploadQaImage', qa.uploadQaImage)
-  router.post('/loadQuestion', qa.loadQuestion)
+  router.post('/getQaQuestion', qa.getQaQuestion)
   router.post('/updateQuestionReplys', qa.updateQuestionReplys);
+  router.get('/getQaQuestions', qa.getQaQuestions)
 
-  router.get('/loadQuestions', qa.loadQuestions)
+  const article = app.controllers.article;
+  // 获取文章
+  router.post('/getArticle', article.getArticle);
+  // 上传文章
+  router.post('/postArticle', auth.all, article.postArticle);
+  // 上传文章图片
+  router.post('/postArticleImage', article.postArticleImage);
+  // 删除文章
+  router.post('/delArticle', article.delArticle);
+  // 获取 新闻 或者 技术前沿的文章
+  router.post('/getArticles', article.getArticles);
+  // 获取全部文章
+  router.get('/getAllArticles', article.getAllArticles);
+  // 更新文章信息
+  router.post('/updateArticleInfo', article.updateArticleInfo);
+  // 教师查看自己发布的文章
+  router.get('/tchGetMyArticles', auth.tch, teacher.getMyArticles);
+  // 学生查看自己发布的文章
+  router.get('/stuGetMyArticles', auth.stu, student.getMyArticles);
+  router.get('/getFourHottestCourses', courses.getFourHottestCourses);
+  // router.post('/delArticle', article.delArticle);
 
-  const news = app.controllers.news;
-  router.post('/getNewsArticle', news.getNewsArticle);
-  router.post('/postNewsArticle', auth.all, news.postNewsArticle)
-  router.post('/postNewsArticleImage', news.postNewsArticleImage)
-  router.post('/delNewsArticle', news.delNewsArticle)
-  router.get('/getAllNewsArticle', news.getAllNewsArticle);
-  //教师查看自己发布的文章
-  router.get('/tchGetMyArticles', auth.tch, teacher.getMyArticles)
-  //学生查看自己发布的文章
-  router.get('/stuGetMyArticles', auth.stu, student.getMyArticles)
-
-  router.get('/getFourHottestCourses', courses.getFourHottestCourses)
-  // router.post('/delNewsArticle', news.delNewsArticle);
-
+  router.get('/stuGetMyQuestions', auth.stu, student.getMyQuestions);
   app.use(router.routes())
     .use(router.allowedMethods());
 };

@@ -1,36 +1,30 @@
 <template>
   <div>
     <el-card
-      v-for="article in articles"
-      :key="article.articleID"
-      class="article"
+      v-for="question in questions"
+      :key="question.qaID"
+      class="question"
       shadow="always"
     >
-      <el-row type="flex">
-        <el-col :span="18" class="article-name">
-          <span
-            @click="
-              $router.push({
-                path: `/${article.articleType}/article/${article.articleID}`
-              })
-            "
-            >{{ article.title }}</span
-          >
-          <div class="article-date">
-            {{ $dayjs(article.created).format('YYYY-MM-DD') }}
-          </div>
+      <el-row>
+        <el-col :span="18" class="question-name">
+          <span @click="$router.push({ path: `/qa/${question.id}` })">{{
+            question.title
+          }}</span>
         </el-col>
         <el-col :span="6" class="manipulate">
-          <el-button type="danger" @click="delArticle(article)">删除</el-button>
+          <el-button type="danger" @click="delQuestion(question)"
+            >删除</el-button
+          >
         </el-col>
       </el-row>
     </el-card>
-    <el-row v-if="articles.length === 0" class="article_empty">
+    <el-row v-if="questions.length === 0" class="question_empty">
       <span v-if="user">
-        您还没有发布过文章，去<el-button
+        您还没有提过问题，去<el-button
           type="text"
-          @click="$router.push({ path: '/news' })"
-          >&nbsp;发布文章</el-button
+          @click="$router.push({ path: '/qa' })"
+          >&nbsp;提问题</el-button
         >
         吧
       </span>
@@ -48,19 +42,18 @@ export default {
   },
   data() {
     return {
-      articles: []
+      questions: []
     };
   },
   methods: {
-    getMyArticles() {
-      const type = this.user.userType === 0 ? 'stu' : 'tch';
-      const url = `/api/${type}GetMyArticles`;
+    getMyquestions() {
+      //   const type = this.user.userType === 0 ? 'stu' : 'tch';
+      const url = '/api/stuGetMyQuestions';
       this.$http
         .get(url)
         .then(res => {
           if (res.data.code === 1) {
-            this.articles = res.data.data;
-            console.log(this.articles);
+            this.questions = res.data.data;
           } else {
             this.$message({
               message: '获取信息失败!',
@@ -72,13 +65,12 @@ export default {
           console.log(err);
         });
     },
-    delArticle(article) {
-      const url = '/api/delArticle';
+    delQuestion(question) {
+      const url = '/api/delQaQuestion';
       this.$http
         .post(url, {
-          articleType: article.articleType,
-          articleID: article.articleID,
-          authorID: article.authorID
+          qaID: question.qaID,
+          questionerID: this.user.id
         })
         .then(res => {
           if (res.data.code === 1) {
@@ -88,8 +80,9 @@ export default {
             });
           } else if (res.data.code === 0) {
             this.$message.error({
-              message: res.data.info
+              message: res.data.data.info
             });
+            console.log(res.data);
           } else {
             this.$message.error({
               message: '删除失败！'
@@ -102,24 +95,19 @@ export default {
     }
   },
   created() {
-    this.getMyArticles();
+    this.getMyquestions();
   }
 };
 </script>
     
 <style lang="scss" scoped>
-.article {
+.question {
   margin-bottom: 20px;
 
-  .article-name {
+  .question-name {
     span {
       line-height: 40px;
       cursor: pointer;
-    }
-    > .article-date {
-      color: #909090;
-      font-size: 14px;
-      align-self: center;
     }
   }
 
@@ -128,7 +116,7 @@ export default {
     text-align: right;
   }
 }
-.article_empty {
+.question_empty {
   padding: 5rem;
   text-align: center;
   color: #909090;

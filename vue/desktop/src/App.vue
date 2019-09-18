@@ -61,7 +61,15 @@ body {
 }
 .slide-fade-enter,
 .slide-fade-leave-to {
-  //transform: translateX(50px);
   opacity: 0;
+}
+.slide-fade-enter {
+  transform: translateX(-50px);
+}
+.slide-fade-leave-to {
+  transform: translateX(50px);
+}
+main {
+  overflow: hidden !important;
 }
 </style>

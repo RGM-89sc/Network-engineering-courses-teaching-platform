@@ -30,6 +30,7 @@
           </el-col>
         </el-row>
         <ckeditor
+          class="ckeditor_base"
           ref="questioningEditor"
           :editor="editor"
           v-model="question.content"
@@ -38,12 +39,12 @@
         ></ckeditor>
         <el-row class="rich-text__footer" type="flex" justify="space-between">
           <el-col :span="5">
-            <el-button type="danger" plain @click="question.content = ''"
+            <el-button type="danger" @click="question.content = ''"
               >清空内容</el-button
             ></el-col
           >
           <el-col :span="2.5">
-            <el-button type="primary" plain @click="$emit('upload')">{{
+            <el-button type="primary" @click="$emit('upload')">{{
               currentMode.submitText
             }}</el-button></el-col
           >
@@ -184,7 +185,7 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss">
 .rich-text {
   margin-top: 20px;
 }
@@ -194,5 +195,14 @@ export default {
 }
 .rich-text__header {
   margin-bottom: 20px;
+}
+.ckeditor_base {
+  + .ck-editor {
+    > .ck-editor__main {
+      > .ck-content {
+        min-height: 30vh;
+      }
+    }
+  }
 }
 </style>

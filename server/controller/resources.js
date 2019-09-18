@@ -2,16 +2,25 @@ const fs = require('fs');
 const path = require('path');
 const db = require('../tools/mountModel');
 const omit = require('../tools/omitObjProp');
-const { decodeFilename, encodeFilename } = require('../tools/filenameTools');
+const {
+  decodeFilename,
+  encodeFilename
+} = require('../tools/filenameTools');
 
 module.exports = {
   async uploadResources(ctx) {
-    const { classify } = ctx.request.body;
+    const {
+      classify,
+      courseID
+    } = ctx.request.body;
     const file = ctx.request.files.file;
     const filename = encodeFilename(file.name);
     const filepath = file.path;
-
-    if (await db.resources.findOne({ classify, filename })) {
+    const classifyPath = classify === 'courseware' ? `/${courseID}` : '';
+    if (await db.resources.findOne({
+        classify,
+        filename
+      })) {
       if (fs.existsSync(filepath)) {
         fs.unlinkSync(filepath);
       }
@@ -21,9 +30,17 @@ module.exports = {
       };
     }
 
-    await db.resources.create({ classify, filename })
+    await db.resources.create({
+        classify,
+        filename,
+        courseID
+      })
       .then(docs => {
-        fs.renameSync(filepath, path.join(__dirname, `../public/static/${classify}/${filename}`));
+        const URI = `../public/static/${classify}${classifyPath}`;
+        if (!fs.existsSync(path.join(__dirname, URI))) {
+          fs.mkdirSync(path.join(__dirname, URI));
+        }
+        fs.renameSync(filepath, path.join(__dirname, `${URI}/${filename}`));
         return ctx.body = {
           code: 1
         };
@@ -37,14 +54,24 @@ module.exports = {
   },
 
   async getResources(ctx) {
-    const { classify, skip, limit } = ctx.request.body;
-
+    const {
+      classify,
+      skip,
+      limit,
+      courseID
+    } = ctx.request.body;
     const query = {};
-    if (classify !== 'all') {
-      query.classify = classify;
-    }
+    query.classify = classify;
 
-    await db.resources.find(query, { _id: 0, __v: 0 }).sort({ created: -1 }).skip(parseInt(skip)).limit(parseInt(limit))
+    if (classify === 'courseware') {
+      query.courseID = courseID;
+    }
+    await db.resources.find(query, {
+        _id: 0,
+        __v: 0
+      }).sort({
+        created: -1
+      }).skip(parseInt(skip)).limit(parseInt(limit))
       .then(docs => {
         return ctx.body = {
           code: 1,
@@ -60,10 +87,16 @@ module.exports = {
   },
 
   async delResource(ctx) {
-    let { classify, filename } = ctx.request.body;
+    let {
+      classify,
+      filename
+    } = ctx.request.body;
     filename = encodeFilename(filename);
 
-    await db.resources.deleteOne({ classify, filename })
+    await db.resources.deleteOne({
+        classify,
+        filename
+      })
       .then(docs => {
         const filepath = path.join(__dirname, `../public/static/${classify}/${filename}`);
         if (fs.existsSync(filepath)) {

@@ -26,7 +26,6 @@
             <div class="cmt__content__table">
               <el-table
                 :data="singlePageQuestions"
-                border
                 stripe
                 highlight-current-row
                 :loading="loading"
@@ -163,8 +162,8 @@ export default {
     viewQuestionDetails(scope) {
       this.$router.push({ path: `${this.$route.path}/${scope.row.qaID}` });
     },
-    loadQuestions() {
-      const url = '/api/loadQuestions';
+    getQaQuestions() {
+      const url = '/api/getQaQuestions';
       let data = [];
       this.$http
         .get(url)
@@ -199,7 +198,7 @@ export default {
         type: 'warning'
       })
         .then(() => {
-          const url = '/api/uploadQuestion';
+          const url = '/api/uploadQaQuestion';
           this.$http
             .post(url, this.question)
             .then(res => {
@@ -208,7 +207,10 @@ export default {
                   message: '提交成功！',
                   type: 'success'
                 });
-                this.loadQuestions();
+                // this.getQaQuestions();
+                this.$router.push({
+                  path: '/emptyPage'
+                });
               } else {
                 this.$message.error('提交失败！');
               }
@@ -236,7 +238,7 @@ export default {
     }
   },
   created() {
-    this.loadQuestions();
+    this.getQaQuestions();
     if (this.isLogin) {
       const Q = this.question;
       Q.questionerID = this.user.id;

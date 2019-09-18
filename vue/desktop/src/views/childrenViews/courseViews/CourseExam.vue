@@ -4,7 +4,7 @@
       <el-col :span="12">
         <span class="course-name">{{ courseName }}</span>
       </el-col>
-      <el-col :span="12" class="toolsbar" v-if="user && user.userType === 1">
+      <el-col class="toolsbar" v-if="user && user.userType === 1">
         <el-button
           type="primary"
           @click="$router.push({ path: `${$route.path}/addExamPaper` })"

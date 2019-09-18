@@ -364,8 +364,15 @@ module.exports = {
   },
   async getMyArticles(ctx) {
     const articles = ctx.state.user.articles || [];
-    return {
+    return ctx.body = {
       data: articles,
+      code: 1
+    }
+  },
+  async getMyQuestions(ctx) {
+    const questions = ctx.state.user.questions || [];
+    return ctx.body = {
+      data: questions,
       code: 1
     }
   }

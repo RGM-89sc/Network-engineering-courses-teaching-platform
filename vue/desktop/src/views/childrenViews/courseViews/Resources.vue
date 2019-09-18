@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-row type="flex" justify="space-between">
-      <el-col :span="5">
+      <!-- <el-col :span="5">
         <el-select v-model="classify" placeholder="全部结果" size="small">
           <el-option
             v-for="item in classifyOptions"
@@ -10,7 +10,7 @@
             :value="item.value"
           ></el-option>
         </el-select>
-      </el-col>
+      </el-col> -->
       <el-col :span="5">
         <el-input
           placeholder="请输入搜索内容"
@@ -20,13 +20,13 @@
         ></el-input>
       </el-col>
     </el-row>
-    <el-row class="resources-list">
+    <el-row class="resources-list" type="flex">
       <el-table :data="resources" v-loading="loading" style="width: 100%">
         <el-table-column v-if="user.userType === 1" prop="filename">
           <template slot="header" slot-scope="scope">
             <!-- slot-scope="scope"不能去掉，去掉了就不会显示这个模板 -->
             <el-button type="primary" size="small" @click="uploadResource">
-              <i class="el-icon-upload el-icon--left"></i>上传资源
+              <i class="el-icon-upload el-icon--left"></i>上传课件
             </el-button>
           </template>
           <template slot-scope="scope">
@@ -110,10 +110,10 @@
 
     <el-dialog
       v-if="user.userType === 1"
-      title="上传资源"
+      title="上传课件"
       :visible.sync="uploadDialogVisible"
     >
-      <el-row type="flex" justify="center" style="margin-bottom: 20px;">
+      <!-- <el-row type="flex" justify="center" style="margin-bottom: 20px;">
         <span style="line-height: 32px;">上传到类别：</span>
         <el-select
           v-model="uploadClassify"
@@ -127,7 +127,7 @@
             :value="item.value"
           ></el-option>
         </el-select>
-      </el-row>
+      </el-row> -->
 
       <el-row type="flex" justify="center">
         <el-upload
@@ -135,7 +135,7 @@
           multiple
           ref="upload"
           :action="$serverBaseUrl + '/api/uploadResources'"
-          :data="{ classify: uploadClassify }"
+          :data="{ classify: uploadClassify, courseID }"
           :with-credentials="true"
           :on-remove="handleRemove"
           :on-error="handleError"
@@ -184,21 +184,21 @@
 export default {
   data() {
     return {
-      classifyOptions: [
-        {
-          value: 'all',
-          label: '全部结果'
-        },
-        {
-          value: 'courseware',
-          label: '课件'
-        },
-        {
-          value: 'software',
-          label: '软件'
-        }
-      ],
-      classify: 'all',
+      // classifyOptions: [
+      //   {
+      //     value: 'all',
+      //     label: '全部结果'
+      //   },
+      //   {
+      //     value: 'courseware',
+      //     label: '课件'
+      //   },
+      //   {
+      //     value: 'software',
+      //     label: '软件'
+      //   }
+      // ],
+      classify: 'courseware',
 
       search: '',
 
@@ -209,22 +209,23 @@ export default {
       gotAllResources: false,
 
       uploadDialogVisible: false,
-      uploadClassifyOptions: [
-        {
-          value: 'courseware',
-          label: '课件'
-        },
-        {
-          value: 'software',
-          label: '软件'
-        }
-      ],
+      // uploadClassifyOptions: [
+      //   {
+      //     value: 'courseware',
+      //     label: '课件'
+      //   },
+      //   {
+      //     value: 'software',
+      //     label: '软件'
+      //   }
+      // ],
       uploadClassify: 'courseware',
       fileList: [],
       updating: false,
       uploaded: 0,
 
-      uploadSuccessDialogVisible: false
+      uploadSuccessDialogVisible: false,
+      courseID: ''
     };
   },
   computed: {
@@ -237,9 +238,9 @@ export default {
       if (this.classify === 'courseware') {
         return '请选择.pdf文件进行上传，.ppt/.pptx无法在线预览';
       }
-      if (this.classify === 'software') {
-        return '请打包成单个文件后再上传';
-      }
+      // if (this.classify === 'software') {
+      //   return '请打包成单个文件后再上传';
+      // }
     }
   },
   props: {
@@ -248,16 +249,17 @@ export default {
       default: {}
     }
   },
-  watch: {
-    classify: function(newValue, oldValue) {
-      this.skip = 0;
-      this.allResources = [];
-      this.gotAllResources = false;
-      this.getResources(newValue);
-    }
-  },
+  // watch: {
+  //   classify: function(newValue, oldValue) {
+  //     this.skip = 0;
+  //     this.allResources = [];
+  //     this.gotAllResources = false;
+  //     this.getResources(newValue);
+  //   }
+  // },
   created() {
-    this.getResources('all');
+    this.courseID = this.$route.params.course_id;
+    this.getResources(this.classify);
   },
   methods: {
     encodeFilename(filename) {
@@ -286,20 +288,23 @@ export default {
     },
     getResources(classify) {
       this.loading = true;
+      const courseID = this.courseID;
       this.$http
         .post('/api/getResources', {
           classify,
+          courseID,
           skip: this.skip,
           limit: this.limit
         })
         .then(res => {
           if (res.data.code === 1) {
+            console.log(res.data.data);
             const resources = res.data.data.map(data => {
               return {
                 filename: this.decodeFilename(data.filename),
                 date: this.dateFormat(data.created),
                 classify: data.classify,
-                href: `${this.$serverBaseUrl}/static/${data.classify}/${data.filename}`
+                href: `${this.$serverBaseUrl}/static/${data.classify}/${courseID}/${data.filename}`
               };
             });
             this.allResources.push(...resources);
@@ -327,7 +332,8 @@ export default {
           this.$http
             .post('/api/delResources', {
               classify: resource.classify,
-              filename: resource.filename
+              filename: resource.filename,
+              courseID: this.courseID
             })
             .then(res => {
               if (res.data.code === 1) {

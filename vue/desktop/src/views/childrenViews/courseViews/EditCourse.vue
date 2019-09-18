@@ -1,12 +1,16 @@
 <template>
   <div>
-    <el-row :gutter="20">
+    <el-row type="flex" :gutter="20">
       <el-col :span="17">
         <el-card>
           <div slot="header" class="clearfix">
-            <span>{{this.partInfo.title}}</span>
+            <span>{{ this.partInfo.title }}</span>
           </div>
-          <ckeditor :editor="editor" v-model="editorData" :config="editorConfig"></ckeditor>
+          <ckeditor
+            :editor="editor"
+            v-model="editorData"
+            :config="editorConfig"
+          ></ckeditor>
         </el-card>
       </el-col>
 
@@ -20,9 +24,14 @@
             :rules="partInfoRules"
           >
             <el-form-item class="form-item" label="标题：" prop="title">
-              <el-input v-model="partInfo.title" placeholder="请输入标题"></el-input>
+              <el-input
+                v-model="partInfo.title"
+                placeholder="请输入标题"
+              ></el-input>
             </el-form-item>
-            <el-button type="primary" style="width: 100%;" @click="updatePart">发布/更新</el-button>
+            <el-button type="primary" style="width: 100%;" @click="updatePart"
+              >发布/更新</el-button
+            >
           </el-form>
         </el-card>
 
@@ -30,7 +39,11 @@
           <el-upload
             accept=".mp4"
             :action="$serverBaseUrl + '/api/uploadCourseVideoChunks'"
-            :data="{ courseID: $route.query.id, chapter: $route.query.c, part: $route.query.p }"
+            :data="{
+              courseID: $route.query.id,
+              chapter: $route.query.c,
+              part: $route.query.p
+            }"
             ref="upload"
             :http-request="uploadVideo"
             :with-credentials="true"
@@ -55,11 +68,18 @@
           :show-close="false"
         >
           <p>视频上传成功！视频地址：</p>
-          <el-input v-model="uploadVideoScuessUrl[uploadVideoScuessName]" id="uploaded-video-url"></el-input>
+          <el-input
+            v-model="uploadVideoScuessUrl[uploadVideoScuessName]"
+            id="uploaded-video-url"
+          ></el-input>
           <p>您也可以点击该视频查看视频地址</p>
           <span slot="footer">
-            <el-button plain @click="uploadVideoScuessDialogVis = false">取 消</el-button>
-            <el-button type="primary" @click="copyUploadVideoScuessUrl">复制地址</el-button>
+            <el-button plain @click="uploadVideoScuessDialogVis = false"
+              >取 消</el-button
+            >
+            <el-button type="primary" @click="copyUploadVideoScuessUrl"
+              >复制地址</el-button
+            >
           </span>
         </el-dialog>
       </el-col>
@@ -155,9 +175,7 @@ export default {
 
         ckfinder: {
           // Upload the images to the server using the CKFinder QuickUpload command.
-          uploadUrl: `${this.$serverBaseUrl}/api/uploadCourseImg?courseID=${
-            this.$route.query.id
-          }&chapter=${this.$route.query.c}&part=${this.$route.query.p}`,
+          uploadUrl: `${this.$serverBaseUrl}/api/uploadCourseImg?courseID=${this.$route.query.id}&chapter=${this.$route.query.c}&part=${this.$route.query.p}`,
           options: {
             resourceType: '.jpg,.jpeg,.png'
           }

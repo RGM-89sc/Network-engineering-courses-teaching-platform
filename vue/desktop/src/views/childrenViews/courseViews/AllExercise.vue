@@ -6,8 +6,12 @@
     <el-row>
       <el-row v-for="course in allCourses" :key="course.courseID">
         <el-card>
-          <span class="course-name" @click="gotoCourseExecrises(course.courseID, course.coursename)">{{course.coursename}}</span>
-          <span class="course-tch">授课教师：{{course.tch[0].username}}</span>
+          <span
+            class="course-name"
+            @click="gotoCourseExecrises(course.courseID, course.coursename)"
+            >{{ course.coursename }}</span
+          >
+          <span class="course-tch">授课教师：{{ course.tch[0].username }}</span>
         </el-card>
       </el-row>
     </el-row>
@@ -41,7 +45,6 @@ export default {
   },
   methods: {
     gotoCourseExecrises(courseID, coursename) {
-      window.sessionStorage.setItem('exercises.current_coursename', coursename);
       this.$router.push({ path: `/exercise/${courseID}` });
     }
   }

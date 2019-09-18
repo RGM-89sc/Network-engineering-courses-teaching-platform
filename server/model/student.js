@@ -52,10 +52,33 @@ const stuSchema = new mongoose.Schema({
     type: Date,
     default: Date.now
   },
-  articles: {
-    type: Array,
-    default: []
-  }
+  articles: [{
+    authorID: String,
+    articleID: String,
+    type: String,
+    title: String,
+    created: Date
+  }],
+  //提出过的问题
+  questions: [{
+    qaID: String,
+    title: String,
+    created: Date,
+    questionerID: String
+  }],
+  //回答过的问题
+  questionReplys: [{
+    questionID: String,
+    created: Date
+  }],
+  // //  浏览过的文章
+  // viewedArticles:[
+  //   articleID: String
+  // ],
+  // //  点赞过的文章
+  // goodArticles:[
+  //   articleID: String
+  // ]
 });
 
 module.exports = mongoose.model('Student', stuSchema);

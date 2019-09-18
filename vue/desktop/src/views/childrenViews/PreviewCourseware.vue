@@ -1,10 +1,13 @@
 <template>
   <div>
-    <span class="filename">{{$route.params.filename}}</span>
-    <PDFViewerSkeleton v-if="!pdfLoaded"/>
+    <span class="filename">{{ $route.params.filename }}</span>
+    <PDFViewerSkeleton v-if="!pdfLoaded" />
     <div
       class="pdf-viewer"
-      :style="{ 'visibility': pdfLoaded ? 'visible' : 'hidden', 'transform': `translateY(${pdfLoaded ? '0' : '-200%'})` }"
+      :style="{
+        visibility: pdfLoaded ? 'visible' : 'hidden',
+        transform: `translateY(${pdfLoaded ? '0' : '-200%'})`
+      }"
     >
       <el-row class="pdf-main">
         <pdf
@@ -14,7 +17,7 @@
           style="background-color: #eee;"
           @error="pdfError"
         ></pdf>
-        <!-- <span>{{currentPage}} / {{pageCount}}</span> -->
+        <span>{{ currentPage }} / {{ pageCount }}</span>
       </el-row>
       <el-row class="pdf-console">
         <el-col class="tools" :span="12">
@@ -28,31 +31,54 @@
             size="small"
             title="选择颜色"
             v-model="penColor"
-            :predefine="['#000', '#FF0000', '#ff8c00', '#ffd700', '#90ee90', '#00ced1', '#1e90ff', '#c71585']"
+            :predefine="[
+              '#000',
+              '#FF0000',
+              '#ff8c00',
+              '#ffd700',
+              '#90ee90',
+              '#00ced1',
+              '#1e90ff',
+              '#c71585'
+            ]"
             style="margin-left: 1rem"
           ></el-color-picker>
           <div
             style="box-sizing: border-box; display: inline-block; margin-left: 1rem; padding: 0 15px; width: 120px; "
           >
-            <el-slider v-model="penThickness" :min="1" :max="10" title="笔尖粗细"></el-slider>
+            <el-slider
+              v-model="penThickness"
+              :min="1"
+              :max="10"
+              title="笔尖粗细"
+            ></el-slider>
           </div>
-          <!-- <el-input-number
-          size="small"
-          v-model="currentPage"
-          :min="1"
-          :max="pageCount"
-          style="margin-right: 1rem"
-          ></el-input-number>-->
+          <el-input-number
+            size="small"
+            v-model="currentPage"
+            :min="1"
+            :max="pageCount"
+            style="margin-right: 1rem"
+          ></el-input-number>
         </el-col>
         <el-col class="pagination" :span="3">
           <span>
-            <span id="currentPage" contenteditable="true" @blur="gotoPage" @keydown="checkKeyCode">
-              {{currentPage}}
-            </span> / {{pageCount}}
+            <span
+              id="currentPage"
+              contenteditable="true"
+              @blur="gotoPage"
+              @keydown="checkKeyCode"
+            >
+              {{ currentPage }}
+            </span>
+            / {{ pageCount }}
           </span>
         </el-col>
         <el-col class="reading-progress" :span="8">
-          <el-progress :percentage="readingProgress" :show-text="false"></el-progress>
+          <el-progress
+            :percentage="readingProgress"
+            :show-text="false"
+          ></el-progress>
         </el-col>
       </el-row>
 
@@ -63,7 +89,10 @@
         <div class="catalogue-list-box">
           <div
             class="catalogue-list"
-            :style="{transform: `translateX(calc(-20% * ${catalogueItemOffsetPage - 1}))`}"
+            :style="{
+              transform: `translateX(calc(-20% * ${catalogueItemOffsetPage -
+                1}))`
+            }"
           >
             <a
               :href="'#' + pageNumber"
@@ -94,15 +123,13 @@
 
 <script>
 import pdf from 'vue-pdf';
-import PDFViewerSkeleton from '../../components/skeleton/PDFViewer';
+import PDFViewerSkeleton from '@/components/skeleton/PDFViewer';
 
 export default {
   data() {
     return {
       src: pdf.createLoadingTask(
-        `${this.$serverBaseUrl}/static/courseware/${
-          this.$route.params.filename
-        }`
+        `${this.$serverBaseUrl}/static/courseware/${this.$route.params.filename}`
       ),
       loading: null,
       currentPage: 1,
@@ -200,10 +227,18 @@ export default {
   methods: {
     checkKeyCode(event) {
       // 禁止除左右方向键，退格，删除，数字0-9以外的键入
-      if (event.keyCode === 8 || event.keyCode === 46 || event.keyCode === 37 || event.keyCode === 39) {
+      if (
+        event.keyCode === 8 ||
+        event.keyCode === 46 ||
+        event.keyCode === 37 ||
+        event.keyCode === 39
+      ) {
         return null;
       }
-      if ((event.keyCode >= 96 && event.keyCode <= 105) || (event.keyCode >= 48 && event.keyCode <= 57)) {
+      if (
+        (event.keyCode >= 96 && event.keyCode <= 105) ||
+        (event.keyCode >= 48 && event.keyCode <= 57)
+      ) {
         return null;
       }
       event.preventDefault();

@@ -42,7 +42,7 @@
       </el-row>
       <el-row type="flex" justify="space-between">
         <el-col :span="3" class="normal-info-font">
-          {{ question.replys.length }} 个回答
+          {{ question.replysLength }} 个回答
         </el-col>
         <el-col :span="6">
           <el-tag
@@ -160,8 +160,8 @@ export default {
     handleCurPageChange(val) {
       this.index = (val - 1) * this.offset;
     },
-    loadQuesiton() {
-      const url = '/api/loadQuestion';
+    getQaQuestion() {
+      const url = '/api/getQaQuestion';
       const qaID = this.$route.params.question_id;
       this.$http
         .post(url, { qaID: qaID })
@@ -223,7 +223,7 @@ export default {
                   message: '提交成功！',
                   type: 'success'
                 });
-                this.loadQuesiton();
+                this.getQaQuestion();
               } else {
                 this.$message.error('提交失败！');
               }
@@ -242,7 +242,7 @@ export default {
     }
   },
   created() {
-    this.loadQuesiton();
+    this.getQaQuestion();
   },
   components: {
     RichInput

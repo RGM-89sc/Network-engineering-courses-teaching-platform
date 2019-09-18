@@ -5,14 +5,9 @@ const db = require('../tools/mountModel');
 const {
     serverURL
 } = require('../config.js');
-const omit = require('../tools/omitObjProp');
-const {
-    decodeFilename,
-    encodeFilename
-} = require('../tools/filenameTools');
 module.exports = {
     //提交问题
-    async uploadQuestion(ctx) {
+    async uploadQaQuestion(ctx) {
         const {
             title,
             content,
@@ -32,14 +27,25 @@ module.exports = {
             questionerName,
             questionerID,
             questionerType
-        }).then((docs) => {
+        }).then(async docs => {
+            //更新 user 的问题列表
+            await db.student.updateOne({
+                id: questionerID
+            }, {
+                $push: {
+                    questions: {
+                        qaID: docs.qaID,
+                        title: docs.title,
+                        created: docs.created,
+                        questionerID: docs.questionerID
+                    }
+                }
+            });
             ctx.body = {
                 data: docs,
                 code: 1
-
             }
         }).catch((err) => {
-            console.log(err);
             ctx.body = {
                 code: -1,
                 errMsg: err.message
@@ -47,15 +53,36 @@ module.exports = {
         });
     },
     //删除问题
-    async deleteQuestion(ctx) {
+    async delQaQuestion(ctx) {
         const {
-            qaID
+            qaID,
+            questionerID
         } = ctx.request.body;
+        if (questionerID !== ctx.state.user.id) {
+            return ctx.body = {
+                code: 0,
+                info: '没有删除问题的权限！'
+            }
+        }
+
 
         await db.qa.deleteOne({
-            qaID
-        }).then((docs) => {
-
+            qaID,
+            questionerID
+        }).then(async docs => {
+            await db.student.updateOne({
+                id: questionerID
+            }, {
+                $pull: {
+                    questions: {
+                        id: qaID
+                    }
+                }
+            });
+            return ctx.body = {
+                code: 1,
+                data: docs
+            }
         }).catch((err) => {
             ctx.body = {
                 code: -1,
@@ -63,7 +90,8 @@ module.exports = {
             }
         })
     },
-    async modifyQuestion() {
+    //编辑问题
+    async modifyQaQuestion(ctx) {
         const {
             tag,
             qaID
@@ -83,17 +111,23 @@ module.exports = {
         })
     },
     //删除问题的回复 or 回答
-    async deleteQuestionReply() {
+    async deleteQuestionReply(ctx) {
 
     },
     //加载全部问题
-    async loadQuestions(ctx) {
-        await db.qa.find(
+    async getQaQuestions(ctx) {
+        await db.qa.find({}, {
 
-        ).then((docs) => {
-
+        }, {
+            _id: 0,
+            __v: 0,
+            content: 0,
+            questionerAvatar: 0,
+            content: 0,
+            replys: 0
+        }).then((docs) => {
             ctx.body = {
-                data: omit(docs, ['_id', '__v'], true),
+                data: docs,
                 code: 1
             }
         }).catch((err) => {
@@ -104,13 +138,16 @@ module.exports = {
         })
     },
     //加载单个问题
-    async loadQuestion(ctx) {
+    async getQaQuestion(ctx) {
         const {
             qaID
         } = ctx.request.body;
 
         await db.qa.findOne({
             qaID
+        }, {
+            _id: 0,
+            __v: 0
         }).then((docs) => {
             ctx.body = {
                 data: docs,
@@ -133,6 +170,9 @@ module.exports = {
         await db.qa.updateOne({
             qaID
         }, {
+            $inc: {
+                replysLength: 1
+            },
             $push: {
                 ['replys']: reply
             }
@@ -175,6 +215,8 @@ module.exports = {
             fileName: fname, //图片名
             url: serverURL + '/static/img/qa/' + fname //上传服务器的图片的url
         }
-    }
+    },
+    async getMyQuetions(ctx) {
 
+    }
 }

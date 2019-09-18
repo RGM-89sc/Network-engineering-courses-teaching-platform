@@ -98,7 +98,7 @@
       :key="i"
     >
       <el-col
-        :span="6"
+        :span="4"
         v-for="(course, index) in courses.slice((i - 1) * 4, (i - 1) * 4 + 4)"
         :key="index"
       >

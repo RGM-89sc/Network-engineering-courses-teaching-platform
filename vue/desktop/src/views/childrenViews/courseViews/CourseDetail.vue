@@ -1,12 +1,12 @@
 <template>
   <div>
     <el-row type="flex" :gutter="20">
-      <el-col :span="18">
+      <el-col :span="20">
         <el-row class="header">
           <el-col :span="14" class="course-name">
             <span v-if="courseDetail">{{ courseDetail.coursename }}</span>
           </el-col>
-          <el-col :span="10" class="toolsbar">
+          <el-col class="toolsbar">
             <template
               v-if="user.userType === 1 && user.id === courseDetail.tchID"
             >
@@ -83,7 +83,7 @@
                       type="text"
                       @click="
                         $router.push({
-                          path: `/editCourse?id=${courseID}&c=${ch.id}&p=${part.id}`
+                          path: `${$route.path}/editCourse?id=${courseID}&c=${ch.id}&p=${part.id}`
                         })
                       "
                       >编辑</el-button
@@ -104,7 +104,7 @@
                   size="small"
                   @click="
                     $router.push({
-                      path: `/editCourse?id=${courseID}&c=${
+                      path: `${$route.path}/editCourse?id=${courseID}&c=${
                         ch.id
                       }&p=${getMaxPartID(ch.part) + 1}`
                     })
@@ -219,22 +219,23 @@ export default {
       newChapterFormRules: {
         stamp: [{ required: true, message: '请输入章节名称', trigger: 'blur' }]
       },
-      newBulletinRules: {
-        content: [
-          { required: true, message: '请输入公告内容', trigger: 'blur' }
-        ]
-      },
+      // newBulletinRules: {
+      //   content: [
+      //     { required: true, message: '请输入公告内容', trigger: 'blur' }
+      //   ]
+      // },
+      // newBulletin: {
+      //   content: ''
+      // },
+      // isBulletinShow: false,
+      // activeBulletinNames: [0],
       newChapter: {
         stamp: '',
         part: []
       },
-      newBulletin: {
-        content: ''
-      },
+
       addChapter: false,
-      isBulletinShow: false,
-      lastread: [],
-      activeBulletinNames: [0]
+      lastread: []
     };
   },
   props: {
@@ -438,70 +439,70 @@ export default {
     handleAddChapterClose() {
       this.$refs.addChapter.resetFields();
       this.addChapter = false;
-    },
-    showBulletins() {
-      this.isBulletinShow = true;
-      this.getBulletins();
-    },
-    handleBulletinHidden() {
-      this.$refs.newBulletinForm.resetFields();
-      this.isBulletinShow = false;
-      this.activeBulletinNames = [0];
-    },
-    addBulletin(formName) {
-      this.$refs[formName].validate(valid => {
-        if (valid) {
-          this.$http
-            .post('/api/addBulletin', {
-              courseID: this.courseID,
-              content: this.newBulletin.content
-            })
-            .then(res => {
-              if (res.data.code === 1) {
-                this.handleBulletinHidden();
-                this.$message({
-                  message: '公告发布成功',
-                  type: 'success'
-                });
-              }
-              if (res.data.code === -1) {
-                console.log(res.data.errMsg);
-                this.$message.error('公告发布失败');
-              }
-            })
-            .catch(err => {
-              console.log(err);
-            });
-        } else {
-          return false;
-        }
-      });
-    },
-    getBulletins() {
-      this.$http
-        .get(`/api/getBulletins?courseID=${this.courseID}`)
-        .then(res => {
-          if (res.data.code === 1) {
-            const bulletins = res.data.data.sort((bulletin_a, bulletin_b) => {
-              if (bulletin_a.created < bulletin_b.created) {
-                return 1;
-              }
-              if (bulletin_a.created > bulletin_b.created) {
-                return -1;
-              }
-              return 0;
-            });
-            this.$set(this.courseDetail, 'bulletins', bulletins);
-          }
-          if (res.data.code === -1) {
-            console.log(res.data.errMsg);
-            this.$message.error('公告获取失败');
-          }
-        })
-        .catch(err => {
-          console.log(err);
-        });
     }
+    // showBulletins() {
+    //   this.isBulletinShow = true;
+    //   this.getBulletins();
+    // },
+    // handleBulletinHidden() {
+    //   this.$refs.newBulletinForm.resetFields();
+    //   this.isBulletinShow = false;
+    //   this.activeBulletinNames = [0];
+    // },
+    // addBulletin(formName) {
+    //   this.$refs[formName].validate(valid => {
+    //     if (valid) {
+    //       this.$http
+    //         .post('/api/addBulletin', {
+    //           courseID: this.courseID,
+    //           content: this.newBulletin.content
+    //         })
+    //         .then(res => {
+    //           if (res.data.code === 1) {
+    //             this.handleBulletinHidden();
+    //             this.$message({
+    //               message: '公告发布成功',
+    //               type: 'success'
+    //             });
+    //           }
+    //           if (res.data.code === -1) {
+    //             console.log(res.data.errMsg);
+    //             this.$message.error('公告发布失败');
+    //           }
+    //         })
+    //         .catch(err => {
+    //           console.log(err);
+    //         });
+    //     } else {
+    //       return false;
+    //     }
+    //   });
+    // }
+    // getBulletins() {
+    //   this.$http
+    //     .get(`/api/getBulletins?courseID=${this.courseID}`)
+    //     .then(res => {
+    //       if (res.data.code === 1) {
+    //         const bulletins = res.data.data.sort((bulletin_a, bulletin_b) => {
+    //           if (bulletin_a.created < bulletin_b.created) {
+    //             return 1;
+    //           }
+    //           if (bulletin_a.created > bulletin_b.created) {
+    //             return -1;
+    //           }
+    //           return 0;
+    //         });
+    //         this.$set(this.courseDetail, 'bulletins', bulletins);
+    //       }
+    //       if (res.data.code === -1) {
+    //         console.log(res.data.errMsg);
+    //         this.$message.error('公告获取失败');
+    //       }
+    //     })
+    //     .catch(err => {
+    //       console.log(err);
+    //     });
+    // }
   },
   components: {
     TeacherCard,

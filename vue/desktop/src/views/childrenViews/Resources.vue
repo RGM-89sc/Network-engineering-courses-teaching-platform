@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-row type="flex" justify="space-between">
-      <el-col :span="5">
+      <!-- <el-col :span="5">
         <el-select v-model="classify" placeholder="全部结果" size="small">
           <el-option
             v-for="item in classifyOptions"
@@ -10,9 +10,14 @@
             :value="item.value"
           ></el-option>
         </el-select>
-      </el-col>
+      </el-col> -->
       <el-col :span="5">
-        <el-input placeholder="请输入搜索内容" prefix-icon="el-icon-search" v-model="search" size="small"></el-input>
+        <el-input
+          placeholder="请输入搜索内容"
+          prefix-icon="el-icon-search"
+          v-model="search"
+          size="small"
+        ></el-input>
       </el-col>
     </el-row>
     <el-row class="resources-list">
@@ -21,7 +26,7 @@
           <template slot="header" slot-scope="scope">
             <!-- slot-scope="scope"不能去掉，去掉了就不会显示这个模板 -->
             <el-button type="primary" size="small" @click="uploadResource">
-              <i class="el-icon-upload el-icon--left"></i>上传资源
+              <i class="el-icon-upload el-icon--left"></i>上传软件
             </el-button>
           </template>
           <template slot-scope="scope">
@@ -29,14 +34,20 @@
               :href="scope.row.href"
               class="download-link"
               :download="scope.row.filename"
-            >{{scope.row.filename}}</a>
+              >{{ scope.row.filename }}</a
+            >
             <el-button
               v-if="/\.pdf$/i.test(scope.row.filename)"
               type="text"
               style="margin-left: 10px;"
               size="small"
-              @click="$router.push({ path: `/library/${encodeFilename(scope.row.filename)}` })"
-            >在线预览</el-button>
+              @click="
+                $router.push({
+                  path: `/library/${encodeFilename(scope.row.filename)}`
+                })
+              "
+              >在线预览</el-button
+            >
           </template>
         </el-table-column>
 
@@ -46,34 +57,65 @@
               :href="scope.row.href"
               class="download-link"
               :download="scope.row.filename"
-            >{{scope.row.filename}}</a>
+              >{{ scope.row.filename }}</a
+            >
             <el-button
               v-if="/\.pdf$/i.test(scope.row.filename)"
               type="text"
               style="margin-left: 10px;"
               size="small"
-              @click="$router.push({ path: `/library/${encodeFilename(scope.row.filename)}` })"
-            >在线预览</el-button>
+              @click="
+                $router.push({
+                  path: `/library/${encodeFilename(scope.row.filename)}`
+                })
+              "
+              >在线预览</el-button
+            >
           </template>
         </el-table-column>
 
-        <el-table-column prop="date" label="日期" align="right" width="180"></el-table-column>
+        <el-table-column
+          prop="date"
+          label="日期"
+          align="right"
+          width="180"
+        ></el-table-column>
 
-        <el-table-column v-if="user.userType === 1" label="操作" align="right" width="100">
+        <el-table-column
+          v-if="user.userType === 1"
+          label="操作"
+          align="right"
+          width="100"
+        >
           <template slot-scope="scope">
-            <el-button type="danger" size="small" @click="delResource(scope.row)">删除</el-button>
+            <el-button
+              type="danger"
+              size="small"
+              @click="delResource(scope.row)"
+              >删除</el-button
+            >
           </template>
         </el-table-column>
       </el-table>
     </el-row>
     <el-row type="flex" justify="center">
-      <span class="show-more" v-if="!gotAllResources" @click="showMore">显示更多</span>
+      <span class="show-more" v-if="!gotAllResources" @click="showMore"
+        >显示更多</span
+      >
     </el-row>
 
-    <el-dialog v-if="user.userType === 1" title="上传资源" :visible.sync="uploadDialogVisible">
-      <el-row type="flex" justify="center" style="margin-bottom: 20px;">
+    <el-dialog
+      v-if="user.userType === 1"
+      title="上传资源"
+      :visible.sync="uploadDialogVisible"
+    >
+      <!-- <el-row type="flex" justify="center" style="margin-bottom: 20px;">
         <span style="line-height: 32px;">上传到类别：</span>
-        <el-select v-model="uploadClassify" size="small" placeholder="请选择类别">
+        <el-select
+          v-model="uploadClassify"
+          size="small"
+          placeholder="请选择类别"
+        >
           <el-option
             v-for="item in uploadClassifyOptions"
             :key="item.value"
@@ -81,7 +123,7 @@
             :value="item.value"
           ></el-option>
         </el-select>
-      </el-row>
+      </el-row> -->
 
       <el-row type="flex" justify="center">
         <el-upload
@@ -102,13 +144,15 @@
             将文件拖到此处，或
             <em>点击上传</em>
           </div>
-          <div class="el-upload__tip" slot="tip">{{uploadTip}}</div>
+          <div class="el-upload__tip" slot="tip">{{ uploadTip }}</div>
         </el-upload>
       </el-row>
 
       <div slot="footer" class="dialog-footer">
         <el-button @click="uploadDialogVisible = false">取 消</el-button>
-        <el-button type="primary" :loading="updating" @click="submitUpload">开始上传</el-button>
+        <el-button type="primary" :loading="updating" @click="submitUpload"
+          >开始上传</el-button
+        >
       </div>
 
       <el-dialog
@@ -118,10 +162,14 @@
         :before-close="beforeSuccessDialogClose"
         append-to-body
       >
-        <span>{{uploaded}}个文件已成功上传</span>
+        <span>{{ uploaded }}个文件已成功上传</span>
         <div slot="footer" class="dialog-footer">
           <el-button @click="continueUpload">继续上传</el-button>
-          <el-button type="primary" @click="$router.push({ path: '/emptyPage' })">返回资源列表</el-button>
+          <el-button
+            type="primary"
+            @click="$router.push({ path: '/emptyPage' })"
+            >返回资源列表</el-button
+          >
         </div>
       </el-dialog>
     </el-dialog>
@@ -132,21 +180,21 @@
 export default {
   data() {
     return {
-      classifyOptions: [
-        {
-          value: 'all',
-          label: '全部结果'
-        },
-        {
-          value: 'courseware',
-          label: '课件'
-        },
-        {
-          value: 'software',
-          label: '软件'
-        }
-      ],
-      classify: 'all',
+      // classifyOptions: [
+      //   {
+      //     value: 'all',
+      //     label: '全部结果'
+      //   },
+      //   {
+      //     value: 'courseware',
+      //     label: '课件'
+      //   },
+      //   {
+      //     value: 'software',
+      //     label: '软件'
+      //   }
+      // ],
+      classify: 'software',
 
       search: '',
 
@@ -157,17 +205,17 @@ export default {
       gotAllResources: false,
 
       uploadDialogVisible: false,
-      uploadClassifyOptions: [
-        {
-          value: 'courseware',
-          label: '课件'
-        },
-        {
-          value: 'software',
-          label: '软件'
-        }
-      ],
-      uploadClassify: 'courseware',
+      // uploadClassifyOptions: [
+      //   {
+      //     value: 'courseware',
+      //     label: '课件'
+      //   },
+      //   {
+      //     value: 'software',
+      //     label: '软件'
+      //   }
+      // ],
+      uploadClassify: 'software',
       fileList: [],
       updating: false,
       uploaded: 0,
@@ -182,9 +230,9 @@ export default {
       });
     },
     uploadTip() {
-      if (this.classify === 'courseware') {
-        return '请选择.pdf文件进行上传，.ppt/.pptx无法在线预览';
-      }
+      // if (this.classify === 'courseware') {
+      //   return '请选择.pdf文件进行上传，.ppt/.pptx无法在线预览';
+      // }
       if (this.classify === 'software') {
         return '请打包成单个文件后再上传';
       }
@@ -196,16 +244,16 @@ export default {
       default: {}
     }
   },
-  watch: {
-    classify: function(newValue, oldValue) {
-      this.skip = 0;
-      this.allResources = [];
-      this.gotAllResources = false;
-      this.getResources(newValue);
-    }
-  },
+  // watch: {
+  //   classify: function(newValue, oldValue) {
+  //     this.skip = 0;
+  //     this.allResources = [];
+  //     this.gotAllResources = false;
+  //     this.getResources(newValue);
+  //   }
+  // },
   created() {
-    this.getResources('all');
+    this.getResources('software');
   },
   methods: {
     encodeFilename(filename) {
@@ -247,9 +295,7 @@ export default {
                 filename: this.decodeFilename(data.filename),
                 date: this.dateFormat(data.created),
                 classify: data.classify,
-                href: `${this.$serverBaseUrl}/static/${data.classify}/${
-                  data.filename
-                }`
+                href: `${this.$serverBaseUrl}/static/${data.classify}/${data.filename}`
               };
             });
             this.allResources.push(...resources);
