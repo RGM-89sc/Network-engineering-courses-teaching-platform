@@ -169,8 +169,6 @@ module.exports = {
                 info: '您没有该操作的权限'
             }
         }
-        console.log(articleID);
-        console.log(articleType);
         await db.article.deleteOne({
             articleID,
             articleType
@@ -243,5 +241,86 @@ module.exports = {
                 code: -1
             }
         })
-    }
+    },
+    async postComment(ctx) {
+        const {
+            articleType,
+            articleID,
+            comment
+        } = ctx.request.body;
+        comment.id = uuidV4().split('-').join();
+        await db.article.updateOne({
+            articleType,
+            articleID,
+
+        }, {
+            $push: {
+                comments: comment
+            }
+        }).then(docs => {
+            return ctx.body = {
+                data: docs,
+                code: 1
+            }
+        }).catch(err => {
+            return ctx.body = {
+                errMsg: err.message,
+                code: -1
+            }
+        })
+    },
+    async postCommentReply(ctx) {
+        const {
+            articleType,
+            articleID,
+            reply,
+            commentIndex
+        } = ctx.request.body;
+        await db.article.updateOne({
+            articleType,
+            articleID,
+        }, {
+            $push: {
+                [`comments.${commentIndex}.replys`]: reply
+            }
+        }).then(docs => {
+            return ctx.body = {
+                data: docs,
+                code: 1
+            }
+        }).catch(err => {
+            return ctx.body = {
+                errMsg: err.message,
+                code: -1
+            }
+        })
+    },
+    async delCommentReply(ctx) {
+        const {
+            articleType,
+            articleID,
+            replyIndex,
+            commentIndex
+        } = ctx.request.body;
+        await db.article.updateOne({
+            articleType,
+            articleID,
+        }, {
+            $pull: {
+                [`comments.${commentIndex}.replys`]: {
+                    replyIndex
+                }
+            }
+        }).then(docs => {
+            return ctx.body = {
+                data: docs,
+                code: 1
+            }
+        }).catch(err => {
+            return ctx.body = {
+                errMsg: err.message,
+                code: -1
+            }
+        })
+    },
 }

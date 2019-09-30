@@ -4,13 +4,14 @@
       <span>请选择以下课程：</span>
     </el-row>
     <el-row>
-      <el-row v-for="course in allCourses" :key="course.courseID">
+      <el-row
+        v-for="course in allCourses"
+        :key="course.courseID">
         <el-card>
           <span
             class="course-name"
             @click="gotoCourseExam(course.courseID, course.coursename)"
-            >{{ course.coursename }}</span
-          >
+          >{{ course.coursename }}</span>
           <span class="course-tch">授课教师：{{ course.tch[0].username }}</span>
         </el-card>
       </el-row>
@@ -33,7 +34,7 @@ export default {
   },
   created() {
     this.$http
-      .get('/api/getCourses')
+      .get("/api/getCourses")
       .then(res => {
         if (res.data.code === 1) {
           this.allCourses = res.data.data;
@@ -45,7 +46,7 @@ export default {
   },
   methods: {
     gotoCourseExam(courseID, coursename) {
-      window.sessionStorage.setItem('exams.current_coursename', coursename);
+      window.sessionStorage.setItem("exams.current_coursename", coursename);
       this.$router.push({ path: `/exam/${courseID}` });
       console.log(this.$route.params);
     }

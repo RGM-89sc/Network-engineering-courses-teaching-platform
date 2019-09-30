@@ -71,5 +71,6 @@ body {
 }
 main {
   overflow: hidden !important;
+  min-width: 1100px;
 }
 </style>

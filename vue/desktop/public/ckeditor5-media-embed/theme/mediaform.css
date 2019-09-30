@@ -6,28 +6,28 @@
 @import "@ckeditor/ckeditor5-theme-lark/theme/mixins/_rwd.css";
 
 .ck.ck-media-form {
-	display: flex;
-	align-items: flex-start;
-	flex-direction: row;
-	flex-wrap: nowrap;
+  display: flex;
+  align-items: flex-start;
+  flex-direction: row;
+  flex-wrap: nowrap;
 
-	& .ck-labeled-input {
-		display: inline-block;
-	}
+  & .ck-labeled-input {
+    display: inline-block;
+  }
 
-	& .ck-label {
-		display: none;
-	}
+  & .ck-label {
+    display: none;
+  }
 
-	@mixin ck-media-phone {
-		flex-wrap: wrap;
+  @mixin ck-media-phone {
+    flex-wrap: wrap;
 
-		& .ck-labeled-input {
-			flex-basis: 100%;
-		}
+    & .ck-labeled-input {
+      flex-basis: 100%;
+    }
 
-		& .ck-button {
-			flex-basis: 50%;
-		}
-	}
+    & .ck-button {
+      flex-basis: 50%;
+    }
+  }
 }

@@ -53,7 +53,8 @@ import {
   Link,
   BreadcrumbItem,
   Carousel,
-  CarouselItem
+  CarouselItem,
+  Icon
 } from 'element-ui';
 
 Vue.config.productionTip = false;
@@ -64,7 +65,7 @@ Vue.prototype.$ELEMENT = {
 };
 
 Vue.use(CKEditor);
-
+Vue.use(Icon);
 Vue.use(Header);
 Vue.use(Menu);
 Vue.use(MenuItem);

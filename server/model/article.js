@@ -21,8 +21,7 @@ const articleSchema = new mongoose.Schema({
         required: true,
         default: 'news'
     },
-    tags: {
-        type: Array,
+    tags: {type: Array,
         required: true
     },
     content: {
@@ -51,7 +50,25 @@ const articleSchema = new mongoose.Schema({
     created: {
         type: Date,
         default: Date.now
-    }
+    },
+    comments: [{
+        id: String,
+        commenterAvatar: String,
+        commenterID: String,
+        commenterName: String,
+        content: String,
+        created: String,
+        likeN: Number,
+        replys: [{
+            id: String,
+            replyerAvatar: String,
+            replyerName: String,
+            replyerID: String,
+            content: String,
+            created: String,
+            likeN: Number,
+        }]
+    }]
 });
 
 module.exports = mongoose.model('article', articleSchema)

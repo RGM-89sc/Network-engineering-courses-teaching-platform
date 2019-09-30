@@ -9,8 +9,7 @@
           <span
             class="course-name"
             @click="gotoCourseExecrises(course.courseID, course.coursename)"
-            >{{ course.coursename }}</span
-          >
+          >{{ course.coursename }}</span>
           <span class="course-tch">授课教师：{{ course.tch[0].username }}</span>
         </el-card>
       </el-row>

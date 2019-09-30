@@ -2,7 +2,7 @@
   <div class="news-detail">
     <article class="news-article">
       <h1 class="article__title">{{ article.title }}</h1>
-      <el-row type="flex" class="article__meta normal-font_sub" :gutter="1">
+      <el-row type="flex" class="article__meta sub-font_sub" :gutter="1">
         <el-link class="article__author-avatar" :underline="false">
           <img :src="article.avatarURL" :alt="article.authorName" />
         </el-link>
@@ -19,7 +19,7 @@
             >
             <span
               class="article__good-btn item_padding"
-              @click="goodClickHandler"
+              @click="likeArticleHandler"
             >
               {{ article.goods }}次点赞
             </span>
@@ -28,6 +28,137 @@
       </el-row>
       <div class="article__content" v-html="article.content"></div>
     </article>
+    <div class="comments-area">
+      <div class="comments__meta">
+        <p>{{ comments.length }}个评论</p>
+      </div>
+      <div class="comments__list_wrapper">
+        <div
+          class="comment__item_wrapper"
+          v-for="(comment, index) in comments"
+          :key="index">
+          <div class="commenter-avatar">
+            <img
+              :src="comment.commenterAvatar"
+              :alt="comment.commenterName"
+              :title="comment.commenterName"/>
+          </div>
+          <div class="comment__main">
+            <div class="comment__header">
+              <p class="comment__meta">
+                <el-link type="primary">{{ comment.commenterName }}</el-link>
+                <span>{{ comment.created }} </span>
+              </p>
+            </div>
+            <div class="comment__content display-info_normal">
+              <p>{{ comment.content }}</p>
+            </div>
+            <div class="comment__footer">
+              <p class="comment_action display-info_sub">
+                <el-link :underline="false">
+                  <el-icon
+                    class="el-icon-star-off"
+                    data-is-stared=""
+                    @click="starClickHandler"
+                  ></el-icon>
+                  {{ comment.likeN }}
+                </el-link>
+                <el-link
+                  icon="el-icon-s-comment"
+                  :underline="false"
+                  :data-index="comment.id"
+                  @click="handler"
+                >
+                  回复</el-link
+                >
+              </p>
+              <el-row
+                class="action_reply"
+                :class="{
+                  ['action_reply_active']: currentReply === comment.id
+                }"
+                type="flex"
+              >
+                <el-input
+                  type="textarea"
+                  :autosize="{minRows: 1, maxRows: 6}"
+                  placeholder="请输入内容"
+                  v-model="replyContent"
+                >
+                </el-input>
+                <el-button size="mini">
+                  提交回复
+                </el-button>
+              </el-row>
+            </div>
+            <ul class="comment__replys">
+              <li
+                class="comment__reply"
+                v-for="(reply, index) in comment.replys"
+                :key="index"
+              >
+                <div class="replyer-avatar">
+                  <img
+                    :src="reply.replyerAvatar"
+                    :alt="reply.replyerName"
+                    :title="reply.replyerName"
+                  />
+                </div>
+                <div class="reply__main">
+                  <div class="reply__header">
+                    <p class="reply__meata">
+                      <el-link type="primary">
+                        {{ reply.replyerName }}
+                      </el-link>
+                      <span>
+                        {{ reply.created }}
+                      </span>
+                    </p>
+                  </div>
+                  <div class="reply__content display-info_normal">
+                    {{ reply.content }}
+                  </div>
+                  <div class="reply__footer">
+                    <p class="reply_action display-info_sub">
+                      <el-link :underline="false">
+                        <el-icon class="el-icon-star-off"> </el-icon>
+                        {{ reply.likeN }}
+                      </el-link>
+                      <el-link
+                        icon="el-icon-s-comment"
+                        :underline="false"
+                        :data-index="index"
+                        @click="handler"
+                      >
+                        回复</el-link
+                      >
+                    </p>
+                    <el-row
+                      class="action_reply"
+                      type="flex"
+                      :class="{
+                        ['action_reply_active']: currentReply === comment.id
+                      }"
+                    >
+                      <el-input
+                        type="textarea"
+                        :autosize="{minRows: 1, maxRows: 6}"
+                        placeholder="请输入内容"
+                        v-model="replyContent"
+                      >
+                      </el-input>
+                      <el-button size="mini">
+                        提交回复
+                      </el-button>
+                    </el-row>
+                  </div>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -36,7 +167,67 @@ export default {
   data() {
     return {
       article: {},
-      isGood: false
+      articleType: "news",
+      isGood: false,
+      replyContent: "",
+      comments: [
+        {
+          id: "123",
+          commenterAvatar:
+            "https://avatar-static.segmentfault.com/117/948/117948289-5c24399f09196_big64",
+          commenterID: "",
+          commenterName: "张三",
+          content: "我他妈怎么这么帅卧槽我要死了我要被帅死了",
+          created: "",
+          likeN: 255,
+          replys: [
+            {
+              id: "1234",
+              replyerAvatar:
+                "https://avatar-static.segmentfault.com/117/948/117948289-5c24399f09196_big64",
+              replyerID: "",
+              replyerName: "张三",
+              content: "我他妈怎么这么帅卧槽我要死了我要被帅死了",
+              created: "",
+              likeN: 255
+            }
+          ]
+        },
+        {
+          id: "223",
+          commenterAvatar:
+            "https://avatar-static.segmentfault.com/117/948/117948289-5c24399f09196_big64",
+          commenterID: "",
+          commenterName: "张三",
+          content: "我他妈怎么这么帅卧槽我要死了我要被帅死了",
+          created: "",
+          likeN: 255,
+          replys: []
+        },
+        {
+          id: "323",
+          commenterAvatar:
+            "https://avatar-static.segmentfault.com/117/948/117948289-5c24399f09196_big64",
+          commenterID: "",
+          commenterName: "张三",
+          content: "我他妈怎么这么帅卧槽我要死了我要被帅死了",
+          created: "",
+          likeN: 255,
+          replys: []
+        },
+        {
+          id: "423",
+          commenterAvatar:
+            "https://avatar-static.segmentfault.com/117/948/117948289-5c24399f09196_big64",
+          commenterID: "",
+          commenterName: "张三",
+          content: "我他妈怎么这么帅卧槽我要死了我要被帅死了",
+          created: "",
+          likeN: 255,
+          replys: []
+        }
+      ],
+      currentReply: ""
     };
   },
   methods: {
@@ -49,59 +240,107 @@ export default {
       return minute > 59
         ? hour > 23
           ? day > 29
-            ? created.format('YYYY-MM-DD')
+            ? created.format("YYYY-MM-DD")
             : `${day}天前`
           : `${hour}小时前`
         : `${minute}分钟前`;
     },
     getArticle() {
-      const url = '';
+      const url = "/api/getArticle";
+
       this.$http
-        .post(`/api/getArticle`, {
-          articleID: this.$route.params.article_id
+        .post(url, {
+          articleID: this.$route.params.article_id,
+          articleType: this.articleType
         })
         .then(res => {
           if (res.data.code === 1) {
             this.article = res.data.data;
+            // this.comments = this.article.comments;
           }
         })
         .catch(err => {
-          console.log(err);
+          console.error(err);
         });
     },
     incInfo(infoType, count = 1) {
       this.$http
-        .post('/api/updateArticleInfo', {
+        .post("/api/updateArticleInfo", {
           articleID: this.$route.params.news_id,
           infoType
         })
         .then(() => {})
         .catch(err => {
-          console.log(err);
+          console.error(err);
         });
     },
-    goodClickHandler() {
+    likeArticleHandler() {
       !this.isGood
-        ? ++this.article.goods && this.incInfo('goods')
-        : --this.article.goods && this.incInfo('goods', -1);
+        ? ++this.article.goods && this.incInfo("goods")
+        : --this.article.goods && this.incInfo("goods", -1);
       this.isGood = !this.isGood;
-    }
+    },
+    handler(e) {
+      const index = e.currentTarget.dataset.index;
+      if (this.currentReply === index) {
+        return;
+      }
+      this.replyContent = "";
+      this.currentReply = index;
+    },
+    updateComments() {
+      this.$http.post("/updateArticle", {
+        type: "comment",
+        articleID: this.$route.params.article_id
+      });
+    },
+    updateReplys() {},
+    starClickHandler() {}
   },
   computed: {},
   created() {
-    this.getNewsArticle();
+    this.articleType = this.$route.query.articleType;
+    this.getArticle();
   },
   mounted() {
-    this.incInfo('views');
+    this.incInfo("views");
   }
 };
 </script>
 
 <style lang="scss" scoped>
+.icon-left {
+  margin-right: 2px;
+}
+.display-info_sub {
+  font-size: 14px;
+  color: #909399 !important;
+}
+.display-info_normal {
+  font-size: 16px;
+  color: #000 !important;
+}
+.comment__item_wrapper,
+.comment__reply {
+  display: flex;
+  .commenter-avatar,
+  .replyer-avatar {
+    margin-top: 1em;
+    padding-right: 24px;
+    > img {
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+    }
+  }
+}
+.comment__item_wrapper {
+  border-bottom: 1px solid #eee;
+}
 .item_padding {
   padding-right: 15px;
 }
-.normal-font_sub {
+.sub-font_sub {
   font-size: 14px;
   color: #999;
 }
@@ -128,5 +367,46 @@ export default {
 }
 .article__content {
   margin-top: 50px;
+}
+.comment__main,
+.reply__main {
+  flex: 1;
+  .comment__footer,
+  .reply__footer {
+    > .comment_action,
+    .reply_action {
+      > a {
+        padding-right: 12px;
+      }
+    }
+  }
+}
+.comment__replys {
+  margin: 0;
+  padding: 0;
+}
+.action_reply {
+  display: none;
+  // visibility: hidden;
+  // transition: transform, visibility .3s ease;
+  // transform: translate3d(0, -100%, 0);
+  > .el-textarea {
+    padding-right: 15px;
+    > textarea {
+      max-height: 120px;
+    }
+  }
+  > button {
+    height: 33px;
+  }
+}
+.action_reply_active {
+  display: flex;
+  // transform: translate3d( 0, -100%, 0);
+  // visibility: visible;
+}
+.comments-area {
+  margin-top: 25px;
+  border-top: 1px solid #eee;
 }
 </style>

@@ -174,6 +174,8 @@ module.exports = app => {
   router.get('/getAllArticles', article.getAllArticles);
   // 更新文章信息
   router.post('/updateArticleInfo', article.updateArticleInfo);
+  // 更新文章 评论 回复
+  router.post('/updateArticle', article.updateArticle);
   // 教师查看自己发布的文章
   router.get('/tchGetMyArticles', auth.tch, teacher.getMyArticles);
   // 学生查看自己发布的文章

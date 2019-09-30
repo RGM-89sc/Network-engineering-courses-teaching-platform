@@ -208,16 +208,16 @@
 </template>
 
 <script>
-import TeacherCard from '@/components/TeacherCard';
-import StudentsCard from '@/components/StudentsCard';
-import TheBaseNavSideBar from '@/components/TheBaseNavSideBar';
+import TeacherCard from "@/components/TeacherCard";
+import StudentsCard from "@/components/StudentsCard";
+import TheBaseNavSideBar from "@/components/TheBaseNavSideBar";
 export default {
   data() {
     return {
-      courseID: '',
+      courseID: "",
       courseDetail: {},
       newChapterFormRules: {
-        stamp: [{ required: true, message: '请输入章节名称', trigger: 'blur' }]
+        stamp: [{ required: true, message: "请输入章节名称", trigger: "blur" }]
       },
       // newBulletinRules: {
       //   content: [
@@ -230,7 +230,7 @@ export default {
       // isBulletinShow: false,
       // activeBulletinNames: [0],
       newChapter: {
-        stamp: '',
+        stamp: "",
         part: []
       },
 
@@ -271,7 +271,7 @@ export default {
     },
     getCourseDetail() {
       this.$http
-        .post('/api/getCourseDetail', {
+        .post("/api/getCourseDetail", {
           courseID: this.courseID
         })
         .then(res => {
@@ -288,7 +288,7 @@ export default {
             }
           }
           if (res.data.code === -1) {
-            this.$message.error('加载失败');
+            this.$message.error("加载失败");
           }
         })
         .catch(err => {
@@ -297,7 +297,7 @@ export default {
     },
     addChapterToCourse() {
       this.$http
-        .post('/api/addChapterToCourse', {
+        .post("/api/addChapterToCourse", {
           courseID: this.courseID,
           tchID: this.courseDetail.tchID,
           newChapter: {
@@ -309,17 +309,17 @@ export default {
         .then(res => {
           if (res.data.code === 1) {
             this.addChapter = false;
-            this.$router.push({ path: '/emptyPage' });
+            this.$router.push({ path: "/emptyPage" });
           }
           if (res.data.code === 0) {
             this.$message({
               message: res.data.info,
-              type: 'warning'
+              type: "warning"
             });
           }
           if (res.data.code === -1) {
-            this.$alert('发生了错误导致章节添加失败', '添加失败', {
-              confirmButtonText: '确定'
+            this.$alert("发生了错误导致章节添加失败", "添加失败", {
+              confirmButtonText: "确定"
             });
             console.log(res.data.errMsg);
           }
@@ -329,30 +329,30 @@ export default {
         });
     },
     delCourse() {
-      this.$confirm('此操作将删除该课程及其所有内容, 是否继续?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
+      this.$confirm("此操作将删除该课程及其所有内容, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
       })
         .then(() => {
           this.$http
-            .post('/api/delCourse', {
+            .post("/api/delCourse", {
               courseID: this.courseID,
               tchID: this.courseDetail.tchID
             })
             .then(res => {
               if (res.data.code === 1) {
-                this.$router.push({ path: '/emptyPage' });
+                this.$router.push({ path: "/emptyPage" });
               }
               if (res.data.code === 0) {
                 this.$message({
                   message: res.data.info,
-                  type: 'warning'
+                  type: "warning"
                 });
               }
               if (res.data.code === -1) {
-                this.$alert('发生了错误导致课程删除失败', '删除失败', {
-                  confirmButtonText: '确定'
+                this.$alert("发生了错误导致课程删除失败", "删除失败", {
+                  confirmButtonText: "确定"
                 });
                 console.log(res.data.errMsg);
               }
@@ -364,31 +364,31 @@ export default {
         .catch(() => {});
     },
     delChapter(chapter) {
-      this.$confirm('此操作将删除该章节, 是否继续?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
+      this.$confirm("此操作将删除该章节, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
       })
         .then(() => {
           this.$http
-            .post('/api/delChapter', {
+            .post("/api/delChapter", {
               courseID: this.courseID,
               tchID: this.courseDetail.tchID,
               chapter
             })
             .then(res => {
               if (res.data.code === 1) {
-                this.$router.push({ path: '/emptyPage' });
+                this.$router.push({ path: "/emptyPage" });
               }
               if (res.data.code === 0) {
                 this.$message({
                   message: res.data.info,
-                  type: 'warning'
+                  type: "warning"
                 });
               }
               if (res.data.code === -1) {
-                this.$alert('发生了错误导致删除失败', '删除失败', {
-                  confirmButtonText: '确定'
+                this.$alert("发生了错误导致删除失败", "删除失败", {
+                  confirmButtonText: "确定"
                 });
                 console.log(res.data.errMsg);
               }
@@ -400,14 +400,14 @@ export default {
         .catch(() => {});
     },
     delPart(chapter, part) {
-      this.$confirm('此操作将删除该单元, 是否继续?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
+      this.$confirm("此操作将删除该单元, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
       })
         .then(() => {
           this.$http
-            .post('/api/delPart', {
+            .post("/api/delPart", {
               courseID: this.courseID,
               tchID: this.courseDetail.tchID,
               chapter,
@@ -415,17 +415,17 @@ export default {
             })
             .then(res => {
               if (res.data.code === 1) {
-                this.$router.push({ path: '/emptyPage' });
+                this.$router.push({ path: "/emptyPage" });
               }
               if (res.data.code === 0) {
                 this.$message({
                   message: res.data.info,
-                  type: 'warning'
+                  type: "warning"
                 });
               }
               if (res.data.code === -1) {
-                this.$alert('发生了错误导致删除失败', '删除失败', {
-                  confirmButtonText: '确定'
+                this.$alert("发生了错误导致删除失败", "删除失败", {
+                  confirmButtonText: "确定"
                 });
                 console.log(res.data.errMsg);
               }

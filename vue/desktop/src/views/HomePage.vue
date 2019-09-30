@@ -11,14 +11,26 @@
         v-for="(course, index) in courses"
         :key="index"
         class="course-item__wrapper"
+        @click="
+          $router.push({
+            path: `/course/${course.courseID}`
+          })
+        "
       >
         <el-card class="course__item_hottest">
           <div class="course-cover__wrapper">
-            <img :src="course.cover" :alt="course.coursename" />
+            <img
+              :src="course.cover"
+              :alt="course.coursename"
+              :title="course.coursename"
+              @click.prevent=""
+            />
           </div>
           <div class="course-info__wrapper">
             <p class="course_tch-name">{{ course.tchID }}</p>
-            <p class="course_course-name">{{ course.coursename }}</p>
+            <p :title="course.coursename" class="course_course-name">
+              {{ course.coursename }}
+            </p>
           </div>
         </el-card>
       </div>
@@ -62,14 +74,14 @@ export default {
 
 <style lang="scss">
 .course-list__wrapper {
-  overflow: hidden;
+  cursor: pointer;
 }
+
 .course__item_hottest {
   > .el-card__body {
     display: flex;
-    align-items: center;
     flex-direction: row;
-    padding: 20px 0;
+    padding-right: 0;
   }
 }
 .course-item__wrapper {
@@ -77,27 +89,26 @@ export default {
   padding: 0 20px;
   width: 25%;
 }
-// .course-cover__wrapper,
-// .course-info__wrapper {
-//   box-sizing: border-box;
-//   width: 50%;
-// }
 .course-cover__wrapper {
-  padding-right: 36px;
+  padding-right: 12px;
   > img {
     width: 40px;
     height: 40px;
     border-radius: 50%;
+    vertical-align: middle;
   }
 }
 .course-info__wrapper {
-  // overflow: hidden;
-  // white-space: nowrap;
-  // text-overflow: ellipsis;
+  overflow: hidden;
+
   > p {
     font-size: 14px;
     line-height: 1.4;
     margin: 0;
+    text-overflow: ellipsis;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    display: -webkit-box;
   }
 }
 </style>

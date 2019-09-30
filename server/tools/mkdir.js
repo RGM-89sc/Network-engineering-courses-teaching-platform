@@ -55,6 +55,5 @@ module.exports = () => {
   const techInfoImageStoreRelativeURL = '../public/static/img/article/techInfo';
   if (!fs.existsSync(path.join(__dirname, techInfoImageStoreRelativeURL))) {
     fs.mkdirSync(path.join(__dirname, techInfoImageStoreRelativeURL));
-
   }
 };
