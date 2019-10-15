@@ -12,7 +12,6 @@ const {
 const saltRounds = 10;
 
 module.exports = {
-  // get info by id
   async getInfoById(ctx) {
     const {
       id
@@ -33,7 +32,6 @@ module.exports = {
       });
   },
 
-  // register
   async register(ctx) {
     const {
       id,

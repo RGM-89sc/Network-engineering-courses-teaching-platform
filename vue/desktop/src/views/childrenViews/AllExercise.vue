@@ -15,6 +15,8 @@
 </template>
 
 <script>
+import { CoursesProvider } from '../../provider/index'
+
 export default {
   data() {
     return {
@@ -28,11 +30,10 @@ export default {
     }
   },
   created() {
-    this.$http
-      .get('/api/getCourses')
+    CoursesProvider.getCourses()
       .then(res => {
-        if (res.data.code === 1) {
-          this.allCourses = res.data.data;
+        if (res.code === 1) {
+          this.allCourses = res.data;
         }
       })
       .catch(err => {

@@ -48,7 +48,7 @@
         :credentials="true"
         cropRatio="1:1"
         :max-file-size="5242880"
-        :url="changePWAPIUrl"
+        :url="changeAvatarApiUrl"
       >
         <el-button type="primary">选择头像</el-button>
       </vue-core-image-upload>
@@ -57,9 +57,13 @@
 </template>
 
 <script>
+import { UserProvider } from '../provider/index'
 import VueCoreImageUpload from 'vue-core-image-upload';
 
 export default {
+  components: {
+    'vue-core-image-upload': VueCoreImageUpload
+  },
   data() {
     const validatePassword = (rule, value, callback) => {
       // 这里的value始终undefined，我鬼知道是怎么回事啊，这个问题贼烦，github issue找到非常相似的，但是并没有解决！
@@ -95,7 +99,7 @@ export default {
         pass: [{ validator: validatePassword, trigger: 'change' }],
         checkPass: [{ validator: validatePassword2, trigger: 'change' }]
       },
-      changePWAPIUrl: '',
+      changeAvatarApiUrl: '',
       avatar: ''
     };
   },
@@ -107,9 +111,9 @@ export default {
   },
   created() {
     if (this.user.userType === 1) {
-      this.changePWAPIUrl = this.$serverBaseUrl + '/api/tchChangeAvatar';
+      this.changeAvatarApiUrl = this.$apiBaseUrl + 'tchChangeAvatar';
     } else if (this.user.userType === 0) {
-      this.changePWAPIUrl = this.$serverBaseUrl + '/api/stuChangeAvatar';
+      this.changeAvatarApiUrl = this.$apiBaseUrl + 'stuChangeAvatar';
     }
     this.avatar = this.user.avatar;
   },
@@ -117,18 +121,18 @@ export default {
     changeNewPassword() {
       this.$refs['changePassword'].validate(valid => {
         if (valid) {
-          let apiUrl = '';
+          let userType = '';
           if (this.user.userType === 1) {
-            apiUrl = '/api/tchChangePW';
+            userType = 'TCH';
           } else if (this.user.userType === 0) {
-            apiUrl = '/api/stuChangePW';
+            userType = 'STU';
           } else {
             return false;
           }
-          this.$http
-            .post(apiUrl, { password: this.changePassword.new })
+
+          UserProvider.user.changePW(userType, { password: this.changePassword.new })
             .then(res => {
-              if (res.data.code === 1) {
+              if (res.code === 1) {
                 this.changePassword = {
                   new: '',
                   newAgain: ''
@@ -139,11 +143,11 @@ export default {
                   type: 'success'
                 });
               }
-              if (res.data.code === -1) {
+              if (res.code === -1) {
                 this.$alert('发生了错误导致更改密码失败', '发生错误', {
                   confirmButtonText: '确定'
                 });
-                console.log(res.data.errMsg);
+                console.log(res.errMsg);
               }
             })
             .catch(err => {
@@ -169,9 +173,6 @@ export default {
       }
     }
   },
-  components: {
-    'vue-core-image-upload': VueCoreImageUpload
-  }
 };
 </script>
 

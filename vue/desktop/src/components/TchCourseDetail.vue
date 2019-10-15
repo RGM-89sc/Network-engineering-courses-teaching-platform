@@ -68,6 +68,8 @@
 </template>
 
 <script>
+import { CoursesProvider, UserProvider } from '../provider/index'
+
 export default {
   data() {
     return {
@@ -96,13 +98,12 @@ export default {
   },
   methods: {
     getCourseStusAndExams() {
-      this.$http
-        .post('/api/getCourseStusAndExams', { courseID: this.courseID })
+      CoursesProvider.getCourseStusAndExams({ courseID: this.courseID })
         .then(res => {
-          if (res.data.code === 1) {
-            this.courseExams = res.data.data.exams;
-            this.courseName = res.data.data.course.coursename;
-            res.data.data.course.stus.forEach(stu => {
+          if (res.code === 1) {
+            this.courseExams = res.data.exams;
+            this.courseName = res.data.course.coursename;
+            res.data.course.stus.forEach(stu => {
               let progress, exams;
               stu.study.some(course => {
                 if (course.courseID === this.courseID) {
@@ -176,14 +177,13 @@ export default {
             this.$message('该生未参与该考试，无需重置');
             return null;
           }
-          this.$http
-            .post('/api/resetStuExamScore', {
-              stuID: this.currentStuID,
-              courseID: this.courseID,
-              examID
-            })
+          UserProvider.teacher.resetStuExamScore({
+            stuID: this.currentStuID,
+            courseID: this.courseID,
+            examID
+          })
             .then(res => {
-              if (res.data.code === 1) {
+              if (res.code === 1) {
                 this.currentStuExams.some((e, index) => {
                   if (e.examID === examID) {
                     this.currentStuExams[index].examScore = '-';
@@ -212,8 +212,8 @@ export default {
                   type: 'success'
                 });
               }
-              if (res.data.code === -1) {
-                console.log(res.data.errMsg);
+              if (res.code === -1) {
+                console.log(res.errMsg);
                 this.$message.error('发生错误，操作失败');
               }
             })

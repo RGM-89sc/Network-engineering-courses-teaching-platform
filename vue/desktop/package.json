@@ -1,76 +1,76 @@
 {
-  "name": "network_course_website",
-  "version": "0.1.0",
-  "private": true,
-  "scripts": {
-    "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
-  },
-  "dependencies": {
-    "@ckeditor/ckeditor5-alignment": "^11.0.0",
-    "@ckeditor/ckeditor5-basic-styles": "^11.0.0",
-    "@ckeditor/ckeditor5-build-classic": "^12.1.0",
-    "@ckeditor/ckeditor5-ckfinder": "^11.0.0",
-    "@ckeditor/ckeditor5-dev-utils": "^12.0.1",
-    "@ckeditor/ckeditor5-dev-webpack-plugin": "^8.0.1",
-    "@ckeditor/ckeditor5-editor-classic": "^12.0.0",
-    "@ckeditor/ckeditor5-essentials": "^11.0.0",
-    "@ckeditor/ckeditor5-font": "^11.0.0",
-    "@ckeditor/ckeditor5-heading": "^11.0.0",
-    "@ckeditor/ckeditor5-image": "^13.0.0",
-    "@ckeditor/ckeditor5-link": "^11.0.0",
-    "@ckeditor/ckeditor5-media-embed": "^11.0.0",
-    "@ckeditor/ckeditor5-paragraph": "^11.0.0",
-    "@ckeditor/ckeditor5-theme-lark": "^14.2.0",
-    "@ckeditor/ckeditor5-vue": "^1.0.0-beta.1",
-    "axios": "^0.18.0",
-    "dayjs": "^1.8.11",
-    "element-ui": "^2.8.2",
-    "postcss-loader": "^3.0.0",
-    "raw-loader": "^0.5.1",
-    "uuid": "^3.3.2",
-    "vue": "^2.5.21",
-    "vue-core-image-upload": "^2.3.6",
-    "vue-pdf": "^4.0.6",
-    "vue-router": "^3.0.1",
-    "vue-video": "^0.1.7",
-    "vue-video-player": "^5.0.2"
-  },
-  "devDependencies": {
-    "@vue/cli-plugin-babel": "^3.0.5",
-    "@vue/cli-plugin-eslint": "^3.0.5",
-    "@vue/cli-service": "^3.0.5",
-    "babel-eslint": "^10.0.1",
-    "babel-plugin-component": "^1.1.1",
-    "eslint": "^5.8.0",
-    "eslint-plugin-vue": "^5.0.0",
-    "node-sass": "^4.11.0",
-    "sass-loader": "^7.1.0",
-    "vue-template-compiler": "^2.5.21"
-  },
-  "eslintConfig": {
-    "root": true,
-    "env": {
-      "node": true
+    "name": "network_course_website",
+    "version": "0.1.0",
+    "private": true,
+    "scripts": {
+        "serve": "vue-cli-service serve",
+        "build": "vue-cli-service build",
+        "lint": "vue-cli-service lint"
     },
-    "extends": [
-      "plugin:vue/essential",
-      "eslint:recommended"
-    ],
-    "rules": {},
-    "parserOptions": {
-      "parser": "babel-eslint"
-    }
-  },
-  "postcss": {
-    "plugins": {
-      "autoprefixer": {}
-    }
-  },
-  "browserslist": [
-    "> 1%",
-    "last 2 versions",
-    "not ie <= 8"
-  ]
+    "dependencies": {
+        "@ckeditor/ckeditor5-alignment": "^11.0.0",
+        "@ckeditor/ckeditor5-basic-styles": "^11.0.0",
+        "@ckeditor/ckeditor5-build-classic": "^12.1.0",
+        "@ckeditor/ckeditor5-ckfinder": "^11.0.0",
+        "@ckeditor/ckeditor5-dev-utils": "^12.0.1",
+        "@ckeditor/ckeditor5-dev-webpack-plugin": "^8.0.1",
+        "@ckeditor/ckeditor5-editor-classic": "^12.0.0",
+        "@ckeditor/ckeditor5-essentials": "^11.0.0",
+        "@ckeditor/ckeditor5-font": "^11.0.0",
+        "@ckeditor/ckeditor5-heading": "^11.0.0",
+        "@ckeditor/ckeditor5-image": "^13.0.0",
+        "@ckeditor/ckeditor5-link": "^11.0.0",
+        "@ckeditor/ckeditor5-media-embed": "^11.0.0",
+        "@ckeditor/ckeditor5-paragraph": "^11.0.0",
+        "@ckeditor/ckeditor5-theme-lark": "^14.2.0",
+        "@ckeditor/ckeditor5-vue": "^1.0.0-beta.1",
+        "axios": "^0.18.0",
+        "dayjs": "^1.8.11",
+        "element-ui": "^2.8.2",
+        "postcss-loader": "^3.0.0",
+        "raw-loader": "^0.5.1",
+        "uuid": "^3.3.2",
+        "vue": "^2.5.21",
+        "vue-core-image-upload": "2.3.6",
+        "vue-pdf": "^4.0.6",
+        "vue-router": "^3.0.1",
+        "vue-video": "^0.1.7",
+        "vue-video-player": "^5.0.2"
+    },
+    "devDependencies": {
+        "@vue/cli-plugin-babel": "^3.0.5",
+        "@vue/cli-plugin-eslint": "^3.0.5",
+        "@vue/cli-service": "^3.0.5",
+        "babel-eslint": "^10.0.1",
+        "babel-plugin-component": "^1.1.1",
+        "eslint": "^5.8.0",
+        "eslint-plugin-vue": "^5.0.0",
+        "node-sass": "^4.11.0",
+        "sass-loader": "^7.1.0",
+        "vue-template-compiler": "^2.5.21"
+    },
+    "eslintConfig": {
+        "root": true,
+        "env": {
+            "node": true
+        },
+        "extends": [
+            "plugin:vue/essential",
+            "eslint:recommended"
+        ],
+        "rules": {},
+        "parserOptions": {
+            "parser": "babel-eslint"
+        }
+    },
+    "postcss": {
+        "plugins": {
+            "autoprefixer": {}
+        }
+    },
+    "browserslist": [
+        "> 1%",
+        "last 2 versions",
+        "not ie <= 8"
+    ]
 }

@@ -30,6 +30,8 @@
 </template>
 
 <script>
+import { UserProvider } from '../provider/index'
+
 export default {
   data() {
     return {
@@ -53,14 +55,13 @@ export default {
   },
   methods: {
     getMyCourseExams() {
-      this.$http
-        .post('/api/getMyCourseExams', { courseID: this.courseID })
+      userProvider.student.getMyCourseExams({ courseID: this.courseID })
         .then(res => {
-          if (res.data.code === 1) {
-            this.courseName = res.data.data.course.coursename;
-            res.data.data.exams.forEach(exam => {
+          if (res.code === 1) {
+            this.courseName = res.data.course.coursename;
+            res.data.exams.forEach(exam => {
               let score = '-';
-              res.data.data.stu.exams.some(e => {
+              res.data.stu.exams.some(e => {
                 if (e.examID === exam.examID) {
                   score = e.examScore;
                   return true;
@@ -74,8 +75,8 @@ export default {
             });
             this.loadingData = false;
           }
-          if (res.data.code === -1) {
-            console.log(res.data.errMsg);
+          if (res.code === -1) {
+            console.log(res.errMsg);
             this.$message.error('加载失败');
           }
         })

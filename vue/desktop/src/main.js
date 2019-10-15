@@ -56,6 +56,7 @@ import {
   CarouselItem,
   Icon
 } from 'element-ui';
+import config from './config/index';
 
 Vue.config.productionTip = false;
 
@@ -122,7 +123,8 @@ Vue.prototype.$getLoginState = getLoginState;
 dayjs.locale('zh-cn');
 Vue.prototype.$dayjs = dayjs;
 
-Vue.prototype.$serverBaseUrl = 'http://localhost:9000';
+Vue.prototype.$serverBaseUrl = config.serverBaseUrl;
+Vue.prototype.$apiBaseUrl = config.apiBaseUrl;
 
 new Vue({
   router,

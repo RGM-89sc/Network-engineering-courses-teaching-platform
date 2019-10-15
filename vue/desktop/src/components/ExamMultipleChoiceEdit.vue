@@ -48,7 +48,7 @@
     </el-form>
     <el-row class="upload-img">
       <el-upload
-        :action="$serverBaseUrl + '/api/uploadQuestionImg'"
+        :action="$apiBaseUrl + 'uploadExamQuestionImg'"
         :data="{ courseID: courseid, exerciseID: exerciseid,  questionID: questionid }"
         accept=".jpg, .png"
         :with-credentials="true"
@@ -66,6 +66,8 @@
 </template>
 
 <script>
+import { ExamsProvider } from '../provider/index'
+
 export default {
   data() {
     return {
@@ -175,12 +177,9 @@ export default {
         type: 'warning'
       })
         .then(() => {
-          this.$http
-            .post('/api/delQuestionImg', {
-              filename: file.name
-            })
+          ExamsProvider.delQuestionImg({ filename: file.name })
             .then(res => {
-              if (res.data.code === 1) {
+              if (res.code === 1) {
                 this.$message({
                   type: 'success',
                   message: '删除成功!'
@@ -193,11 +192,11 @@ export default {
                 });
                 this.setPractice();
               }
-              if (res.data.code === -1) {
+              if (res.code === -1) {
                 this.$alert('发生了错误导致删除失败', '删除失败', {
                   confirmButtonText: '确定'
                 });
-                console.log(res.data.errMsg);
+                console.log(res.errMsg);
               }
             })
             .catch(err => {

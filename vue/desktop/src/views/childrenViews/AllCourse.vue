@@ -109,9 +109,13 @@
 </template>
 
 <script>
+import { CoursesProvider } from '../../provider/index'
 import CourseCard from '../../components/CourseCard';
 
 export default {
+  components: {
+    CourseCard
+  },
   data() {
     return {
       search: '',
@@ -156,11 +160,10 @@ export default {
   },
   methods: {
     getCourses() {
-      this.$http
-        .get('/api/getCourses')
+      CoursesProvider.getCourses()
         .then(res => {
-          if (res.data.code === 1) {
-            this.allCourses = res.data.data;
+          if (res.code === 1) {
+            this.allCourses = res.data;
           }
         })
         .catch(err => {
@@ -222,9 +225,6 @@ export default {
       this.addingNewCourse = false;
     }
   },
-  components: {
-    CourseCard
-  }
 };
 </script>
 

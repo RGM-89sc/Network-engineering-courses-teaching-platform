@@ -53,6 +53,8 @@
 </template>
 
 <script>
+import { UserProvider } from '../provider/index'
+
 export default {
   name: 'baseHeader',
   data() {
@@ -89,18 +91,16 @@ export default {
   },
   methods: {
     logout() {
-      let url;
-
+      let userType = '';
       if (this.user.userType === 0) {
-        url = '/api/stuLogout';
+        userType = 'STU';
       } else {
-        url = '/api/tchLogout';
+        userType = 'TCH';
       }
 
-      this.$http
-        .get(url)
+      UserProvider.user.logout(userType)
         .then(res => {
-          if (res.data.code === 1) {
+          if (res.code === 1) {
             this.$emit('update:user', {});
             this.$router.push({ path: '/' });
           }

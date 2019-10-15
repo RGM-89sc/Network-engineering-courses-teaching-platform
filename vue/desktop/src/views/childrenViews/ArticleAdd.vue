@@ -31,6 +31,8 @@
 </template>
 
 <script>
+import { ArticleProvider } from '../../provider/index'
+
 import '@ckeditor/ckeditor5-build-classic/build/translations/zh-cn';
 import ClassicEditor from '@ckeditor/ckeditor5-editor-classic/src/classiceditor';
 
@@ -157,22 +159,20 @@ export default {
           cacelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          const url = '/api/postArticle';
           this.article.articleID = this.$route.query.articleID;
           this.article.authorName = this.user.username;
           this.article.authorID = this.user.id;
           this.article.avatarURL = this.user.avatar;
           this.article.articleType = this.$route.query.articleType;
           this.article.tags.push(this.article.articleType);
-          this.$http
-            .post(url, this.article)
+
+          ArticleProvider.postArticle(this.article)
             .then(res => {
               if (res.data.code === 1) {
                 this.$message({
                   message: '发布成功！',
                   type: 'success'
                 });
-                console.log('asdasd');
                 this.$router.push({ path: '/news' });
               } else {
                 this.$message.error('发布失败！');
