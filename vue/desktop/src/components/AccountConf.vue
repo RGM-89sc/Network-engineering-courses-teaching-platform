@@ -132,7 +132,7 @@ export default {
 
           UserProvider.user.changePW(userType, { password: this.changePassword.new })
             .then(res => {
-              if (res.code === 1) {
+              if (res.data.code === 1) {
                 this.changePassword = {
                   new: '',
                   newAgain: ''
@@ -143,7 +143,7 @@ export default {
                   type: 'success'
                 });
               }
-              if (res.code === -1) {
+              if (res.data.code === -1) {
                 this.$alert('发生了错误导致更改密码失败', '发生错误', {
                   confirmButtonText: '确定'
                 });
@@ -162,11 +162,11 @@ export default {
       });
     },
     imageuploaded(res) {
-      if (res.code === 1) {
+      if (res.data.code === 1) {
         this.avatar = res.data.avatarUrl;
         window.location.reload();
       }
-      if (res.code === -1) {
+      if (res.data.code === -1) {
         this.$alert('头像更改失败', '失败', {
           confirmButtonText: '确定'
         });

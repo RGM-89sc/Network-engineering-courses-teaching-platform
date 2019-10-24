@@ -100,7 +100,7 @@ export default {
     getCourseStusAndExams() {
       CoursesProvider.getCourseStusAndExams({ courseID: this.courseID })
         .then(res => {
-          if (res.code === 1) {
+          if (res.data.code === 1) {
             this.courseExams = res.data.exams;
             this.courseName = res.data.course.coursename;
             res.data.course.stus.forEach(stu => {
@@ -183,7 +183,7 @@ export default {
             examID
           })
             .then(res => {
-              if (res.code === 1) {
+              if (res.data.code === 1) {
                 this.currentStuExams.some((e, index) => {
                   if (e.examID === examID) {
                     this.currentStuExams[index].examScore = '-';
@@ -212,7 +212,7 @@ export default {
                   type: 'success'
                 });
               }
-              if (res.code === -1) {
+              if (res.data.code === -1) {
                 console.log(res.errMsg);
                 this.$message.error('发生错误，操作失败');
               }

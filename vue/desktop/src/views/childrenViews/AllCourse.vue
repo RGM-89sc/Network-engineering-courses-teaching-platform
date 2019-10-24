@@ -162,8 +162,9 @@ export default {
     getCourses() {
       CoursesProvider.getCourses()
         .then(res => {
-          if (res.code === 1) {
-            this.allCourses = res.data;
+          console.log(res);
+          if (res.data.code === 1) {
+            this.allCourses = res.data.data;
           }
         })
         .catch(err => {

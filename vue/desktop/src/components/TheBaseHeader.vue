@@ -100,7 +100,7 @@ export default {
 
       UserProvider.user.logout(userType)
         .then(res => {
-          if (res.code === 1) {
+          if (res.data.code === 1) {
             this.$emit('update:user', {});
             this.$router.push({ path: '/' });
           }

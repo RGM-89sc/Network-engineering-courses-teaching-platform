@@ -179,7 +179,7 @@ export default {
         .then(() => {
           ExamsProvider.delQuestionImg({ filename: file.name })
             .then(res => {
-              if (res.code === 1) {
+              if (res.data.code === 1) {
                 this.$message({
                   type: 'success',
                   message: '删除成功!'
@@ -192,7 +192,7 @@ export default {
                 });
                 this.setPractice();
               }
-              if (res.code === -1) {
+              if (res.data.code === -1) {
                 this.$alert('发生了错误导致删除失败', '删除失败', {
                   confirmButtonText: '确定'
                 });
