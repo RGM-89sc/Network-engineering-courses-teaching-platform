@@ -104,6 +104,7 @@ export default {
                   message: '公告发布成功',
                   type: 'success'
                 });
+                this.getBulletins();
               }
               if (res.data.code === -1) {
                 console.log(res.data.errMsg);
