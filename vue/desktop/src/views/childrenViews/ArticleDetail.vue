@@ -28,7 +28,7 @@
       </el-row>
       <div class="article__content" v-html="article.content"></div>
     </article>
-    <div class="comments-area">
+    <!-- <div class="comments-area">
       <div class="comments__meta">
         <p>{{ comments.length }}个评论</p>
       </div>
@@ -160,7 +160,7 @@
           </div>
         </div>
       </div>
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -173,63 +173,6 @@ export default {
       articleType: 'news',
       isGood: false,
       replyContent: '',
-      comments: [
-        {
-          id: '123',
-          commenterAvatar:
-            'https://avatar-static.segmentfault.com/117/948/117948289-5c24399f09196_big64',
-          commenterID: '',
-          commenterName: '张三',
-          content: '我他妈怎么这么帅卧槽我要死了我要被帅死了',
-          created: '',
-          likeN: 255,
-          replys: [
-            {
-              id: '1234',
-              replyerAvatar:
-                'https://avatar-static.segmentfault.com/117/948/117948289-5c24399f09196_big64',
-              replyerID: '',
-              replyerName: '张三',
-              content: '我他妈怎么这么帅卧槽我要死了我要被帅死了',
-              created: '',
-              likeN: 255
-            }
-          ]
-        },
-        {
-          id: '223',
-          commenterAvatar:
-            'https://avatar-static.segmentfault.com/117/948/117948289-5c24399f09196_big64',
-          commenterID: '',
-          commenterName: '张三',
-          content: '我他妈怎么这么帅卧槽我要死了我要被帅死了',
-          created: '',
-          likeN: 255,
-          replys: []
-        },
-        {
-          id: '323',
-          commenterAvatar:
-            'https://avatar-static.segmentfault.com/117/948/117948289-5c24399f09196_big64',
-          commenterID: '',
-          commenterName: '张三',
-          content: '我他妈怎么这么帅卧槽我要死了我要被帅死了',
-          created: '',
-          likeN: 255,
-          replys: []
-        },
-        {
-          id: '423',
-          commenterAvatar:
-            'https://avatar-static.segmentfault.com/117/948/117948289-5c24399f09196_big64',
-          commenterID: '',
-          commenterName: '张三',
-          content: '我他妈怎么这么帅卧槽我要死了我要被帅死了',
-          created: '',
-          likeN: 255,
-          replys: []
-        }
-      ],
       currentReply: ''
     };
   },

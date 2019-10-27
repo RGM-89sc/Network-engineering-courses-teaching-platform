@@ -160,16 +160,10 @@
         <span>{{ uploaded }}个文件已成功上传</span>
         <div slot="footer" class="dialog-footer">
           <el-button @click="continueUpload">继续上传</el-button>
-<<<<<<< HEAD
-          <el-button type="primary" @click="$router.push({path: '/emptyPage'})"
-            >返回资源列表</el-button
-          >
-=======
           <el-button
             type="primary"
             @click="$router.push({ path: '/emptyPage' })"
             >返回资源列表</el-button>
->>>>>>> c74a5fe7e391aaebd674cb6f54ab61d37b41d2fa
         </div>
       </el-dialog>
     </el-dialog>
@@ -295,7 +289,6 @@ export default {
       })
         .then(res => {
           if (res.data.code === 1) {
-            console.log(res.data.data);
             const resources = res.data.data.map(data => {
               return {
                 filename: this.decodeFilename(data.filename),
@@ -326,12 +319,13 @@ export default {
       })
         .then(() => {
           // 确定
-          ResourcesProvider.delResource({
+          ResourcesProvider.delResources({
             classify: resource.classify,
             filename: resource.filename,
-            courseID: this.courseID
+            courseID: that.courseID
           })
             .then(res => {
+             
               if (res.data.code === 1) {
                 that.$alert(`${resource.filename}已删除`, '删除成功', {
                   confirmButtonText: '确定',

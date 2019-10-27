@@ -21,7 +21,8 @@ const articleSchema = new mongoose.Schema({
         required: true,
         default: 'news'
     },
-    tags: {type: Array,
+    tags: {
+        type: Array,
         required: true
     },
     content: {

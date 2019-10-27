@@ -164,7 +164,7 @@ export default {
           this.article.authorID = this.user.id;
           this.article.avatarURL = this.user.avatar;
           this.article.articleType = this.$route.query.articleType;
-          this.article.tags.push(this.article.articleType);
+          // this.article.tags.push(this.article.articleType);
 
           ArticleProvider.postArticle(this.article)
             .then(res => {
