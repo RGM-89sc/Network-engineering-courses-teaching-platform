@@ -13,7 +13,6 @@
 import {CoursesProvider} from '@/provider/index';
 import {UserProvider} from '@/provider/index';
 import CPContent from '@/components/CPContent';
-console.log(CoursesProvider);
 export default {
   data() {
     return {

@@ -60,7 +60,6 @@ export default {
         .then(res => {
           if (res.data.code === 1) {
             this.articles = res.data.data;
-            console.log(this.articles);
           } else {
             this.$message({
               message: '获取信息失败!',

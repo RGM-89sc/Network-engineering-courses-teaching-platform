@@ -70,7 +70,6 @@
 
 <script>
 import { ExercisesProvider } from '@/provider/index';
-console.log(ExercisesProvider);
 export default {
   data() {
     return {

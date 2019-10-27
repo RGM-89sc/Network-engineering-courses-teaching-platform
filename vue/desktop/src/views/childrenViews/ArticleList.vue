@@ -2,7 +2,7 @@
   <div class="news-list__wrapper">
     <el-row class="news-list__header" type="flex" justify="space-between">
       <el-col :span="5">
-        <el-select v-model="sortData.sortSelectVal" placeholder="请选择">
+        <el-select v-model="sortData.sortSelectVal" placeholder="请选择排序方式">
           <el-option
             v-for="item in sortData.sortOptions"
             :key="item.value"
@@ -40,7 +40,7 @@
     <el-card class="news__list">
       <div
         class="news__item"
-        v-for="(article, index) in articleList"
+        v-for="(article, index) in orderArticleList"
         :key="index"
       >
         <article class="news-article">
@@ -125,6 +125,7 @@ export default {
   data() {
     return {
       articleList: [],
+      orderArticleList: [],
       //要发布的文章ID
       articleID: '',
       dayjsNowTime: {},
@@ -148,6 +149,11 @@ export default {
       articlesCountLimit: 12,
       skipArticles: 0
     };
+  },
+  watch: {
+    'sortData.sortSelectVal': function(sortType) {
+      this.sortArticleList(sortType)
+    }
   },
   created() {
     this.articleID = uuid()
@@ -187,6 +193,7 @@ export default {
             this.articleList = res.data.data;
             this.skipArticles += this.articlesCountLimit;
           }
+          this.sortArticleList('ascendingTime')
           // const dayjsNowTime = this.$dayjs(Date.now());
           // for (const item of this.articleList) {
           //   item.created = this.formatDate(item.created, dayjsNowTime);
@@ -194,7 +201,6 @@ export default {
         })
         .catch(err => {
           console.log(err);
-          console.log('获取文章列表出错！');
         })
         .finally(() => {
           this.loadingArticle = false;
@@ -229,13 +235,13 @@ export default {
 
       intersectionObserver.observe(observedEl);
     },
-    sortArticles() {
-      const {sortSelectVal} = sortData;
-      switch (this.sortSelectVal) {
-        case 'ascendingTime':
-      }
-      this.articles.sort((a, b) => {
-        const [t1, t2] = [a.created, b.created];
+    sortArticleList(sortType) {
+      const dayjs = this.$dayjs;
+      const direction = sortType === 'ascendingTime' ? -1 : 1;
+      this.orderArticleList = this.articleList.sort((x, y) => {
+        return dayjs(x.created).isAfter(dayjs(y.created))
+          ? direction
+          : -direction;
       });
     }
   }

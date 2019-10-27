@@ -41,7 +41,6 @@
 <script>
 import provider from '../provider/index';
 import { ResourcesProvider } from '../provider/index';
-console.log(ResourcesProvider);
 import MainLayout from '../components/MainLayout';
 export default {
   data() {
@@ -60,7 +59,6 @@ export default {
         .then(res => {
           if (res.data.code === 1) {
             this.courses = res.data.data;
-            console.log(this.courses);
           }
         })
         .catch(err => {
