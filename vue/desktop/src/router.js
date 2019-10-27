@@ -44,7 +44,7 @@ let router = new Router({
           },
 
           children: [{
-              path: "",
+              path: "index",
               name: "course_detail",
               component: () => import("./views/childrenViews/courseViews/CourseDetail.vue"),
               meta: {
@@ -63,7 +63,7 @@ let router = new Router({
             },
             //编辑课程
             {
-              path: "editCourse",
+              path: "index/editCourse",
               name: "edit_chapter",
               component: () => import("./views/childrenViews/courseViews/EditCourse.vue"),
               meta: {

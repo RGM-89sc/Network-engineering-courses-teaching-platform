@@ -121,4 +121,9 @@ export const CoursesProvider = {
       .then(res => res)
       .catch(err => err)
   },
+  delChapter: (payload) => {
+    return http.post(baseUrl + 'delChapter', payload)
+      .then(res => res)
+      .catch(err => err)
+  }
 }

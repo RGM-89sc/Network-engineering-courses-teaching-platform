@@ -95,6 +95,7 @@
 </template>
 
 <script>
+import ExercisesProvider from '@/provider/index';
 export default {
   data() {
     return {

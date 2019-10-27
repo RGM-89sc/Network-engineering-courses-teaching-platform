@@ -33,7 +33,7 @@ export default {
         'exams.current_coursename',
         this.course.coursename
       );
-      this.$router.push({ path: `/course/${this.course.courseID}` });
+      this.$router.push({ path: `/course/${this.course.courseID}/index` });
     }
   }
 };

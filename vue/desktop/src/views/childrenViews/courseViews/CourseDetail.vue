@@ -368,6 +368,7 @@ export default {
         type: 'warning'
       })
         .then(() => {
+          console.log(CoursesProvider.delChapter);
           CoursesProvider.delChapter({
             courseID: this.courseID,
             tchID: this.courseDetail.tchID,

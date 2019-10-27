@@ -292,7 +292,7 @@ export default {
           })
             .then(res => {
               if (res.data.code === 1) {
-                this.$router.push({path: `/course/${this.courseID}`});
+                this.$router.push({path: `/course/${this.courseID}/index`});
               }
               if (res.data.code === 0) {
                 this.$message({

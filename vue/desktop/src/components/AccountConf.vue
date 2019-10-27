@@ -132,7 +132,7 @@ export default {
 
           UserProvider.user.changePW(userType, { password: this.changePassword.new })
             .then(res => {
-              if (res.data.code === 1) {
+              if (res.code === 1) {
                 this.changePassword = {
                   new: '',
                   newAgain: ''
@@ -143,7 +143,7 @@ export default {
                   type: 'success'
                 });
               }
-              if (res.data.code === -1) {
+              if (res.code === -1) {
                 this.$alert('发生了错误导致更改密码失败', '发生错误', {
                   confirmButtonText: '确定'
                 });

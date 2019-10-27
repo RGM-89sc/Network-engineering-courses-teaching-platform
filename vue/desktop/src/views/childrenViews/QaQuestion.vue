@@ -9,10 +9,10 @@
               :style="{
                 backgroundImage: `url(${question.questionerAvatar})`
               }"
-              href="/myInfo"
+              href="javascript:void(0);"
             ></a>
             <div class="question-meta__wrapper">
-              <el-link class="user-name" type="primary" href="/myInfo">{{
+              <el-link class="user-name" type="primary" href="javascript:void(0);">{{
                 question.questionerName
               }}</el-link>
               <div class="question-created normal-info-font">

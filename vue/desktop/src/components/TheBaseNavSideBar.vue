@@ -31,7 +31,7 @@ export default {
       indexList: [],
 
       paths: [
-        { path: '', name: '课程内容' },
+        { path: '/index', name: '课程内容' },
         { path: '/notice', name: '课程公告' },
         { path: '/resources', name: '资源' },
         { path: '/exercise', name: '作业练习' },
@@ -48,10 +48,8 @@ export default {
   watch: {
     '$route.path': function() {
       let path = this.$route.path.replace(/(\/[^\/]+)(\/+$)/g, '$1');
+      console.log();
       const reg = /(\/[^\/]+)/;
-
-      // console.log(reg.exec(this.$route.path));
-      // console.log(path);
       // 检测到跳转到了auth并且cookie已过期，更新user数据
       if (path === '/auth' && !this.$getLoginState()) {
         this.$emit('update:user', {});
