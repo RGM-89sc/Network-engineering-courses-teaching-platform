@@ -279,7 +279,7 @@ let router = new Router({
             articleType: 'techInfo'
           },
         }, {
-          path: '/article/:article_id',
+          path: 'article/:article_id',
           name: 'article_techInfo_detail',
           component: () => import('./views/childrenViews/ArticleDetail.vue'),
           meta: {

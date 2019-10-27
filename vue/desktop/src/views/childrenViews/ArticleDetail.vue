@@ -12,7 +12,7 @@
 
           <div class="article__meta-detail">
             <div class="article__created item_padding">
-              {{ formatDate(article.created, $dayjs(Date.now())) }}
+              {{ formatDate(article.created, dayjsNowTime) }}
             </div>
             <span class="item_padding"
               >{{ article.views }}次浏览&nbsp;&nbsp;&nbsp;·</span
@@ -173,7 +173,8 @@ export default {
       articleType: 'news',
       isGood: false,
       replyContent: '',
-      currentReply: ''
+      currentReply: '',
+      dayjsNowTime: {}
     };
   },
   methods: {
@@ -248,6 +249,7 @@ export default {
   created() {
     this.articleType = this.$route.query.articleType;
     this.getArticle();
+    this.dayjsNowTime = this.$dayjs(Date.now());
   },
   mounted() {
     this.incInfo('views');

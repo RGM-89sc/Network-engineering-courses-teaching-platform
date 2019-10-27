@@ -194,10 +194,6 @@ export default {
             this.skipArticles += this.articlesCountLimit;
           }
           this.sortArticleList('ascendingTime')
-          // const dayjsNowTime = this.$dayjs(Date.now());
-          // for (const item of this.articleList) {
-          //   item.created = this.formatDate(item.created, dayjsNowTime);
-          // }
         })
         .catch(err => {
           console.log(err);
