@@ -36,12 +36,14 @@
         <div
           class="comment__item_wrapper"
           v-for="(comment, index) in comments"
-          :key="index">
+          :key="index"
+        >
           <div class="commenter-avatar">
             <img
               :src="comment.commenterAvatar"
               :alt="comment.commenterName"
-              :title="comment.commenterName"/>
+              :title="comment.commenterName"
+            />
           </div>
           <div class="comment__main">
             <div class="comment__header">
@@ -163,71 +165,72 @@
 </template>
 
 <script>
+import {ArticleProvider} from '@/provider/index';
 export default {
   data() {
     return {
       article: {},
-      articleType: "news",
+      articleType: 'news',
       isGood: false,
-      replyContent: "",
+      replyContent: '',
       comments: [
         {
-          id: "123",
+          id: '123',
           commenterAvatar:
-            "https://avatar-static.segmentfault.com/117/948/117948289-5c24399f09196_big64",
-          commenterID: "",
-          commenterName: "张三",
-          content: "我他妈怎么这么帅卧槽我要死了我要被帅死了",
-          created: "",
+            'https://avatar-static.segmentfault.com/117/948/117948289-5c24399f09196_big64',
+          commenterID: '',
+          commenterName: '张三',
+          content: '我他妈怎么这么帅卧槽我要死了我要被帅死了',
+          created: '',
           likeN: 255,
           replys: [
             {
-              id: "1234",
+              id: '1234',
               replyerAvatar:
-                "https://avatar-static.segmentfault.com/117/948/117948289-5c24399f09196_big64",
-              replyerID: "",
-              replyerName: "张三",
-              content: "我他妈怎么这么帅卧槽我要死了我要被帅死了",
-              created: "",
+                'https://avatar-static.segmentfault.com/117/948/117948289-5c24399f09196_big64',
+              replyerID: '',
+              replyerName: '张三',
+              content: '我他妈怎么这么帅卧槽我要死了我要被帅死了',
+              created: '',
               likeN: 255
             }
           ]
         },
         {
-          id: "223",
+          id: '223',
           commenterAvatar:
-            "https://avatar-static.segmentfault.com/117/948/117948289-5c24399f09196_big64",
-          commenterID: "",
-          commenterName: "张三",
-          content: "我他妈怎么这么帅卧槽我要死了我要被帅死了",
-          created: "",
+            'https://avatar-static.segmentfault.com/117/948/117948289-5c24399f09196_big64',
+          commenterID: '',
+          commenterName: '张三',
+          content: '我他妈怎么这么帅卧槽我要死了我要被帅死了',
+          created: '',
           likeN: 255,
           replys: []
         },
         {
-          id: "323",
+          id: '323',
           commenterAvatar:
-            "https://avatar-static.segmentfault.com/117/948/117948289-5c24399f09196_big64",
-          commenterID: "",
-          commenterName: "张三",
-          content: "我他妈怎么这么帅卧槽我要死了我要被帅死了",
-          created: "",
+            'https://avatar-static.segmentfault.com/117/948/117948289-5c24399f09196_big64',
+          commenterID: '',
+          commenterName: '张三',
+          content: '我他妈怎么这么帅卧槽我要死了我要被帅死了',
+          created: '',
           likeN: 255,
           replys: []
         },
         {
-          id: "423",
+          id: '423',
           commenterAvatar:
-            "https://avatar-static.segmentfault.com/117/948/117948289-5c24399f09196_big64",
-          commenterID: "",
-          commenterName: "张三",
-          content: "我他妈怎么这么帅卧槽我要死了我要被帅死了",
-          created: "",
+            'https://avatar-static.segmentfault.com/117/948/117948289-5c24399f09196_big64',
+          commenterID: '',
+          commenterName: '张三',
+          content: '我他妈怎么这么帅卧槽我要死了我要被帅死了',
+          created: '',
           likeN: 255,
           replys: []
         }
       ],
-      currentReply: ""
+      currentReply: ''
     };
   },
   methods: {
@@ -240,19 +243,17 @@ export default {
       return minute > 59
         ? hour > 23
           ? day > 29
-            ? created.format("YYYY-MM-DD")
+            ? created.format('YYYY-MM-DD')
             : `${day}天前`
           : `${hour}小时前`
         : `${minute}分钟前`;
     },
     getArticle() {
-      const url = "/api/getArticle";
-
-      this.$http
-        .post(url, {
-          articleID: this.$route.params.article_id,
-          articleType: this.articleType
-        })
+      const url = '/api/getArticle';
+      ArticleProvider.getArticle({
+        articleID: this.$route.params.article_id,
+        articleType: this.articleType
+      })
         .then(res => {
           if (res.data.code === 1) {
             this.article = res.data.data;
@@ -264,11 +265,10 @@ export default {
         });
     },
     incInfo(infoType, count = 1) {
-      this.$http
-        .post("/api/updateArticleInfo", {
-          articleID: this.$route.params.news_id,
-          infoType
-        })
+      ArticleProvider.updateArticleInfo({
+        articleID: this.$route.params.news_id,
+        infoType
+      })
         .then(() => {})
         .catch(err => {
           console.error(err);
@@ -276,8 +276,8 @@ export default {
     },
     likeArticleHandler() {
       !this.isGood
-        ? ++this.article.goods && this.incInfo("goods")
-        : --this.article.goods && this.incInfo("goods", -1);
+        ? ++this.article.goods && this.incInfo('goods')
+        : --this.article.goods && this.incInfo('goods', -1);
       this.isGood = !this.isGood;
     },
     handler(e) {
@@ -285,13 +285,17 @@ export default {
       if (this.currentReply === index) {
         return;
       }
-      this.replyContent = "";
+      this.replyContent = '';
       this.currentReply = index;
     },
     updateComments() {
-      this.$http.post("/updateArticle", {
-        type: "comment",
+      ArticleProvider.updateArticle({
+        type: 'comment',
         articleID: this.$route.params.article_id
+      }).then(res => {
+        if (res.data.code === 1) {
+          this.$message({});
+        }
       });
     },
     updateReplys() {},
@@ -303,7 +307,7 @@ export default {
     this.getArticle();
   },
   mounted() {
-    this.incInfo("views");
+    this.incInfo('views');
   }
 };
 </script>

@@ -135,7 +135,7 @@
           multiple
           ref="upload"
           :action="$serverBaseUrl + '/api/uploadResources'"
-          :data="{ classify: uploadClassify, courseID }"
+          :data="{classify: uploadClassify, courseID}"
           :with-credentials="true"
           :on-remove="handleRemove"
           :on-error="handleError"
@@ -169,9 +169,7 @@
         <span>{{ uploaded }}个文件已成功上传</span>
         <div slot="footer" class="dialog-footer">
           <el-button @click="continueUpload">继续上传</el-button>
-          <el-button
-            type="primary"
-            @click="$router.push({ path: '/emptyPage' })"
+          <el-button type="primary" @click="$router.push({path: '/emptyPage'})"
             >返回资源列表</el-button
           >
         </div>
@@ -181,6 +179,7 @@
 </template>
 
 <script>
+import {ResourcesProvider} from '@/provider/index';
 export default {
   data() {
     return {
@@ -289,13 +288,12 @@ export default {
     getResources(classify) {
       this.loading = true;
       const courseID = this.courseID;
-      this.$http
-        .post('/api/getResources', {
-          classify,
-          courseID,
-          skip: this.skip,
-          limit: this.limit
-        })
+      ResourcesProvider.getResources({
+        classify,
+        courseID,
+        skip: this.skip,
+        limit: this.limit
+      })
         .then(res => {
           if (res.data.code === 1) {
             console.log(res.data.data);
@@ -329,18 +327,17 @@ export default {
       })
         .then(() => {
           // 确定
-          this.$http
-            .post('/api/delResources', {
-              classify: resource.classify,
-              filename: resource.filename,
-              courseID: this.courseID
-            })
+          ResourcesProvider.delResource({
+            classify: resource.classify,
+            filename: resource.filename,
+            courseID: this.courseID
+          })
             .then(res => {
               if (res.data.code === 1) {
                 that.$alert(`${resource.filename}已删除`, '删除成功', {
                   confirmButtonText: '确定',
                   callback: action => {
-                    that.$router.push({ path: '/emptyPage' });
+                    that.$router.push({path: '/emptyPage'});
                   }
                 });
               }
@@ -381,7 +378,7 @@ export default {
         this.$alert(response.info, '上传失败', {
           confirmButtonText: '确定',
           callback: action => {
-            this.$router.push({ path: '/emptyPage' });
+            this.$router.push({path: '/emptyPage'});
           }
         });
       }

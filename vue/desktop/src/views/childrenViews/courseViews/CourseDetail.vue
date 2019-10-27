@@ -208,16 +208,17 @@
 </template>
 
 <script>
-import TeacherCard from "@/components/TeacherCard";
-import StudentsCard from "@/components/StudentsCard";
-import TheBaseNavSideBar from "@/components/TheBaseNavSideBar";
+import {CoursesProvider} from '@/provider/index';
+import TeacherCard from '@/components/TeacherCard';
+import StudentsCard from '@/components/StudentsCard';
+import TheBaseNavSideBar from '@/components/TheBaseNavSideBar';
 export default {
   data() {
     return {
-      courseID: "",
+      courseID: '',
       courseDetail: {},
       newChapterFormRules: {
-        stamp: [{ required: true, message: "请输入章节名称", trigger: "blur" }]
+        stamp: [{required: true, message: '请输入章节名称', trigger: 'blur'}]
       },
       // newBulletinRules: {
       //   content: [
@@ -230,7 +231,7 @@ export default {
       // isBulletinShow: false,
       // activeBulletinNames: [0],
       newChapter: {
-        stamp: "",
+        stamp: '',
         part: []
       },
 
@@ -270,10 +271,9 @@ export default {
       return Math.max(...ids);
     },
     getCourseDetail() {
-      this.$http
-        .post("/api/getCourseDetail", {
-          courseID: this.courseID
-        })
+      CoursesProvider.getCourseDetail({
+        courseID: this.courseID
+      })
         .then(res => {
           if (res.data.code === 1) {
             res.data.data.bulletins = [];
@@ -288,7 +288,7 @@ export default {
             }
           }
           if (res.data.code === -1) {
-            this.$message.error("加载失败");
+            this.$message.error('加载失败');
           }
         })
         .catch(err => {
@@ -296,30 +296,29 @@ export default {
         });
     },
     addChapterToCourse() {
-      this.$http
-        .post("/api/addChapterToCourse", {
-          courseID: this.courseID,
-          tchID: this.courseDetail.tchID,
-          newChapter: {
-            id: this.getMaxChapterID() + 1,
-            stamp: this.newChapter.stamp,
-            part: this.newChapter.part
-          }
-        })
+      CoursesProvider.addChapterToCourse({
+        courseID: this.courseID,
+        tchID: this.courseDetail.tchID,
+        newChapter: {
+          id: this.getMaxChapterID() + 1,
+          stamp: this.newChapter.stamp,
+          part: this.newChapter.part
+        }
+      })
         .then(res => {
           if (res.data.code === 1) {
             this.addChapter = false;
-            this.$router.push({ path: "/emptyPage" });
+            this.$router.push({path: '/emptyPage'});
           }
           if (res.data.code === 0) {
             this.$message({
               message: res.data.info,
-              type: "warning"
+              type: 'warning'
             });
           }
           if (res.data.code === -1) {
-            this.$alert("发生了错误导致章节添加失败", "添加失败", {
-              confirmButtonText: "确定"
+            this.$alert('发生了错误导致章节添加失败', '添加失败', {
+              confirmButtonText: '确定'
             });
             console.log(res.data.errMsg);
           }
@@ -329,30 +328,29 @@ export default {
         });
     },
     delCourse() {
-      this.$confirm("此操作将删除该课程及其所有内容, 是否继续?", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning"
+      this.$confirm('此操作将删除该课程及其所有内容, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
       })
         .then(() => {
-          this.$http
-            .post("/api/delCourse", {
-              courseID: this.courseID,
-              tchID: this.courseDetail.tchID
-            })
+          CoursesProvider.delCourse({
+            courseID: this.courseID,
+            tchID: this.courseDetail.tchID
+          })
             .then(res => {
               if (res.data.code === 1) {
-                this.$router.push({ path: "/emptyPage" });
+                this.$router.push({path: '/emptyPage'});
               }
               if (res.data.code === 0) {
                 this.$message({
                   message: res.data.info,
-                  type: "warning"
+                  type: 'warning'
                 });
               }
               if (res.data.code === -1) {
-                this.$alert("发生了错误导致课程删除失败", "删除失败", {
-                  confirmButtonText: "确定"
+                this.$alert('发生了错误导致课程删除失败', '删除失败', {
+                  confirmButtonText: '确定'
                 });
                 console.log(res.data.errMsg);
               }
@@ -364,31 +362,30 @@ export default {
         .catch(() => {});
     },
     delChapter(chapter) {
-      this.$confirm("此操作将删除该章节, 是否继续?", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning"
+      this.$confirm('此操作将删除该章节, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
       })
         .then(() => {
-          this.$http
-            .post("/api/delChapter", {
-              courseID: this.courseID,
-              tchID: this.courseDetail.tchID,
-              chapter
-            })
+          CoursesProvider.delChapter({
+            courseID: this.courseID,
+            tchID: this.courseDetail.tchID,
+            chapter
+          })
             .then(res => {
               if (res.data.code === 1) {
-                this.$router.push({ path: "/emptyPage" });
+                this.$router.push({path: '/emptyPage'});
               }
               if (res.data.code === 0) {
                 this.$message({
                   message: res.data.info,
-                  type: "warning"
+                  type: 'warning'
                 });
               }
               if (res.data.code === -1) {
-                this.$alert("发生了错误导致删除失败", "删除失败", {
-                  confirmButtonText: "确定"
+                this.$alert('发生了错误导致删除失败', '删除失败', {
+                  confirmButtonText: '确定'
                 });
                 console.log(res.data.errMsg);
               }
@@ -400,32 +397,31 @@ export default {
         .catch(() => {});
     },
     delPart(chapter, part) {
-      this.$confirm("此操作将删除该单元, 是否继续?", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning"
+      this.$confirm('此操作将删除该单元, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
       })
         .then(() => {
-          this.$http
-            .post("/api/delPart", {
-              courseID: this.courseID,
-              tchID: this.courseDetail.tchID,
-              chapter,
-              part
-            })
+          CoursesProvider.delPart('/api/delPart', {
+            courseID: this.courseID,
+            tchID: this.courseDetail.tchID,
+            chapter,
+            part
+          })
             .then(res => {
               if (res.data.code === 1) {
-                this.$router.push({ path: "/emptyPage" });
+                this.$router.push({path: '/emptyPage'});
               }
               if (res.data.code === 0) {
                 this.$message({
                   message: res.data.info,
-                  type: "warning"
+                  type: 'warning'
                 });
               }
               if (res.data.code === -1) {
-                this.$alert("发生了错误导致删除失败", "删除失败", {
-                  confirmButtonText: "确定"
+                this.$alert('发生了错误导致删除失败', '删除失败', {
+                  confirmButtonText: '确定'
                 });
                 console.log(res.data.errMsg);
               }
@@ -440,69 +436,6 @@ export default {
       this.$refs.addChapter.resetFields();
       this.addChapter = false;
     }
-    // showBulletins() {
-    //   this.isBulletinShow = true;
-    //   this.getBulletins();
-    // },
-    // handleBulletinHidden() {
-    //   this.$refs.newBulletinForm.resetFields();
-    //   this.isBulletinShow = false;
-    //   this.activeBulletinNames = [0];
-    // },
-    // addBulletin(formName) {
-    //   this.$refs[formName].validate(valid => {
-    //     if (valid) {
-    //       this.$http
-    //         .post('/api/addBulletin', {
-    //           courseID: this.courseID,
-    //           content: this.newBulletin.content
-    //         })
-    //         .then(res => {
-    //           if (res.data.code === 1) {
-    //             this.handleBulletinHidden();
-    //             this.$message({
-    //               message: '公告发布成功',
-    //               type: 'success'
-    //             });
-    //           }
-    //           if (res.data.code === -1) {
-    //             console.log(res.data.errMsg);
-    //             this.$message.error('公告发布失败');
-    //           }
-    //         })
-    //         .catch(err => {
-    //           console.log(err);
-    //         });
-    //     } else {
-    //       return false;
-    //     }
-    //   });
-    // }
-    // getBulletins() {
-    //   this.$http
-    //     .get(`/api/getBulletins?courseID=${this.courseID}`)
-    //     .then(res => {
-    //       if (res.data.code === 1) {
-    //         const bulletins = res.data.data.sort((bulletin_a, bulletin_b) => {
-    //           if (bulletin_a.created < bulletin_b.created) {
-    //             return 1;
-    //           }
-    //           if (bulletin_a.created > bulletin_b.created) {
-    //             return -1;
-    //           }
-    //           return 0;
-    //         });
-    //         this.$set(this.courseDetail, 'bulletins', bulletins);
-    //       }
-    //       if (res.data.code === -1) {
-    //         console.log(res.data.errMsg);
-    //         this.$message.error('公告获取失败');
-    //       }
-    //     })
-    //     .catch(err => {
-    //       console.log(err);
-    //     });
-    // }
   },
   components: {
     TeacherCard,

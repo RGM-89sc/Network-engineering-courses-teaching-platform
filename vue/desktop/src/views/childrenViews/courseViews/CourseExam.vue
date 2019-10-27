@@ -7,7 +7,7 @@
       <el-col class="toolsbar" v-if="user && user.userType === 1">
         <el-button
           type="primary"
-          @click="$router.push({ path: `${$route.path}/addExamPaper` })"
+          @click="$router.push({path: `${$route.path}/addExamPaper`})"
           >发布考试</el-button
         >
       </el-col>
@@ -88,6 +88,7 @@
 </template>
 
 <script>
+import {ExamsProvider} from '../../../provider';
 export default {
   data() {
     return {
@@ -114,8 +115,7 @@ export default {
   },
   methods: {
     getExamPapers() {
-      this.$http
-        .post('/api/getExamPapers', { courseID: this.courseID })
+      ExamsProvider.getExamPapers({courseID: this.courseID})
         .then(res => {
           if (res.data.code === 1) {
             this.examPapers = res.data.data;
@@ -137,11 +137,10 @@ export default {
         return null;
       }
       if (this.user && (this.user.userType === 1 || this.user.userType === 0)) {
-        this.$http
-          .post('/api/checkStuCanEnterExam', {
-            courseID: this.courseID,
-            examID: examPaper.examID
-          })
+        ExamsProvider.checkStuCanEnterExam({
+          courseID: this.courseID,
+          examID: examPaper.examID
+        })
           .then(res => {
             if (res.data.code === 1) {
               if (!res.data.data.canEnterExam) {
@@ -166,7 +165,7 @@ export default {
             console.log(err);
           });
       } else {
-        this.$router.push({ path: '/auth' });
+        this.$router.push({path: '/auth'});
       }
     },
     openSetExamDialog(examPaper) {
@@ -191,17 +190,16 @@ export default {
           type: 'error'
         });
       } else {
-        this.$http
-          .post('/api/updateExamPaper', {
-            courseID: this.courseID,
-            examID: this.currentSettingExam.examID,
-            startTime: this.currentSettingExam.startEndTime[0],
-            endTime: this.currentSettingExam.startEndTime[1],
-            examTiming: this.currentSettingExam.examTiming
-          })
+        ExamsProvider.updateExamPaper({
+          courseID: this.courseID,
+          examID: this.currentSettingExam.examID,
+          startTime: this.currentSettingExam.startEndTime[0],
+          endTime: this.currentSettingExam.startEndTime[1],
+          examTiming: this.currentSettingExam.examTiming
+        })
           .then(res => {
             if (res.data.code === 1) {
-              this.$router.push({ path: '/emptyPage' });
+              this.$router.push({path: '/emptyPage'});
             }
             if (res.data.code === -1) {
               this.$alert('发生了错误导致操作失败', '操作失败', {
@@ -222,14 +220,13 @@ export default {
         type: 'warning'
       })
         .then(() => {
-          this.$http
-            .post('/api/delExamPaper', {
-              courseID: this.courseID,
-              examID
-            })
+          ExamsProvider.delExamPaper({
+            courseID: this.courseID,
+            examID
+          })
             .then(res => {
               if (res.data.code === 1) {
-                this.$router.push({ path: '/emptyPage' });
+                this.$router.push({path: '/emptyPage'});
               }
               if (res.data.code === -1) {
                 this.$alert('发生了错误导致删除失败', '删除失败', {

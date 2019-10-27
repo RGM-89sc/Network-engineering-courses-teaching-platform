@@ -7,7 +7,7 @@
       <el-col class="toolsbar" v-if="user && user.userType === 1">
         <el-button
           type="primary"
-          @click="$router.push({ path: `${$route.path}/addExercisePaper` })"
+          @click="$router.push({path: `${$route.path}/addExercisePaper`})"
           >新增试卷</el-button
         >
       </el-col>
@@ -69,6 +69,8 @@
 </template>
 
 <script>
+import { ExercisesProvider } from '@/provider/index';
+console.log(ExercisesProvider);
 export default {
   data() {
     return {
@@ -92,8 +94,7 @@ export default {
   },
   methods: {
     getExercisePapers() {
-      this.$http
-        .post('/api/getExercisePapers', { courseID: this.courseID })
+      ExercisesProvider.getExercisePapers({courseID: this.courseID})
         .then(res => {
           if (res.data.code === 1) {
             this.exercisePapers = res.data.data;
@@ -110,14 +111,13 @@ export default {
         type: 'warning'
       })
         .then(() => {
-          this.$http
-            .post('/api/delExercisePaper', {
-              courseID: this.courseID,
-              exerciseID
-            })
+          ExercisesProvider.delExercisePaper({
+            courseID: this.courseID,
+            exerciseID
+          })
             .then(res => {
               if (res.data.code === 1) {
-                this.$router.push({ path: '/emptyPage' });
+                this.$router.push({path: '/emptyPage'});
               }
               if (res.data.code === -1) {
                 this.$alert('发生了错误导致删除失败', '删除失败', {

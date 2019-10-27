@@ -2,7 +2,7 @@
   <div>
     <el-row class="header">
       <el-col>
-        <span class="exam-name">{{examName}}</span>
+        <span class="exam-name">{{ examName }}</span>
       </el-col>
     </el-row>
     <el-row class="questions">
@@ -12,11 +12,13 @@
         class="question"
       >
         <el-row class="question-info">
-          <span class="question-index">第{{index + 1}}题</span>
-          <span
-            class="question-type"
-          >[{{choiceQuestion.questionType === 'Exclusive' ? '单选题' : '多选题'}}]</span>：
-          <span class="problem">{{choiceQuestion.problem}}</span>
+          <span class="question-index">第{{ index + 1 }}题</span>
+          <span class="question-type"
+            >[{{
+              choiceQuestion.questionType === 'Exclusive' ? '单选题' : '多选题'
+            }}]</span
+          >：
+          <span class="problem">{{ choiceQuestion.problem }}</span>
         </el-row>
         <el-row class="question-imgs" :gutter="20">
           <el-col
@@ -26,11 +28,14 @@
             class="question-img"
           >
             <a :href="img.url" target="_blank">
-              <img :src="img.url" :alt="img.name">
+              <img :src="img.url" :alt="img.name" />
             </a>
           </el-col>
         </el-row>
-        <el-row v-if="choiceQuestion.questionType === 'Exclusive'" class="question-selections">
+        <el-row
+          v-if="choiceQuestion.questionType === 'Exclusive'"
+          class="question-selections"
+        >
           <el-radio-group v-model="userAnswer[choiceQuestion.id]">
             <el-radio
               v-for="selection in choiceQuestion.detail.selections"
@@ -38,10 +43,14 @@
               :label="selection.id"
               @change="radio"
               class="question-selection"
-            >{{selection.content}}</el-radio>
+              >{{ selection.content }}</el-radio
+            >
           </el-radio-group>
         </el-row>
-        <el-row v-if="choiceQuestion.questionType === 'Multiple'" class="question-selections">
+        <el-row
+          v-if="choiceQuestion.questionType === 'Multiple'"
+          class="question-selections"
+        >
           <el-checkbox-group v-model="userAnswer[choiceQuestion.id]">
             <el-checkbox
               v-for="selection in choiceQuestion.detail.selections"
@@ -49,14 +58,15 @@
               :label="selection.id"
               @change="checkbox(choiceQuestion.id, selection.id)"
               class="question-selection"
-            >{{selection.content}}</el-checkbox>
+              >{{ selection.content }}</el-checkbox
+            >
           </el-checkbox-group>
         </el-row>
       </el-card>
     </el-row>
     <el-row type="flex" justify="center" class="control">
       <el-col :span="6" class="countdown">
-        <span>倒计时：{{countdown}}</span>
+        <span>倒计时：{{ countdown }}</span>
       </el-col>
       <el-col :span="6" class="submit">
         <el-button type="primary" @click="handIn">交 卷</el-button>
@@ -66,6 +76,7 @@
 </template>
 
 <script>
+import {ExamsProvider} from '@/provider/index';
 export default {
   data() {
     return {
@@ -94,7 +105,7 @@ export default {
         type: 'error'
       })
         .then(() => {
-          this.$router.push({ path: `/exam/${this.courseID}` });
+          this.$router.push({path: `/exam/${this.courseID}`});
         })
         .catch(() => {});
     } else {
@@ -194,11 +205,10 @@ export default {
       }, 1000);
     },
     getExamPaper() {
-      this.$http
-        .post('/api/getExamPaper', {
-          courseID: this.courseID,
-          examID: this.examID
-        })
+      ExamsProvider.getExamPaper({
+        courseID: this.courseID,
+        examID: this.examID
+      })
         .then(res => {
           if (res.data.code === 1) {
             this.examName = res.data.data.examName;
@@ -213,7 +223,7 @@ export default {
             this.$alert('发生了错误导致获取数据失败', '获取数据失败', {
               confirmButtonText: '确定'
             }).then(() => {
-              this.$router.push({ path: `/exam/${this.courseID}` });
+              this.$router.push({path: `/exam/${this.courseID}`});
             });
           }
         })
@@ -222,7 +232,7 @@ export default {
           this.$alert('发生了错误导致获取数据失败', '获取数据失败', {
             confirmButtonText: '确定'
           }).then(() => {
-            this.$router.push({ path: `/exam/${this.courseID}` });
+            this.$router.push({path: `/exam/${this.courseID}`});
           });
         });
     },
@@ -244,12 +254,11 @@ export default {
       this.saveUserAnswerToSS();
     },
     handInExamPaper() {
-      this.$http
-        .post('/api/handIn', {
-          courseID: this.courseID,
-          examID: this.examID,
-          userAnswer: this.userAnswer
-        })
+      ExamsProvider.handIn({
+        courseID: this.courseID,
+        examID: this.examID,
+        userAnswer: this.userAnswer
+      })
         .then(res => {
           if (res.data.code === 1) {
             this.haveBeenHandIn = true;
@@ -263,7 +272,7 @@ export default {
             this.$alert(`您的成绩为${res.data.data.score}`, '您的成绩', {
               confirmButtonText: '确定',
               callback: action => {
-                this.$router.replace({ path: `/exam/${this.courseID}` });
+                this.$router.replace({path: `/exam/${this.courseID}`});
               }
             });
           }

@@ -12,7 +12,7 @@
         <el-input
           type="textarea"
           resize="none"
-          :autosize="{ minRows: 2, maxRows: 4 }"
+          :autosize="{minRows: 2, maxRows: 4}"
           v-model="newBulletin.content"
         ></el-input>
       </el-form-item>
@@ -38,6 +38,7 @@
 </template>
 
 <script>
+import {CoursesProvider} from '@/provider/index';
 export default {
   props: {
     user: {
@@ -52,9 +53,7 @@ export default {
   data() {
     return {
       newBulletinRules: {
-        content: [
-          { required: true, message: '请输入公告内容', trigger: 'blur' }
-        ]
+        content: [{required: true, message: '请输入公告内容', trigger: 'blur'}]
       },
       newBulletin: {
         content: ''
@@ -69,10 +68,9 @@ export default {
   methods: {
     getCourseDetail() {
       console.log();
-      this.$http
-        .post('/api/getCourseDetail', {
-          courseID: this.courseID
-        })
+      CoursesProvider.getCourseDetail({
+        courseID: this.courseID
+      })
         .then(res => {
           if (res.data.code === 1) {
             this.courseDetail = res.data.data;
@@ -92,11 +90,10 @@ export default {
     addBulletin(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
-          this.$http
-            .post('/api/addBulletin', {
-              courseID: this.courseID,
-              content: this.newBulletin.content
-            })
+          CoursesProvider.addBulletin({
+            courseID: this.courseID,
+            content: this.newBulletin.content
+          })
             .then(res => {
               if (res.data.code === 1) {
                 this.handleBulletinHidden();
@@ -121,8 +118,7 @@ export default {
     },
 
     getBulletins() {
-      this.$http
-        .get(`/api/getBulletins?courseID=${this.courseID}`)
+      CoursesProvider.getBulletins(`?courseID=${this.courseID}`)
         .then(res => {
           if (res.data.code === 1) {
             const bulletins = res.data.data.sort((bulletin_a, bulletin_b) => {

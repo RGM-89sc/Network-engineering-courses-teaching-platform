@@ -109,6 +109,7 @@
 </template>
 
 <script>
+import {ArticleProvider} from '@/provider/index';
 import uuid from 'uuid/v4';
 export default {
   props: {
@@ -176,14 +177,11 @@ export default {
         : `${minute}分钟前`;
     },
     getArticles() {
-      const url = '/api/getArticles';
-      console.log(this.articleType);
-      this.$http
-        .post(url, {
-          articleType: this.articleType,
-          skipArticles: this.skipArticles,
-          articlesCountLimit: this.articlesCountLimit
-        })
+      ArticleProvider.getArticles({
+        articleType: this.articleType,
+        skipArticles: this.skipArticles,
+        articlesCountLimit: this.articlesCountLimit
+      })
         .then(res => {
           if (res.data.code === 1) {
             this.articleList = res.data.data;
@@ -235,7 +233,7 @@ export default {
 
     */
     sortArticles() {
-      const { sortSelectVal } = sortData;
+      const {sortSelectVal} = sortData;
       switch (this.sortSelectVal) {
         case 'ascendingTime':
       }

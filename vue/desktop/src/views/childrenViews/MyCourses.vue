@@ -8,7 +8,7 @@
     >
       <el-row>
         <el-col :span="18" class="course-name">
-          <span @click="$router.push({ path: `/course/${course.courseID}` })">{{
+          <span @click="$router.push({path: `/course/${course.courseID}`})">{{
             course.coursename
           }}</span>
         </el-col>
@@ -30,13 +30,13 @@
     <el-row v-if="courses.length === 0" class="no-course">
       <span v-if="user && user.userType === 0">
         您还没有开始学习任何课程，去
-        <el-button type="text" @click="$router.push({ path: '/course' })"
+        <el-button type="text" @click="$router.push({path: '/course'})"
           >挑选课程</el-button
         >吧
       </span>
       <span v-if="user && user.userType === 1">
         您还没有教授任何课程，去
-        <el-button type="text" @click="$router.push({ path: '/course' })"
+        <el-button type="text" @click="$router.push({path: '/course'})"
           >开设课程</el-button
         >吧
       </span>
@@ -45,6 +45,8 @@
 </template>
 
 <script>
+import {CoursesProvider} from '@/provider/index';
+import {UserProvider} from '@/provider/index';
 export default {
   data() {
     return {
@@ -67,8 +69,8 @@ export default {
   },
   methods: {
     tchGetMyCourses() {
-      this.$http
-        .get('/api/tchGetMyCourses')
+      UserProvider.teacher
+        .getMyCourses()
         .then(res => {
           if (res.data.code === 1) {
             this.courses = res.data.data;
@@ -84,8 +86,8 @@ export default {
         });
     },
     stuGetMyCourses() {
-      this.$http
-        .get('/api/stuGetMyCourses')
+      UserProvider.student
+        .getMyCourses()
         .then(res => {
           if (res.data.code === 1) {
             this.courses = res.data.data.courses;

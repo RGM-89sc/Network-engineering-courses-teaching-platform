@@ -60,6 +60,7 @@
 </template>
 
 <script>
+import {ExercisesProvider} from '@/provider/index';
 import MultipleChoice from '@/components/MultipleChoiceEdit';
 
 export default {
@@ -129,11 +130,10 @@ export default {
       });
     },
     getExercisePaper() {
-      this.$http
-        .post('/api/getExercisePaper', {
-          courseID: this.courseID,
-          exerciseID: this.exerciseID
-        })
+      ExercisesProvider.getExercisePaper({
+        courseID: this.courseID,
+        exerciseID: this.exerciseID
+      })
         .then(res => {
           if (res.data.code === 1) {
             this.exerciseName = res.data.data.exerciseName;
@@ -169,14 +169,13 @@ export default {
       })
         .then(() => {
           if (this.checkQuestionsInfo() && this.exerciseName) {
-            this.$http
-              .post('/api/updateExercisePaper', {
-                courseID: this.courseID,
-                exerciseID: this.exerciseID,
-                exerciseName: this.exerciseName,
-                choiceQuestions: this.choiceQuestions,
-                delImgs: this.delImgs
-              })
+            ExercisesProvider.updateExercisePaper({
+              courseID: this.courseID,
+              exerciseID: this.exerciseID,
+              exerciseName: this.exerciseName,
+              choiceQuestions: this.choiceQuestions,
+              delImgs: this.delImgs
+            })
               .then(res => {
                 if (res.data.code === 1) {
                   this.$router.push({
@@ -223,8 +222,7 @@ export default {
         if (question.id === id) {
           if (question.detail.imgs.length > 0) {
             // this.delImgs.push(...question.detail.imgs);
-            this.$http
-              .post('/api/delQuestionImgs', { imgs: question.detail.imgs })
+            ExercisesProvider.delQuestionImgs({imgs: question.detail.imgs})
               .then(res => {})
               .catch(err => {});
           }

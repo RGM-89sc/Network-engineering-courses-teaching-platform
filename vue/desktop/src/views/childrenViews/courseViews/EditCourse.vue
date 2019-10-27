@@ -88,6 +88,8 @@
 </template>
 
 <script>
+import {CoursesProvider} from '@/provider/index';
+
 import '@ckeditor/ckeditor5-build-classic/build/translations/zh-cn';
 import ClassicEditor from '@ckeditor/ckeditor5-editor-classic/src/classiceditor';
 
@@ -186,7 +188,7 @@ export default {
         title: ''
       },
       partInfoRules: {
-        title: [{ required: true, message: '请输入标题', trigger: 'blur' }]
+        title: [{required: true, message: '请输入标题', trigger: 'blur'}]
       },
 
       videoes: [],
@@ -230,12 +232,11 @@ export default {
         .replace(/%3D/g, '=');
     },
     getPartDetail() {
-      this.$http
-        .post('/api/getPartDetail', {
-          courseID: this.courseID,
-          chapter: this.chapter,
-          part: this.part
-        })
+      CoursesProvider.getPartDetail({
+        courseID: this.courseID,
+        chapter: this.chapter,
+        part: this.part
+      })
         .then(res => {
           if (res.data.code === 1) {
             this.partInfo.title = res.data.data.title;
@@ -253,7 +254,7 @@ export default {
               type: 'warning'
             })
               .then(() => {
-                this.$router.push({ path: '/emptyPage' });
+                this.$router.push({path: '/emptyPage'});
               })
               .catch(() => {});
           }
@@ -266,7 +267,7 @@ export default {
             type: 'warning'
           })
             .then(() => {
-              this.$router.push({ path: '/emptyPage' });
+              this.$router.push({path: '/emptyPage'});
             })
             .catch(() => {});
         });
@@ -281,18 +282,17 @@ export default {
         type: 'warning'
       })
         .then(() => {
-          this.$http
-            .post('/api/updatePart', {
-              courseID: this.courseID,
-              chapter: this.chapter,
-              part: this.part,
-              title: this.partInfo.title,
-              content: this.editorData,
-              tchID: this.tchID
-            })
+          CoursesProvider.updatePart({
+            courseID: this.courseID,
+            chapter: this.chapter,
+            part: this.part,
+            title: this.partInfo.title,
+            content: this.editorData,
+            tchID: this.tchID
+          })
             .then(res => {
               if (res.data.code === 1) {
-                this.$router.push({ path: `/course/${this.courseID}` });
+                this.$router.push({path: `/course/${this.courseID}`});
               }
               if (res.data.code === 0) {
                 this.$message({
@@ -328,14 +328,13 @@ export default {
         type: 'warning'
       })
         .then(() => {
-          this.$http
-            .post('/api/delCourseVideo', {
-              filename: file.name,
-              courseID: this.courseID,
-              chapter: this.chapter,
-              part: this.part,
-              tchID: this.tchID
-            })
+          CoursesProvider.delCourseVideo({
+            filename: file.name,
+            courseID: this.courseID,
+            chapter: this.chapter,
+            part: this.part,
+            tchID: this.tchID
+          })
             .then(res => {
               if (res.data.code === 1) {
                 this.$message({
@@ -431,7 +430,7 @@ export default {
                 return prev + cur;
               });
               const complete = ((allChunksLoads / file.size) * 100) | 0;
-              fileObj.onProgress({ percent: complete === 100 ? 99 : complete }); // 后台需要拼接文件，所以上传完100%了服务器还是没有返回值，所以直接显示99
+              fileObj.onProgress({percent: complete === 100 ? 99 : complete}); // 后台需要拼接文件，所以上传完100%了服务器还是没有返回值，所以直接显示99
             }
           })
         );
@@ -450,9 +449,10 @@ export default {
           part: this.part
         };
         // 请求分片合并
-        this.$http
-          .post('/api/mergeCourseVideoChunks', data)
-          .then(this.handleUpload, this.handleUploadError);
+        CoursesProvider.mergeCourseVideoChunks(data).then(
+          this.handleUpload,
+          this.handleUploadError
+        );
       });
     }
   }

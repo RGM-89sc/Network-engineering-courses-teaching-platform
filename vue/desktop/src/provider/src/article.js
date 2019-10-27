@@ -50,11 +50,15 @@ export const ArticleProvider = {
       .then(res => res)
       .catch(err => err)
   },
-  
   // 更新文章信息
   updateArticleInfo: (payload) => {
     return http.post(baseUrl + 'updateArticleInfo', payload)
       .then(res => res)
       .catch(err => err)
   },
+  updateArticle: (payload) => {
+    return http.post(baseUrl + '/updateArticle', payload)
+      .then(res => res)
+      .catch(err => err)
+  }
 }

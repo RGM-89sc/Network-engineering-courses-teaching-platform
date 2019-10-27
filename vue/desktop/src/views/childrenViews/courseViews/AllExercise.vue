@@ -9,7 +9,8 @@
           <span
             class="course-name"
             @click="gotoCourseExecrises(course.courseID, course.coursename)"
-          >{{ course.coursename }}</span>
+            >{{ course.coursename }}</span
+          >
           <span class="course-tch">授课教师：{{ course.tch[0].username }}</span>
         </el-card>
       </el-row>
@@ -18,6 +19,7 @@
 </template>
 
 <script>
+import {CoursesProvider} from '@/provider/index';
 export default {
   data() {
     return {
@@ -31,8 +33,7 @@ export default {
     }
   },
   created() {
-    this.$http
-      .get('/api/getCourses')
+    CoursesProvider.getCourses()
       .then(res => {
         if (res.data.code === 1) {
           this.allCourses = res.data.data;
@@ -44,7 +45,7 @@ export default {
   },
   methods: {
     gotoCourseExecrises(courseID, coursename) {
-      this.$router.push({ path: `/exercise/${courseID}` });
+      this.$router.push({path: `/exercise/${courseID}`});
     }
   }
 };

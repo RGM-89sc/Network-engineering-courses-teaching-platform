@@ -53,8 +53,8 @@ export const TeacherProvider = {
   },
 
   // 教师查看自己的课程信息
-  getMyCourses: (payload) => {
-    return http.post(baseUrl + 'tchGetMyCourses', payload)
+  getMyCourses: () => {
+    return http.post(baseUrl + 'tchGetMyCourses')
       .then(res => res.data)
       .catch(err => err)
   },
@@ -67,8 +67,8 @@ export const TeacherProvider = {
   },
 
   // 教师查看自己发布的文章
-  getMyArticles: (payload) => {
-    return http.post(baseUrl + 'tchGetMyArticles', payload)
+  getMyArticles: () => {
+    return http.get(baseUrl + 'tchGetMyArticles')
       .then(res => res.data)
       .catch(err => err)
   },

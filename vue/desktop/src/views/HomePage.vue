@@ -39,6 +39,9 @@
 </template>
 
 <script>
+import provider from '../provider/index';
+import { ResourcesProvider } from '../provider/index';
+console.log(ResourcesProvider);
 import MainLayout from '../components/MainLayout';
 export default {
   data() {

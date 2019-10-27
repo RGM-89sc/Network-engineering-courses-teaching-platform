@@ -46,8 +46,8 @@ export const CoursesProvider = {
   },
 
   // 获取课程公告
-  getBulletins: (payload) => {
-    return http.post(baseUrl + 'getBulletins', payload)
+  getBulletins: (query) => {
+    return http.get(baseUrl + 'getBulletins' + query)
       .then(res => res)
       .catch(err => err)
   },

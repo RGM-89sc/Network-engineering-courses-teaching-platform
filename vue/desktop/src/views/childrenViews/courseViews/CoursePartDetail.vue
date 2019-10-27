@@ -10,8 +10,10 @@
 </template>
 
 <script>
+import {CoursesProvider} from '@/provider/index';
+import {UserProvider} from '@/provider/index';
 import CPContent from '@/components/CPContent';
-
+console.log(CoursesProvider);
 export default {
   data() {
     return {
@@ -46,8 +48,8 @@ export default {
   },
   methods: {
     startStudy() {
-      this.$http
-        .post('/api/startStudy', {
+      UserProvider.student
+        .startStudy({
           courseID: this.courseID
         })
         .then(res => {
@@ -70,12 +72,11 @@ export default {
       });
     },
     getPartDetailNoAuth() {
-      this.$http
-        .post('/api/getPartDetailNoAuth', {
-          courseID: this.courseID,
-          chapter: this.chapter,
-          part: this.part
-        })
+      CoursesProvider.getPartDetailNoAuth({
+        courseID: this.courseID,
+        chapter: this.chapter,
+        part: this.part
+      })
         .then(res => {
           if (res.data.code === 1) {
             this.partTitle = res.data.data.title;
@@ -89,7 +90,7 @@ export default {
               type: 'warning'
             })
               .then(() => {
-                this.$router.push({ path: '/emptyPage' });
+                this.$router.push({path: '/emptyPage'});
               })
               .catch(() => {});
           }
@@ -102,7 +103,7 @@ export default {
             type: 'warning'
           })
             .then(() => {
-              this.$router.push({ path: '/emptyPage' });
+              this.$router.push({path: '/emptyPage'});
             })
             .catch(() => {});
         });

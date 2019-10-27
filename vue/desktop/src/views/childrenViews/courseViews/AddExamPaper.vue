@@ -75,6 +75,7 @@
 </template>
 
 <script>
+import { ExamsProvider } from '@/provider/index';
 import ExamMultipleChoice from '@/components/ExamMultipleChoiceEdit';
 import uuid from 'uuid/v4';
 
@@ -162,19 +163,18 @@ export default {
             this.startEndTime.length === 2 &&
             this.examTiming
           ) {
-            this.$http
-              .post('/api/addExamPaper', {
-                courseID: this.courseID,
-                examID: this.examID,
-                examName: this.examName,
-                choiceQuestions: this.choiceQuestions,
-                startTime: this.startEndTime[0],
-                endTime: this.startEndTime[1],
-                examTiming: this.examTiming
-              })
+            ExamsProvider.addExamPaper({
+              courseID: this.courseID,
+              examID: this.examID,
+              examName: this.examName,
+              choiceQuestions: this.choiceQuestions,
+              startTime: this.startEndTime[0],
+              endTime: this.startEndTime[1],
+              examTiming: this.examTiming
+            })
               .then(res => {
                 if (res.data.code === 1) {
-                  this.$router.replace({ path: `/exam/${this.courseID}` });
+                  this.$router.replace({path: `/exam/${this.courseID}`});
                 }
                 if (res.data.code === -1) {
                   this.$alert('发生了错误导致创建失败', '创建失败', {
@@ -216,8 +216,7 @@ export default {
         if (question.id === id) {
           if (question.detail.imgs.length > 0) {
             // 删除该题目的所有配图
-            this.$http
-              .post('/api/delQuestionImgs', { imgs: question.detail.imgs })
+            ExamsProvider.delQuestionImgs({imgs: question.detail.imgs})
               .then(res => {})
               .catch(err => {});
           }

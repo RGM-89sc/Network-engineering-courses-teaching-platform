@@ -2,7 +2,7 @@
   <div>
     <el-row class="header">
       <el-col>
-        <span class="exercise-name">{{exerciseName}}</span>
+        <span class="exercise-name">{{ exerciseName }}</span>
       </el-col>
     </el-row>
     <el-row class="questions">
@@ -13,17 +13,28 @@
       >
         <el-row class="question-info">
           <span v-if="checkedAnswer" class="result-mark">
-            <i v-show="resultMark[choiceQuestion.id]" class="el-icon-success result-mark-success"></i>
-            <i v-show="!resultMark[choiceQuestion.id]" class="el-icon-error result-mark-error"></i>
+            <i
+              v-show="resultMark[choiceQuestion.id]"
+              class="el-icon-success result-mark-success"
+            ></i>
+            <i
+              v-show="!resultMark[choiceQuestion.id]"
+              class="el-icon-error result-mark-error"
+            ></i>
           </span>
-          <span class="question-index">第{{index + 1}}题</span>
-          <span
-            class="question-type"
-          >[{{choiceQuestion.questionType === 'Exclusive' ? '单选题' : '多选题'}}]</span>：
+          <span class="question-index">第{{ index + 1 }}题</span>
+          <span class="question-type"
+            >[{{
+              choiceQuestion.questionType === 'Exclusive' ? '单选题' : '多选题'
+            }}]</span
+          >：
           <span
             class="problem"
-            :class="{ 'red-font': checkedAnswer && !resultMark[choiceQuestion.id] }"
-          >{{choiceQuestion.problem}}</span>
+            :class="{
+              'red-font': checkedAnswer && !resultMark[choiceQuestion.id]
+            }"
+            >{{ choiceQuestion.problem }}</span
+          >
         </el-row>
         <el-row class="question-imgs" :gutter="20">
           <el-col
@@ -33,21 +44,28 @@
             class="question-img"
           >
             <a :href="img.url" target="_blank">
-              <img :src="img.url" :alt="img.name">
+              <img :src="img.url" :alt="img.name" />
             </a>
           </el-col>
         </el-row>
-        <el-row v-if="choiceQuestion.questionType === 'Exclusive'" class="question-selections">
+        <el-row
+          v-if="choiceQuestion.questionType === 'Exclusive'"
+          class="question-selections"
+        >
           <el-radio-group v-model="userAnswer[choiceQuestion.id]">
             <el-radio
               v-for="selection in choiceQuestion.detail.selections"
               :key="selection.id"
               :label="selection.id"
               class="question-selection"
-            >{{selection.content}}</el-radio>
+              >{{ selection.content }}</el-radio
+            >
           </el-radio-group>
         </el-row>
-        <el-row v-if="choiceQuestion.questionType === 'Multiple'" class="question-selections">
+        <el-row
+          v-if="choiceQuestion.questionType === 'Multiple'"
+          class="question-selections"
+        >
           <el-checkbox-group v-model="userAnswer[choiceQuestion.id]">
             <el-checkbox
               v-for="selection in choiceQuestion.detail.selections"
@@ -55,11 +73,18 @@
               :label="selection.id"
               @change="checkbox(choiceQuestion.id, selection.id)"
               class="question-selection"
-            >{{selection.content}}</el-checkbox>
+              >{{ selection.content }}</el-checkbox
+            >
           </el-checkbox-group>
         </el-row>
         <el-row v-if="checkedAnswer" class="question-analyze">
-          <span>[答案解析]：{{choiceQuestion.detail.analyze ? choiceQuestion.detail.analyze : '无'}}</span>
+          <span
+            >[答案解析]：{{
+              choiceQuestion.detail.analyze
+                ? choiceQuestion.detail.analyze
+                : '无'
+            }}</span
+          >
         </el-row>
       </el-card>
     </el-row>
@@ -92,7 +117,7 @@ export default {
         type: 'error'
       })
         .then(() => {
-          this.$router.push({ path: `/exercise/${this.courseID}` });
+          this.$router.push({path: `/exercise/${this.courseID}`});
         })
         .catch(() => {});
     } else {
@@ -101,11 +126,10 @@ export default {
   },
   methods: {
     getExercisePaper() {
-      this.$http
-        .post('/api/getExercisePaper', {
-          courseID: this.courseID,
-          exerciseID: this.exerciseID
-        })
+      ExercisesProvider.getExercisePaper({
+        courseID: this.courseID,
+        exerciseID: this.exerciseID
+      })
         .then(res => {
           if (res.data.code === 1) {
             this.exerciseName = res.data.data.exerciseName;
@@ -117,7 +141,7 @@ export default {
             this.$alert('发生了错误导致获取数据失败', '获取数据失败', {
               confirmButtonText: '确定'
             }).then(() => {
-              this.$router.push({ path: `/exercise/${this.courseID}` });
+              this.$router.push({path: `/exercise/${this.courseID}`});
             });
           }
         })
@@ -126,7 +150,7 @@ export default {
           this.$alert('发生了错误导致获取数据失败', '获取数据失败', {
             confirmButtonText: '确定'
           }).then(() => {
-            this.$router.push({ path: `/exercise/${this.courseID}` });
+            this.$router.push({path: `/exercise/${this.courseID}`});
           });
         });
     },

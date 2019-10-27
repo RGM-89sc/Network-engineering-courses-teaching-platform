@@ -33,6 +33,8 @@
 </template>
     
 <script>
+import { UserProvider } from '@/provider/index';
+import {QaProvider} from '@/provider/index';
 export default {
   props: {
     user: {
@@ -49,8 +51,7 @@ export default {
     getMyquestions() {
       //   const type = this.user.userType === 0 ? 'stu' : 'tch';
       const url = '/api/stuGetMyQuestions';
-      this.$http
-        .get(url)
+      UserProvider.student.getMyquestions()
         .then(res => {
           if (res.data.code === 1) {
             this.questions = res.data.data;
@@ -66,9 +67,7 @@ export default {
         });
     },
     delQuestion(question) {
-      const url = '/api/delQaQuestion';
-      this.$http
-        .post(url, {
+      QaProvider.delQaQuestion()({
           qaID: question.qaID,
           questionerID: this.user.id
         })

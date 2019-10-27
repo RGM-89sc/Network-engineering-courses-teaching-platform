@@ -67,15 +67,15 @@ export const StudentProvider = {
   },
 
   // 学生查看自己文章信息
-  getMyArticles: (payload) => {
-    return http.post(baseUrl + 'stuGetMyArticles', payload)
+  getMyArticles: () => {
+    return http.get(baseUrl + 'stuGetMyArticles')
       .then(res => res.data)
       .catch(err => err)
   },
 
   // 学生查看自己的回答
-  getMyQuestions: (payload) => {
-    return http.post(baseUrl + 'stuGetMyQuestions', payload)
+  getMyQuestions: () => {
+    return http.post(baseUrl + 'stuGetMyQuestions')
       .then(res => res.data)
       .catch(err => err)
   },
