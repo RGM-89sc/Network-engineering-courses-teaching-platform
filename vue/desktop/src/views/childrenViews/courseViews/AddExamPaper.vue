@@ -75,7 +75,7 @@
 </template>
 
 <script>
-import { ExamsProvider } from '@/provider/index';
+import {ExamsProvider} from '@/provider/index';
 import ExamMultipleChoice from '@/components/ExamMultipleChoiceEdit';
 import uuid from 'uuid/v4';
 
@@ -156,6 +156,7 @@ export default {
               message: '考试有效期不能少于考试时长！',
               type: 'error'
             });
+            return;
           }
           if (
             this.checkQuestionsInfo() &&
@@ -174,7 +175,7 @@ export default {
             })
               .then(res => {
                 if (res.data.code === 1) {
-                  this.$router.replace({path: `/exam/${this.courseID}`});
+                  this.$router.push({path: `/course/${this.courseID}/exam`});
                 }
                 if (res.data.code === -1) {
                   this.$alert('发生了错误导致创建失败', '创建失败', {
