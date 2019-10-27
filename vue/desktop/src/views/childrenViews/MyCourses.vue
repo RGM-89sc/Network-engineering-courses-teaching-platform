@@ -72,6 +72,7 @@ export default {
       UserProvider.teacher
         .getMyCourses()
         .then(res => {
+          console.log(res);
           if (res.data.code === 1) {
             this.courses = res.data.data;
             console.log(this.courses);

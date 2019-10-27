@@ -69,13 +69,13 @@ export const StudentProvider = {
   // 学生查看自己文章信息
   getMyArticles: () => {
     return http.get(baseUrl + 'stuGetMyArticles')
-      .then(res => res.data)
+      .then(res => res)
       .catch(err => err)
   },
 
-  // 学生查看自己的回答
+  // 学生查看自己的问题
   getMyQuestions: () => {
-    return http.post(baseUrl + 'stuGetMyQuestions')
+    return http.get(baseUrl + 'stuGetMyQuestions')
       .then(res => res.data)
       .catch(err => err)
   },

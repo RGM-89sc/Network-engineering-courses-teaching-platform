@@ -318,7 +318,7 @@ export default {
         type: 'warning'
       })
         .then(() => {
-          // 确定
+          // 确定 
           ResourcesProvider.delResources({
             classify: resource.classify,
             filename: resource.filename,

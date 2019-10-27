@@ -8,15 +8,15 @@
     >
       <el-row type="flex">
         <el-col :span="18" class="article-name">
-          <h1
+          <h3 type="text"
             @click="
               $router.push({
-                path: `/${article.articleType}/article/${article.articleID}`
+                path: `/${article.articleType}/article/${article.articleID}?articleType=${article.articleType}`
               })
             "
           >
             {{ article.title }}
-          </h1>
+          </h3>
           <div class="article-date">
             {{ $dayjs(article.created).format('YYYY-MM-DD') }}
           </div>
@@ -55,7 +55,8 @@ export default {
   methods: {
     getMyArticles() {
       const type = this.user.userType === 0 ? 'student' : 'teacher';
-      UserProvider[type].getMyArticles
+      UserProvider[type]
+        .getMyArticles()
         .then(res => {
           if (res.data.code === 1) {
             this.articles = res.data.data;
@@ -72,30 +73,39 @@ export default {
         });
     },
     delArticle(article) {
-      ArticleProvider.delArticle({
-        articleType: article.articleType,
-        articleID: article.articleID,
-        authorID: article.authorID
+      this.$confirm('是否确认删除文章?', '确认删除', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
       })
-        .then(res => {
-          if (res.data.code === 1) {
-            this.$message({
-              message: '删除成功',
-              type: 'success'
+        .then(() => {
+          ArticleProvider.delArticle({
+            articleType: article.articleType,
+            articleID: article.articleID,
+            authorID: article.authorID
+          })
+            .then(res => {
+              if (res.data.code === 1) {
+                this.$message({
+                  message: '删除成功',
+                  type: 'success'
+                });
+                this.getMyArticles();
+              } else if (res.data.code === 0) {
+                this.$message.error({
+                  message: res.data.info
+                });
+              } else {
+                this.$message.error({
+                  message: '删除失败！'
+                });
+              }
+            })
+            .catch(err => {
+              console.log(err);
             });
-          } else if (res.data.code === 0) {
-            this.$message.error({
-              message: res.data.info
-            });
-          } else {
-            this.$message.error({
-              message: '删除失败！'
-            });
-          }
         })
-        .catch(err => {
-          console.log(err);
-        });
+        .catch(() => {});
     }
   },
   created() {
@@ -109,8 +119,9 @@ export default {
   margin-bottom: 20px;
 
   .article-name {
-    span {
+    h3 {
       line-height: 40px;
+      margin: 0;
       cursor: pointer;
     }
     > .article-date {

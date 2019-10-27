@@ -54,8 +54,8 @@ export const TeacherProvider = {
 
   // 教师查看自己的课程信息
   getMyCourses: () => {
-    return http.post(baseUrl + 'tchGetMyCourses')
-      .then(res => res.data)
+    return http.get(baseUrl + 'tchGetMyCourses')
+      .then(res => res)
       .catch(err => err)
   },
 
@@ -69,7 +69,7 @@ export const TeacherProvider = {
   // 教师查看自己发布的文章
   getMyArticles: () => {
     return http.get(baseUrl + 'tchGetMyArticles')
-      .then(res => res.data)
+      .then(res => res)
       .catch(err => err)
   },
 }

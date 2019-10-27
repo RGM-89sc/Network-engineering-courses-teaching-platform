@@ -296,7 +296,7 @@ export default {
         });
     },
     addChapterToCourse() {
-      CoursesProvider.addChapterToCourse({
+      CoursesProvider.addChapter({
         courseID: this.courseID,
         tchID: this.courseDetail.tchID,
         newChapter: {
