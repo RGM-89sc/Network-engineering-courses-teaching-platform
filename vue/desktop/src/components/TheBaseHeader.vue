@@ -100,7 +100,7 @@ export default {
 
       UserProvider.user.logout(userType)
         .then(res => {
-          if (res.data.code === 1) {
+          if (res.code === 1) {
             this.$emit('update:user', {});
             this.$router.push({ path: '/' });
           }
@@ -111,6 +111,7 @@ export default {
     },
     userCommand(command) {
       if (command === 'logout') {
+        console.log('1');
         this.logout();
       }
       if (command === 'getOwnInfo') {
