@@ -34,8 +34,7 @@
               :href="scope.row.href"
               class="download-link"
               :download="scope.row.filename"
-              >{{ scope.row.filename }}</a
-            >
+            >{{ scope.row.filename }}</a>
             <el-button
               v-if="/\.pdf$/i.test(scope.row.filename)"
               type="text"
@@ -43,13 +42,14 @@
               size="small"
               @click="
                 $router.push({
-                  path: `/course/${
-                    $route.params.course_id
-                  }/library/${encodeFilename(scope.row.filename)}`
+                  name: 'preview_courseware',
+                  params: {
+                    course_id: $route.params.course_id,
+                    filename: scope.row.filename
+                  }
                 })
               "
-              >在线预览</el-button
-            >
+            >在线预览</el-button>
           </template>
         </el-table-column>
 
@@ -59,8 +59,7 @@
               :href="scope.row.href"
               class="download-link"
               :download="scope.row.filename"
-              >{{ scope.row.filename }}</a
-            >
+            >{{ scope.row.filename }}</a>
             <el-button
               v-if="/\.pdf$/i.test(scope.row.filename)"
               type="text"
@@ -68,13 +67,14 @@
               size="small"
               @click="
                 $router.push({
-                  path: `/course/${
-                    $route.params.course_id
-                  }/library/${encodeFilename(scope.row.filename)}`
+                  name: 'preview_courseware',
+                  params: {
+                    course_id: $route.params.course_id,
+                    filename: scope.row.filename
+                  }
                 })
               "
-              >在线预览</el-button
-            >
+            >在线预览</el-button>
           </template>
         </el-table-column>
 
@@ -89,30 +89,25 @@
           v-if="user.userType === 1"
           label="操作"
           align="right"
-          width="100"
-        >
+          width="100">
           <template slot-scope="scope">
             <el-button
               type="danger"
               size="small"
               @click="delResource(scope.row)"
-              >删除</el-button
-            >
+            >删除</el-button>
           </template>
         </el-table-column>
       </el-table>
     </el-row>
     <el-row type="flex" justify="center">
-      <span class="show-more" v-if="!gotAllResources" @click="showMore"
-        >显示更多</span
-      >
+      <span class="show-more" v-if="!gotAllResources" @click="showMore">显示更多</span>
     </el-row>
 
     <el-dialog
       v-if="user.userType === 1"
       title="上传课件"
-      :visible.sync="uploadDialogVisible"
-    >
+      :visible.sync="uploadDialogVisible">
       <!-- <el-row type="flex" justify="center" style="margin-bottom: 20px;">
         <span style="line-height: 32px;">上传到类别：</span>
         <el-select
@@ -141,8 +136,7 @@
           :on-error="handleError"
           :on-success="handleSuccess"
           :file-list="fileList"
-          :auto-upload="false"
-        >
+          :auto-upload="false">
           <i class="el-icon-upload"></i>
           <div class="el-upload__text">
             将文件拖到此处，或
@@ -154,9 +148,7 @@
 
       <div slot="footer" class="dialog-footer">
         <el-button @click="uploadDialogVisible = false">取 消</el-button>
-        <el-button type="primary" :loading="updating" @click="submitUpload"
-          >开始上传</el-button
-        >
+        <el-button type="primary" :loading="updating" @click="submitUpload">开始上传</el-button>
       </div>
 
       <el-dialog
@@ -164,16 +156,14 @@
         title="上传成功"
         :visible.sync="uploadSuccessDialogVisible"
         :before-close="beforeSuccessDialogClose"
-        append-to-body
-      >
+        append-to-body>
         <span>{{ uploaded }}个文件已成功上传</span>
         <div slot="footer" class="dialog-footer">
           <el-button @click="continueUpload">继续上传</el-button>
           <el-button
             type="primary"
             @click="$router.push({ path: '/emptyPage' })"
-            >返回资源列表</el-button
-          >
+            >返回资源列表</el-button>
         </div>
       </el-dialog>
     </el-dialog>
@@ -182,6 +172,7 @@
 
 <script>
 export default {
+  name: 'show_resources',
   data() {
     return {
       // classifyOptions: [
