@@ -229,9 +229,6 @@ export default {
 
       intersectionObserver.observe(observedEl);
     },
-    /* @param zxc
-
-    */
     sortArticles() {
       const {sortSelectVal} = sortData;
       switch (this.sortSelectVal) {

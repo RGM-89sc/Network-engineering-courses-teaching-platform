@@ -1,9 +1,9 @@
 <template>
   <el-menu
-    :default-active="$route.path"
+    :default-active="path"
     class="nav-menu"
     :router="true"
-    ref="menu"
+    ref="sideNavMenu"
   >
     <el-menu-item
       :index="navItem.path"
@@ -25,17 +25,17 @@ export default {
   },
   data() {
     return {
-      path: '',
+      path: '/index',
       input: '',
       isAuthActive: false,
       indexList: [],
 
       paths: [
-        { path: '/index', name: '课程内容' },
-        { path: '/notice', name: '课程公告' },
-        { path: '/resources', name: '资源' },
-        { path: '/exercise', name: '作业练习' },
-        { path: '/exam', name: '考试' }
+        {path: '/index', name: '课程内容'},
+        {path: '/notice', name: '课程公告'},
+        {path: '/resources', name: '资源'},
+        {path: '/exercise', name: '作业练习'},
+        {path: '/exam', name: '考试'}
       ]
     };
   },
@@ -44,12 +44,12 @@ export default {
     for (const item of this.paths) {
       item.path = this.baseURL + item.path;
     }
+    this.path = this.paths[0].path;
   },
   watch: {
     '$route.path': function() {
       let path = this.$route.path.replace(/(\/[^\/]+)(\/+$)/g, '$1');
-      console.log();
-      const reg = /(\/[^\/]+)/;
+      this.path = this.$route.path.replace(/^(\/[^\/]+)(\/[^\/]+)(\/[^\/]+)(\/.+)/,'$1$2$3');
       // 检测到跳转到了auth并且cookie已过期，更新user数据
       if (path === '/auth' && !this.$getLoginState()) {
         this.$emit('update:user', {});

@@ -14,7 +14,7 @@
           :key="part.id"
           solid
           arrow
-          @click="$router.push({ path: `/course/${courseID}/pd?c=${ch.id}&p=${part.id}` })"
+          @click="$router.push({ path: `${route.path}/pd?c=${ch.id}&p=${part.id}` })"
         >
           <div slot="default">
             {{part.title}}&nbsp;

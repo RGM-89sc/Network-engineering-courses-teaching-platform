@@ -272,7 +272,7 @@ export default {
             this.$alert(`您的成绩为${res.data.data.score}`, '您的成绩', {
               confirmButtonText: '确定',
               callback: action => {
-                this.$router.replace({path: `/exam/${this.courseID}`});
+                this.$router.replace({path: `/course/${this.courseID}/exam`});
               }
             });
           }

@@ -111,7 +111,6 @@ export default {
     },
     userCommand(command) {
       if (command === 'logout') {
-        console.log('1');
         this.logout();
       }
       if (command === 'getOwnInfo') {

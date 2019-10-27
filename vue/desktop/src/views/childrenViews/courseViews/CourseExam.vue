@@ -150,7 +150,7 @@ export default {
                 return null;
               } else {
                 this.$router.push({
-                  path: `/exam/${this.courseID}/examPaper?id=${examPaper.examID}`
+                  path: `/course/${this.courseID}/exam/examPaper?id=${examPaper.examID}`
                 });
               }
             }

@@ -54,7 +54,7 @@ let router = new Router({
             },
             //课程内容
             {
-              path: "pd",
+              path: "index/pd",
               name: "course_part_detail",
               component: () => import("./views/childrenViews/courseViews/CoursePartDetail.vue"),
               meta: {
