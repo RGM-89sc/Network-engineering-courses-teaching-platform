@@ -138,7 +138,7 @@ export default {
             })
               .then(res => {
                 if (res.data.code === 1) {
-                  this.$router.replace({path: `${this.$route.path}`});
+                  this.$router.push({path : `/course/${this.courseID}/exercise`})
                 }
                 if (res.data.code === -1) {
                   this.$alert('发生了错误导致创建失败', '创建失败', {
