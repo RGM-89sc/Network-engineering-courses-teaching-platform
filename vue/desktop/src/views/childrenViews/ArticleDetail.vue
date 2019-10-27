@@ -293,7 +293,7 @@ export default {
 }
 .news-article {
   > .article__title {
-    font-size: 36px;
+    font-size: 48px;
   }
 }
 .article__author-avatar {
