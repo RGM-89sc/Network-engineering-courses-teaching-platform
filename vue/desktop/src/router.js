@@ -4,7 +4,7 @@ import getLoginState from "./getLoginState";
 
 Vue.use(Router);
 let router = new Router({
-  mode: "history",
+  // mode: "history",
   base: process.env.BASE_URL,
   routes: [{
       path: '/',
@@ -178,13 +178,19 @@ let router = new Router({
               ]
             },
             {
-              path: "library",
-              name: "show_resources",
-              component: () => import("./views/childrenViews/courseViews/Resources.vue"),
-              meta: {
-                title: "课程资源"
-              },
+              path: "resources",
+              name: "resources",
+              component: () => import("./views/Resources.vue"),
               children: [{
+                path: "",
+                name: "show_resources",
+                component: () =>
+                  import("./views/childrenViews/courseViews/Resources.vue"),
+                meta: {
+                  title: "课程资源"
+                }
+              },
+              {
                 path: ":filename",
                 name: "preview_courseware",
                 component: () =>

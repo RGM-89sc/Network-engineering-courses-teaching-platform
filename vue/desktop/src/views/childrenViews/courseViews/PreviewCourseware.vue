@@ -68,10 +68,7 @@
               contenteditable="true"
               @blur="gotoPage"
               @keydown="checkKeyCode"
-            >
-              {{ currentPage }}
-            </span>
-            / {{ pageCount }}
+            >{{ currentPage }}</span> / {{ pageCount }}
           </span>
         </el-col>
         <el-col class="reading-progress" :span="8">
@@ -128,9 +125,7 @@ import PDFViewerSkeleton from '@/components/skeleton/PDFViewer';
 export default {
   data() {
     return {
-      src: pdf.createLoadingTask(
-        `${this.$serverBaseUrl}/static/courseware/${this.$route.params.filename}`
-      ),
+      src: '',
       loading: null,
       currentPage: 1,
       pageCount: 0,
@@ -148,6 +143,11 @@ export default {
     };
   },
   created() {
+    console.log(this.$route.params.filename)
+    this.src = pdf.createLoadingTask(
+      `${this.$serverBaseUrl}/static/courseware/${this.$route.params.course_id}/${this.$route.params.filename}`
+    )
+    console.log(this.src)
     this.loading = this.$loading({
       lock: true,
       text: '正在绘制图像，请耐心等待',
@@ -173,6 +173,26 @@ export default {
     });
   },
   computed: {
+    encodeFilename(filename) {
+      return filename
+        .replace(/\+/g, '%2B')
+        .replace(/ /g, '-')
+        .replace(/\//g, '%2F')
+        .replace(/\?/g, '%3F')
+        .replace(/#/g, '%23')
+        .replace(/&/g, '%26')
+        .replace(/=/g, '%3D');
+    },
+
+    decodeFilename(filename) {
+      return filename
+        .replace(/%2B/g, '+')
+        .replace(/%2F/g, '/')
+        .replace(/%3F/g, '?')
+        .replace(/%23/g, '#')
+        .replace(/%26/g, '&')
+        .replace(/%3D/g, '=');
+    },
     catalogueItemOffsetPage() {
       let offset = 1;
       if (this.currentPage <= 3) {

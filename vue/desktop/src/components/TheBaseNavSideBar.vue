@@ -33,7 +33,7 @@ export default {
       paths: [
         { path: '', name: '课程内容' },
         { path: '/notice', name: '课程公告' },
-        { path: '/library', name: '资源' },
+        { path: '/resources', name: '资源' },
         { path: '/exercise', name: '作业练习' },
         { path: '/exam', name: '考试' }
       ]

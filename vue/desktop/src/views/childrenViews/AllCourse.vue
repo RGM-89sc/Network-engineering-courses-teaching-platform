@@ -10,8 +10,7 @@
           class="add-course"
           type="primary"
           @click="addCourseDialogVis = true"
-          >添加课程</el-button
-        >
+        >添加课程</el-button>
       </el-col>
       <el-col :span="6" :offset="user.userType === 1 ? 0 : 6">
         <el-input
