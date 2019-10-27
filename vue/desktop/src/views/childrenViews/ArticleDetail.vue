@@ -181,9 +181,9 @@ export default {
     formatDate(date, now) {
       const created = this.$dayjs(date);
       const sss = now.diff(created);
-      const minute = Math.floor(sss / 1000 / 60);
-      const hour = Math.floor(minute / 60);
-      const day = Math.floor(hour / 24);
+      const minute = Math.ceil(sss / 1000 / 60);
+      const hour = Math.ceil(minute / 60);
+      const day = Math.ceil(hour / 24);
       return minute > 59
         ? hour > 23
           ? day > 29
