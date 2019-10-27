@@ -31,7 +31,7 @@
 </template>
 
 <script>
-import { ArticleProvider } from '../../provider/index'
+import {ArticleProvider} from '../../provider/index';
 
 import '@ckeditor/ckeditor5-build-classic/build/translations/zh-cn';
 import ClassicEditor from '@ckeditor/ckeditor5-editor-classic/src/classiceditor';
@@ -164,7 +164,9 @@ export default {
           this.article.authorID = this.user.id;
           this.article.avatarURL = this.user.avatar;
           this.article.articleType = this.$route.query.articleType;
-          // this.article.tags.push(this.article.articleType);
+          this.article.tags.push(
+            this.article.articleType === 'techInfo' ? '技术前沿' : '新闻动态'
+          );
 
           ArticleProvider.postArticle(this.article)
             .then(res => {
@@ -173,7 +175,7 @@ export default {
                   message: '发布成功！',
                   type: 'success'
                 });
-                this.$router.push({ path: '/news' });
+                this.$router.push({path: `/${this.article.articleType}`});
               } else {
                 this.$message.error('发布失败！');
                 console.log(res.data.errMsg);
