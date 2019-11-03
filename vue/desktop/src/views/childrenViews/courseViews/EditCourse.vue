@@ -90,7 +90,6 @@
 <script>
 import {CoursesProvider} from '@/provider/index';
 
-import '@ckeditor/ckeditor5-build-classic/build/translations/zh-cn';
 import ClassicEditor from '@ckeditor/ckeditor5-editor-classic/src/classiceditor';
 
 import EssentialsPlugin from '@ckeditor/ckeditor5-essentials/src/essentials';
@@ -110,9 +109,8 @@ import ImageToolbar from '@ckeditor/ckeditor5-image/src/imagetoolbar';
 import ImageUpload from '@ckeditor/ckeditor5-image/src/imageupload';
 import ImageCaption from '@ckeditor/ckeditor5-image/src/imagecaption';
 import ImageStyle from '@ckeditor/ckeditor5-image/src/imagestyle';
-// import MediaEmbedPlugin from '@ckeditor/ckeditor5-media-embed/src/mediaembed';
 
-import MediaEmbedPlugin from '../../../../public/ckeditor5-media-embed/src/mediaembed';
+import MediaEmbedPlugin from '../../../components/ckeditor5/ckeditor5-media-embed/src/mediaembed';
 
 import uuidV1 from 'uuid/v1';
 

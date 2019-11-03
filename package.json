@@ -1,0 +1,23 @@
+{
+    "name": "ncw",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "desktop-start": "cd ./vue/desktop && npm run serve",
+        "mobile-start": "cd ./vue/mobile && npm run serve",
+        "desktop-build": "cd ./vue/desktop && npm run build",
+        "mobile-build": "cd ./vue/mobile && npm run build",
+        "server-start": "cd ./server && npm run start"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/RGM-89sc/Network-engineering-courses-teaching-platform.git"
+    },
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/RGM-89sc/Network-engineering-courses-teaching-platform/issues"
+    },
+    "homepage": "https://github.com/RGM-89sc/Network-engineering-courses-teaching-platform#readme"
+}

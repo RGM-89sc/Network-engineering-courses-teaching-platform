@@ -39,7 +39,7 @@ export default class MediaEmbedEditing extends Plugin {
 			providers: [
 				{
 					name: 'normal',
-					url: /^(.+\.mp4)/,
+					url: /^(.+\.mp4)$/,
 					html: match => {
 						return (
 							'<div style="position: relative; padding-bottom: 100%; height: 0;">' +
@@ -50,7 +50,7 @@ export default class MediaEmbedEditing extends Plugin {
 				},
 				{
 					name: 'youku',
-					url: /^v\.youku\.com\/v_show\/id_(.+)\.html/,
+					url: /^v\.youku\.com\/v_show\/id_(.+)\.html$/,
 					html: match => {
 						return (
 							`<iframe height=498 width=510 src="http://player.youku.com/embed/${match[ 1 ]}" frameborder=0 allowfullscreen></iframe>`

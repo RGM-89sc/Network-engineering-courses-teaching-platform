@@ -8,7 +8,7 @@
  */
 
 import mediaPlaceholderIcon from '../theme/icons/media-placeholder.svg';
-import log from '@ckeditor/ckeditor5-utils/src/log';
+import log from './log';
 import TooltipView from '@ckeditor/ckeditor5-ui/src/tooltip/tooltipview';
 import IconView from '@ckeditor/ckeditor5-ui/src/icon/iconview';
 import Template from '@ckeditor/ckeditor5-ui/src/template';

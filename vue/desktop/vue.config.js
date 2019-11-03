@@ -22,7 +22,7 @@ module.exports = {
       }
     }
   },
-  baseUrl: '/d/',
+  publicPath: '/d/',
   // 向所有 Sass 样式传入共享的全局变量
   // css: {
   //   loaderOptions: {
