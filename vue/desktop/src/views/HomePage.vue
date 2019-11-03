@@ -13,7 +13,7 @@
         class="course-item__wrapper"
         @click="
           $router.push({
-            path: `/course/${course.courseID}`
+            path: `/course/${course.courseID}/index`
           })
         "
       >
