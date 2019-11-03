@@ -36,9 +36,12 @@ export default {
       }
 
       const split = content.split(
-        /(<figure class="media"><oembed url="https?:\/\/.+\.mp4"><\/oembed><\/figure>|<figure class="media"><oembed url="https?:\/\/v\.youku\.com\/v_show\/id_.+\.html"><\/oembed><\/figure>)/gi
+        /(<figure class="media"><oembed url="https?:\/\/[^<>]+\.mp4"><\/oembed><\/figure>|<figure class="media"><oembed url="https?:\/\/v\.youku\.com\/v_show\/id_[^<>]+\.html"><\/oembed><\/figure>)/gi
       );
-
+      console.log(split)
+      if (split.length === 0) {
+        return 
+      }
       split.forEach(p => {
         if (!p) {
           return null;
@@ -48,6 +51,7 @@ export default {
           return this.template.push(gen_youku_template(m[1]));
         }
         if ((m = p.match(normal_regex)) !== null) {
+          console.log(p, m)
           return this.template.push({
             tag: 'videoPlayer',
             data: {
@@ -102,5 +106,9 @@ export default {
 <style lang="scss">
 figure {
   text-align: center;
+}
+
+figure[class = "image"] > img {
+  max-width:100%;
 }
 </style>

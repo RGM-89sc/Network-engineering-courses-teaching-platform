@@ -33,7 +33,6 @@
 <script>
 import {ArticleProvider} from '../../provider/index';
 
-import '@ckeditor/ckeditor5-build-classic/build/translations/zh-cn';
 import ClassicEditor from '@ckeditor/ckeditor5-editor-classic/src/classiceditor';
 
 import EssentialsPlugin from '@ckeditor/ckeditor5-essentials/src/essentials';
