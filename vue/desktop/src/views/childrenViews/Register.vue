@@ -187,7 +187,7 @@ export default {
     // 初始化年级选择器中的选项
     for (let i = 1; i <= 5; i++) {
       const date = new Date();
-      if (date.getMonth() > 8) {
+      if (date.getMonth() > 8 && i === 1) {
         // 8、9月入学，已入学的学生才可以选今年
         this.gradeOptions.push(date.getFullYear());
         continue;

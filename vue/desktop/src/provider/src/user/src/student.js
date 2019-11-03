@@ -46,8 +46,8 @@ export const StudentProvider = {
   },
 
   // 学生查看自己的课程信息
-  getMyCourses: (payload) => {
-    return http.post(baseUrl + 'stuGetMyCourses', payload)
+  getMyCourses: () => {
+    return http.get(baseUrl + 'stuGetMyCourses')
       .then(res => res.data)
       .catch(err => err)
   },
