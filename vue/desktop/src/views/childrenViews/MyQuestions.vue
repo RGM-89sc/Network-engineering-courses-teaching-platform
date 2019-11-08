@@ -8,7 +8,7 @@
     >
       <el-row>
         <el-col :span="18" class="question-name">
-          <span @click="$router.push({ path: `/qa/${question.id}` })">{{
+          <span @click="$router.push({path: `/qa/${question.id}`})">{{
             question.title
           }}</span>
         </el-col>
@@ -23,7 +23,7 @@
       <span v-if="user">
         您还没有提过问题，去<el-button
           type="text"
-          @click="$router.push({ path: '/qa' })"
+          @click="$router.push({path: '/qa'})"
           >&nbsp;提问题</el-button
         >
         吧
@@ -33,7 +33,7 @@
 </template>
     
 <script>
-import { UserProvider } from '@/provider/index';
+import {UserProvider} from '@/provider/index';
 import {QaProvider} from '@/provider/index';
 export default {
   props: {
@@ -50,16 +50,17 @@ export default {
   methods: {
     getMyquestions() {
       //   const type = this.user.userType === 0 ? 'stu' : 'tch';
-      const url = '/api/stuGetMyQuestions';
-      UserProvider.student.getMyquestions()
+      UserProvider.student
+        .getMyQuestions()
         .then(res => {
-          if (res.data.code === 1) {
-            this.questions = res.data.data;
+          if (res.code === 1) {
+            this.questions = res.data;
           } else {
             this.$message({
               message: '获取信息失败!',
               type: 'fail'
             });
+            console.error(res);
           }
         })
         .catch(err => {
@@ -68,9 +69,9 @@ export default {
     },
     delQuestion(question) {
       QaProvider.delQaQuestion()({
-          qaID: question.qaID,
-          questionerID: this.user.id
-        })
+        qaID: question.qaID,
+        questionerID: this.user.id
+      })
         .then(res => {
           if (res.data.code === 1) {
             this.$message({
