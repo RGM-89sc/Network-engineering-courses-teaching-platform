@@ -8,6 +8,8 @@ pipeline {
   stages {
     stage('NPM INSTALL') {
       steps {
+        sh 'sudo apt-get install -y build-essential python'
+        
         sh 'cd vue/desktop && npm install --registry=https://registry.npm.taobao.org'
 
         sh 'cd server && npm install --registry=https://registry.npm.taobao.org'
