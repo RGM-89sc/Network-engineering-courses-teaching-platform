@@ -10,12 +10,12 @@ pipeline {
       steps {
         sh 'cd vue/desktop && npm install --registry=https://registry.npm.taobao.org'
       }
-      steps {
-        sh 'cd server && npm install --registry=https://registry.npm.taobao.org'
-      }
-      steps {
-        sh 'cd vue/mobile && npm install --registry=https://registry.npm.taobao.org'
-      }
+      // steps {
+      //   sh 'cd server && npm install --registry=https://registry.npm.taobao.org'
+      // }
+      // steps {
+      //   sh 'cd vue/mobile && npm install --registry=https://registry.npm.taobao.org'
+      // }
     }
     stage('Start') {
       steps {
