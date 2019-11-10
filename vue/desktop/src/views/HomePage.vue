@@ -40,7 +40,7 @@
 
 <script>
 import provider from '../provider/index';
-import { ResourcesProvider } from '../provider/index';
+import { CoursesProvider } from '../provider/index';
 import MainLayout from '../components/MainLayout';
 export default {
   data() {
@@ -54,8 +54,8 @@ export default {
   },
   methods: {
     getFourCourses() {
-      this.$http
-        .get('/api/getFourHottestCourses')
+      CoursesProvider
+        .getFourHottestCourses()
         .then(res => {
           if (res.data.code === 1) {
             this.courses = res.data.data;

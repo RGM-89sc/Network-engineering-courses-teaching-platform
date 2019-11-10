@@ -107,6 +107,7 @@
 
 <script>
 import RichInput from '@/components/TheBaseRichInput';
+import { QaProvider } from '@/provider/index'
 export default {
 	name: 'qaview',
 	props: {
@@ -179,8 +180,8 @@ export default {
 		getQaQuestions() {
 			const url = '/api/getQaQuestions';
 			let data = [];
-			this.$http
-				.get(url)
+			QaProvider
+				.getQaQuestions()
 				.then(res => {
 					if (res.data.code === 1) {
 						this.questions = res.data.data;
@@ -217,8 +218,8 @@ export default {
 			})
 				.then(() => {
 					const url = '/api/uploadQaQuestion';
-					this.$http
-						.post(url, this.question)
+					QaProvider
+						.uploadQaQuestion(url, this.question)
 						.then(res => {
 							if (res.data.code === 1) {
 								this.$message({

@@ -35,6 +35,8 @@
 </template>
 
 <script>
+import { UserProvider } from '@/provider/index'
+console.log(UserProvider);
 export default {
   name: 'login',
   data() {
@@ -85,33 +87,33 @@ export default {
           // 提交
           this.submiting = true;
 
-          let url;
+          // let url;
 
-          if (this.loginData.userType === 0) {
-            url = '/api/stuLogin';
-          } else {
-            url = '/api/tchLogin';
-          }
-
-          this.$http
-            .post(url, {
+          // if (this.loginData.userType === 0) {
+          //   url = '/api/stuLogin';
+          // } else {
+          //   url = '/api/tchLogin';
+          // }
+          const userType = this.loginData.userType === 0 ? 'STU' : 'TCH';
+          
+          UserProvider.user.login(userType, {
               id: this.loginData.id,
               password: this.loginData.password,
               userType: this.loginData.userType
             })
             .then(res => {
-              if (res.data.code === 1) {
+              if (res.code === 1) {
                 this.$emit('login', this.$getLoginState());
                 this.$router.push({ path: '/' });
               }
-              if (res.data.code === 0) {
+              if (res.code === 0) {
                 this.$message({
                   showClose: true,
-                  message: res.data.info,
+                  message: res.info,
                   type: 'warning'
                 });
               }
-              if (res.data.code === -1) {
+              if (res.code === -1) {
                 this.$message({
                   showClose: true,
                   message: res.data.errMsg,

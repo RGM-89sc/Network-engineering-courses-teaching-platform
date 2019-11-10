@@ -45,8 +45,8 @@ export const QaProvider = {
       .catch(err => err)
   },
   
-  getQaQuestions: (payload) => {
-    return http.post(baseUrl + 'getQaQuestions', payload)
+  getQaQuestions: () => {
+    return http.get(baseUrl + 'getQaQuestions')
       .then(res => res)
       .catch(err => err)
   },

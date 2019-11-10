@@ -2,7 +2,7 @@
   <el-header>
     <div class="ul-menu__wrapper">
       <router-link to="/">
-        <img class="logo" src="../assets/logo2.png" alt="logo" />
+        
       </router-link>
       <el-menu
         :default-active="path"
@@ -11,6 +11,7 @@
         :router="true"
         ref="menu"
       >
+        <el-menu-item index="/"><img class="logo" src="../assets/logo2.png" alt="logo" /></el-menu-item>
         <el-menu-item index="/course">课程</el-menu-item>
         <el-menu-item index="/qa">答疑</el-menu-item>
         <el-menu-item index="/techInfo">技术前沿</el-menu-item>

@@ -79,6 +79,7 @@
 </template>
 
 <script>
+import { UserProvider } from '@/provider/index';
 export default {
   name: 'register',
   data() {
@@ -197,16 +198,11 @@ export default {
   },
   methods: {
     login() {
-      let url;
+      const userType = this.loginData.userType === 0 ? 'STU' : 'TCH';
 
-      if (this.registerData.userType === 0) {
-        url = '/api/stuLogin';
-      } else {
-        url = '/api/tchLogin';
-      }
-
-      this.$http
-        .post(url, {
+      UserProvider
+        .user
+        .login(userType, {
           id: this.registerData.id,
           password: this.registerData.password,
           userType: this.registerData.userType
@@ -241,16 +237,10 @@ export default {
           // 提交
           this.submiting = true;
 
-          let url;
+          const userType = this.loginData.userType === 0 ? 'STU' : 'TCH';
 
-          if (this.registerData.userType === 0) {
-            url = '/api/stuRegister';
-          } else {
-            url = '/api/tchRegister';
-          }
-
-          this.$http
-            .post(url, this.registerData)
+          UserProvider
+            .register(userType, this.registerData)
             .then(res => {
               if (res.data.code === 1) {
                 this.login();

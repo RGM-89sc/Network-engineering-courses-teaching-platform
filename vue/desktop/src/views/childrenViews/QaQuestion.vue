@@ -125,6 +125,7 @@
 
 <script>
 import RichInput from '@/components/TheBaseRichInput';
+import { QaProvider } from '@/provider/index'
 export default {
   props: {
     // question: {
@@ -161,10 +162,9 @@ export default {
       this.index = (val - 1) * this.offset;
     },
     getQaQuestion() {
-      const url = '/api/getQaQuestion';
       const qaID = this.$route.params.question_id;
-      this.$http
-        .post(url, { qaID: qaID })
+      QaProvider
+        .getQaQuestion({ qaID: qaID })
         .then(res => {
           if (res.data.code === 1) {
             this.question = res.data.data;
@@ -206,9 +206,8 @@ export default {
         type: 'warning'
       })
         .then(() => {
-          const url = '/api/updateQuestionReplys';
-          this.$http
-            .post(url, {
+          QaProvider
+            .updateQuestionReplys({
               qaID: this.question.qaID,
               reply: {
                 replyerName: this.user.username,

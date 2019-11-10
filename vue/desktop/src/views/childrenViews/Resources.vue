@@ -177,6 +177,7 @@
 </template>
 
 <script>
+import { ResourcesProvider } from '@/provider/index';
 export default {
   data() {
     return {
@@ -282,8 +283,8 @@ export default {
     },
     getResources(classify) {
       this.loading = true;
-      this.$http
-        .post('/api/getResources', {
+      ResourcesProvider
+        .getResources({
           classify,
           skip: this.skip,
           limit: this.limit
@@ -320,8 +321,8 @@ export default {
       })
         .then(() => {
           // 确定
-          this.$http
-            .post('/api/delResources', {
+         ResourcesProvider
+            .delResources({
               classify: resource.classify,
               filename: resource.filename
             })
