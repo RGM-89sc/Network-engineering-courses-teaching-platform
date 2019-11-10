@@ -240,6 +240,7 @@ export default {
           const userType = this.loginData.userType === 0 ? 'STU' : 'TCH';
 
           UserProvider
+          .user
             .register(userType, this.registerData)
             .then(res => {
               if (res.data.code === 1) {

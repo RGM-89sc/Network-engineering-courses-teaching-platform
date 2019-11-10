@@ -54,9 +54,9 @@ export default {
   },
   methods: {
     getMyArticles() {
-      const type = this.user.userType === 0 ? 'student' : 'teacher';
-      UserProvider[type]
-        .getMyArticles()
+      const userType = this.user.userType === 0 ? 'STU' : 'TCH';
+      UserProvider.user
+        .getMyArticles(userType)
         .then(res => {
           if (res.data.code === 1) {
             this.articles = res.data.data;

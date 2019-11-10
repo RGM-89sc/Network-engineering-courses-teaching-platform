@@ -43,7 +43,7 @@
               size="small"
               @click="
                 $router.push({
-                  path: `/library/${encodeFilename(scope.row.filename)}`
+                  path: `/library/${classify}/${encodeFilename(scope.row.filename)}`
                 })
               "
               >在线预览</el-button
@@ -66,7 +66,7 @@
               size="small"
               @click="
                 $router.push({
-                  path: `/library/${encodeFilename(scope.row.filename)}`
+                  path: `/library/${classify}/${encodeFilename(scope.row.filename)}`
                 })
               "
               >在线预览</el-button

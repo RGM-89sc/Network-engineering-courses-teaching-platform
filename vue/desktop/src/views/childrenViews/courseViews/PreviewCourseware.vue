@@ -53,13 +53,13 @@
               title="笔尖粗细"
             ></el-slider>
           </div>
-          <!-- <el-input-number
+        <el-input-number
           size="small"
           v-model="currentPage"
           :min="1"
           :max="pageCount"
           style="margin-right: 1rem"
-          ></el-input-number>-->
+          ></el-input-number>
         </el-col>
         <el-col class="pagination" :span="3">
           <span>
@@ -143,11 +143,9 @@ export default {
     };
   },
   created() {
-    console.log(this.$route.params.filename)
     this.src = pdf.createLoadingTask(
       `${this.$serverBaseUrl}/static/courseware/${this.$route.params.course_id}/${this.$route.params.filename}`
     )
-    console.log(this.src)
     this.loading = this.$loading({
       lock: true,
       text: '正在绘制图像，请耐心等待',

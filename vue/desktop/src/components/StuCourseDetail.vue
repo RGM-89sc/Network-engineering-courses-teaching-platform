@@ -55,7 +55,7 @@ export default {
   },
   methods: {
     getMyCourseExams() {
-      userProvider.student.getMyCourseExams({ courseID: this.courseID })
+      UserProvider.student.getMyCourseExams({ courseID: this.courseID })
         .then(res => {
           if (res.data.code === 1) {
             this.courseName = res.data.course.coursename;

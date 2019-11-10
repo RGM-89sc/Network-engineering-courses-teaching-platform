@@ -70,7 +70,7 @@ let router = new Router({
           }
         },
         {
-          path: ':filename',
+          path: ':classify/:filename',
           name: 'preview_courseware',
           component: () => import('./views/childrenViews/PreviewCourseware.vue'),
           meta: {

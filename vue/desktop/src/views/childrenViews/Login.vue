@@ -36,7 +36,6 @@
 
 <script>
 import { UserProvider } from '@/provider/index'
-console.log(UserProvider);
 export default {
   name: 'login',
   data() {
