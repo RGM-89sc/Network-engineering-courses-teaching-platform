@@ -14,7 +14,7 @@
           ref="pdf"
           :src="src"
           :page="currentPage"
-          style="background-color: #eee;"
+          style="background-color: #eee;display: flex;flex: 1"
           @error="pdfError"
         ></pdf>
         <!-- <span>{{currentPage}} / {{pageCount}}</span> -->
@@ -87,13 +87,12 @@
           <div
             class="catalogue-list"
             :style="{
-              transform: `translateX(calc(-20% * ${catalogueItemOffsetPage -
-                1}))`
+              transform: `translateX(calc(-20% * ${catalogueItemOffsetPage - 1}))`
             }"
           >
             <a
-              :href="'#' + pageNumber"
-              v-for="pageNumber in pageCount"
+              :href="$route.path + '#' + pageNumber"
+              v-for="pageNumber in needLoadPageNum"
               :key="pageNumber"
               @click="changePage(pageNumber)"
             >
@@ -132,6 +131,7 @@ export default {
       progress: 0,
       pdfLoaded: false,
       currentOffset: 1,
+      needLoadPageNum: 1,
 
       isDrawing: false,
       canvas: null,
@@ -156,6 +156,13 @@ export default {
     this.src.then(pdf => {
       this.pageCount = pdf.numPages;
 
+      // 默认先加载10页，文件少于10也则加载全部
+      if (this.pageCount <= 10) {
+        this.needLoadPageNum = this.pageCount
+      } else {
+        this.needLoadPageNum = 10
+      }
+
       // 获取当前url hash，作为当前要加载的页面
       const hash = this.$route.hash;
       if (hash) {
@@ -171,26 +178,6 @@ export default {
     });
   },
   computed: {
-    encodeFilename(filename) {
-      return filename
-        .replace(/\+/g, '%2B')
-        .replace(/ /g, '-')
-        .replace(/\//g, '%2F')
-        .replace(/\?/g, '%3F')
-        .replace(/#/g, '%23')
-        .replace(/&/g, '%26')
-        .replace(/=/g, '%3D');
-    },
-
-    decodeFilename(filename) {
-      return filename
-        .replace(/%2B/g, '+')
-        .replace(/%2F/g, '/')
-        .replace(/%3F/g, '?')
-        .replace(/%23/g, '#')
-        .replace(/%26/g, '&')
-        .replace(/%3D/g, '=');
-    },
     catalogueItemOffsetPage() {
       let offset = 1;
       if (this.currentPage <= 3) {
@@ -217,17 +204,25 @@ export default {
     }
   },
   watch: {
-    currentPage(newPageNum, oldPageNum) {
-      if (this.$route.hash !== '#' + newPageNum) {
-        this.$router.push({
-          path: this.$route.params.filename,
-          hash: '#' + newPageNum
-        });
-      }
-
-      // 禁用涂鸦
-      this.canDraw = false;
+    needLoadPageNum (newValue) {
+      setTimeout(() => {
+        if (newValue + 1 < this.pageCount) {
+          this.needLoadPageNum++
+          console.log('继续加载' + this.needLoadPageNum + '页')
+        }
+      }, 200)
     },
+    // currentPage(newPageNum, oldPageNum) {
+    //   if (this.$route.hash !== '#' + newPageNum) {
+    //     this.$router.push({
+    //       path: this.$route.params.filename,
+    //       hash: '#' + newPageNum
+    //     });
+    //   }
+
+    //   // 禁用涂鸦
+    //   this.canDraw = false;
+    // },
 
     penColor(newColor, oldColor) {
       this.context.strokeStyle = newColor;
@@ -243,6 +238,26 @@ export default {
     }
   },
   methods: {
+    encodeFilename(filename) {
+      return filename
+        .replace(/\+/g, '%2B')
+        .replace(/ /g, '-')
+        .replace(/\//g, '%2F')
+        .replace(/\?/g, '%3F')
+        .replace(/#/g, '%23')
+        .replace(/&/g, '%26')
+        .replace(/=/g, '%3D');
+    },
+
+    decodeFilename(filename) {
+      return filename
+        .replace(/%2B/g, '+')
+        .replace(/%2F/g, '/')
+        .replace(/%3F/g, '?')
+        .replace(/%23/g, '#')
+        .replace(/%26/g, '&')
+        .replace(/%3D/g, '=');
+    },
     checkKeyCode(event) {
       // 禁止除左右方向键，退格，删除，数字0-9以外的键入
       if (
@@ -327,8 +342,18 @@ export default {
       this.currentPage = pageNumber;
     },
     pageLoaded(pageNum) {
-      this.progress = parseInt((pageNum / this.pageCount) * 100);
+      console.log('loaded page ' + pageNum)
+      const _needLoadPageNum = this.needLoadPageNum
+
+      this.progress = parseInt((pageNum / _needLoadPageNum/*this.pageCount*/) * 100);
       if (this.pdfLoaded === false && this.progress === 100) {
+        setTimeout(() => {
+          if (this.needLoadPageNum + 1 <= this.pageCount) {
+            this.needLoadPageNum++
+            console.log('继续加载' + this.needLoadPageNum + '页')
+          }
+        }, 50 * _needLoadPageNum)
+
         setTimeout(() => {
           // annotationLayer层会覆盖canvas，事件无法被激活，所以隐藏
           this.$refs.pdf.$refs.annotationLayer.style.display = 'none';
@@ -343,7 +368,7 @@ export default {
           this.$nextTick(() => {
             this.loading.close();
           });
-        }, 150 * this.pageCount);
+        }, 150 * _needLoadPageNum/*this.pageCount*/);
       }
     },
     pdfError(err) {
@@ -368,17 +393,6 @@ export default {
 .pdf-main {
   position: relative;
   border: 1px solid #eee;
-
-  span {
-    position: absolute;
-    display: block;
-    top: 5px;
-    right: 5px;
-    padding: 5px 10px;
-    background-color: rgba($color: #555, $alpha: 0.1);
-    border-radius: 10px;
-    z-index: 999;
-  }
 }
 
 .pdf-console {
@@ -402,14 +416,16 @@ export default {
 
 .catalogue {
   box-sizing: border-box;
-  display: table;
+  display: flex;
   overflow: hidden;
   white-space: nowrap;
   border: 1px solid #eee;
 
   .prev,
   .next {
-    display: table-cell;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     width: 40px;
     text-align: center;
     vertical-align: middle;
@@ -427,7 +443,6 @@ export default {
     background-color: #eee;
 
     .catalogue-list {
-      display: table-cell;
       transition: all 0.5s ease;
 
       .catalogue-item {

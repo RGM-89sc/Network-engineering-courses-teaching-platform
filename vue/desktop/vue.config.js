@@ -1,5 +1,8 @@
 const CKEditorWebpackPlugin = require('@ckeditor/ckeditor5-dev-webpack-plugin');
 const { styles } = require('@ckeditor/ckeditor5-dev-utils');
+const HappyPack = require('happypack');
+const os = require('os');
+const happyThreadPool = HappyPack.ThreadPool({ size: os.cpus().length });
 
 module.exports = {
   lintOnSave: false, //禁用eslint
@@ -44,6 +47,18 @@ module.exports = {
       new CKEditorWebpackPlugin({
         // See https://ckeditor.com/docs/ckeditor5/latest/features/ui-language.html
         language: 'zh-cn'
+      }),
+      new HappyPack({
+        //用id来标识 happypack处理那里类文件
+        id: 'happyBabel',
+        //如何处理  用法和loader 的配置一样
+        loaders: [{
+          loader: 'babel-loader?cacheDirectory=true',
+        }],
+        //共享进程池
+        threadPool: happyThreadPool,
+        //允许 HappyPack 输出日志
+        verbose: true,
       })
     ]
   },
@@ -89,5 +104,14 @@ module.exports = {
       .test(/ckeditor5-[^/\\]+[/\\]theme[/\\]icons[/\\][^/\\]+\.svg$/)
       .use('raw-loader')
       .loader('raw-loader');
+
+    config.module
+      .rule('happypack-js')
+      .test(/\.js$/)
+      .exclude
+      .add(/node_modules/)
+      .end()
+      .use('happypack')
+      .loader('happypack/loader?id=happyBabel')
   }
 };
