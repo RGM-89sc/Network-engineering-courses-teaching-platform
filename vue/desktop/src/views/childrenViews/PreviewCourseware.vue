@@ -14,7 +14,7 @@
           ref="pdf"
           :src="src"
           :page="currentPage"
-          style="background-color: #eee;"
+          style="background-color: #eee;display: flex;flex: 1"
           @error="pdfError"
         ></pdf>
         <span>{{ currentPage }} / {{ pageCount }}</span>
