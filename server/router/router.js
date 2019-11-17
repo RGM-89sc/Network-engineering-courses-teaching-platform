@@ -6,6 +6,7 @@ const exercisesRouter = require('./modules/exercises');
 const examsRouter = require('./modules/exams');
 const qaRouter = require('./modules/qa');
 const articleRouter = require('./modules/article');
+const othersRouter = require('./modules/others')
 const log4js = require('log4js');
 const logger = log4js.getLogger();
 logger.level = 'debug';
@@ -38,4 +39,7 @@ module.exports = app => {
 
   app.use(articleRouter.routes())
     .use(articleRouter.allowedMethods());
+
+  app.use(othersRouter.routes())
+    .use(othersRouter.allowedMethods())
 };

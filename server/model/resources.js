@@ -19,4 +19,8 @@ const resourcesSchema = new mongoose.Schema({
   }
 });
 
+resourcesSchema.index({ 
+  filename: 'text',
+})
+
 module.exports = mongoose.model('Resources', resourcesSchema);

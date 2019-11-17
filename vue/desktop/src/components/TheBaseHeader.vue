@@ -27,6 +27,7 @@
         class="global-search"
         v-model="input"
         placeholder="搜索..."
+        @keyup.enter.native="searchGlobal"
       ></el-input>
 
       <el-link
@@ -90,6 +91,15 @@ export default {
     }
   },
   methods: {
+    searchGlobal () {
+      if (!this.input) {
+        return
+      }
+      this.$router.push({
+        name: 'search',
+        query: { key: this.input }
+      })
+    },
     logout() {
       let userType = '';
       if (this.user.userType === 0) {

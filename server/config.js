@@ -20,5 +20,7 @@ module.exports = {
     'http://localhost:8088',
     'http://localhost:8089',
     'http://localhost:8090',
-  ]
+  ],
+
+  defaultImageURL: '/static/img/avatar/default.png'
 };

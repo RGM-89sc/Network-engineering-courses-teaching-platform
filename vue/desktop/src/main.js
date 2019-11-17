@@ -54,7 +54,8 @@ import {
   BreadcrumbItem,
   Carousel,
   CarouselItem,
-  Icon
+  Icon,
+  Image
 } from 'element-ui';
 import config from './config/index';
 
@@ -112,6 +113,8 @@ Vue.use(Link);
 Vue.use(Pagination);
 Vue.use(Breadcrumb);
 Vue.use(BreadcrumbItem);
+Vue.use(Image)
+
 Vue.prototype.$loading = Loading.service;
 Vue.prototype.$message = Message;
 Vue.prototype.$alert = MessageBox.alert;

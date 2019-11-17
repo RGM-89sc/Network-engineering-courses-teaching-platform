@@ -51,4 +51,11 @@ const coursesSchema = new mongoose.Schema({
   }
 });
 
+coursesSchema.index({ 
+  coursename: 'text',
+  'content.stamp': 'text',
+  'content.part.title': 'text',
+  'content.part.content': 'text',
+})
+
 module.exports = mongoose.model('Courses', coursesSchema);
