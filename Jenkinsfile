@@ -6,6 +6,11 @@ pipeline {
     }
   }
   stages {
+    stage('ENV') {
+      steps {
+        sh 'sudo apt-get install -y build-essential python'
+      }
+    }
     stage('NPM INSTALL') {
       steps {
         sh 'cd vue/desktop && npm install --registry=https://registry.npm.taobao.org'
@@ -15,9 +20,11 @@ pipeline {
         sh 'cd vue/mobile && npm install --registry=https://registry.npm.taobao.org'
       }
     }
-    stage('Start') {
+    stage('BUILD') {
       steps {
         sh 'npm run desktop-build'
+
+        sh 'npm run mobile-build'
       }
     }
   }
