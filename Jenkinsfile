@@ -27,7 +27,17 @@ pipeline {
         sh 'npm run desktop-build'
 
         sh 'npm run mobile-build'
+      }
+    }
+    stage('MAKE') {
+      steps {
+        sh 'rm -f server/public/d && rm -f server/public/m'
 
+        sh 'cp vue/desktop/dist/ server/public/d && cp vue/mobile/dist/ server/public/m'
+      }
+    }
+    stage('START') {
+      steps {
         // sh 'npm run server-start'
       }
     }
