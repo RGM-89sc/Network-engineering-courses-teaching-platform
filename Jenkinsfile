@@ -1,7 +1,7 @@
 pipeline {
   agent {
     docker {
-      image 'node:7.8'
+      image 'node:6.10'
       args '-p 3001:9000'
     }
   }
@@ -10,7 +10,7 @@ pipeline {
       steps {
         sh 'npm config set registry https://registry.npm.taobao.org'
 
-        sh 'apt-get install -y build-essential python'
+        // sh 'apt-get install -y build-essential python'
       }
     }
 
@@ -39,7 +39,7 @@ pipeline {
         sh 'cp vue/desktop/dist/ server/public/d && cp vue/mobile/dist/ server/public/m'
       }
     }
-    
+
     // stage('START') {
     //   steps {
     //     sh 'npm run server-start'
