@@ -36,10 +36,10 @@ pipeline {
         sh 'cp vue/desktop/dist/ server/public/d && cp vue/mobile/dist/ server/public/m'
       }
     }
-    stage('START') {
-      steps {
-        // sh 'npm run server-start'
-      }
-    }
+    // stage('START') {
+    //   steps {
+    //     sh 'npm run server-start'
+    //   }
+    // }
   }
 }
