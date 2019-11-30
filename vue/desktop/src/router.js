@@ -22,6 +22,14 @@ let router = new Router({
         title: "登录&注册"
       }
     },
+    {
+      path: "/search",
+      name: "search",
+      component: () => import("./views/search/search.vue"),
+      meta: {
+        title: "搜索"
+      }
+    },
     //课程
     {
       path: "/course",

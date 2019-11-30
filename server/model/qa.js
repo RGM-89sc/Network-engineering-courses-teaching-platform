@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
-const defaultImageURL = '/static/img/avatar/default.png'
+const config = require('../config.js')
+const defaultImageURL = config.defaultImageURL
+
 const qaSchema = new mongoose.Schema({
     qaID: {
         type: String,
@@ -79,5 +81,12 @@ const qaSchema = new mongoose.Schema({
         default: 0
     }
 });
+
+qaSchema.index({ 
+  title: 'text',
+  content: 'text',
+  tag: 'text',
+  'replys.content': 'text'
+})
 
 module.exports = mongoose.model('qa', qaSchema)

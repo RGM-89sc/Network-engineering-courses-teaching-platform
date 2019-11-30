@@ -6,6 +6,7 @@ import { ExercisesProvider } from './src/exercises';
 import { ExamsProvider } from './src/exams'
 import { QaProvider } from './src/qa';
 import { ArticleProvider } from './src/article'
+import { OthersProvider } from './src/others'
 
 const userProvider = {
   user: UserProvider,
@@ -21,4 +22,5 @@ export {
   ExamsProvider,
   QaProvider,
   ArticleProvider,
+  OthersProvider
 }
