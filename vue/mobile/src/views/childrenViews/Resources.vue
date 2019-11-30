@@ -8,15 +8,16 @@
           autofocus
           placeholder="搜索资源名称"
           @change="event => {this.searchValue = event.target.value}"
+          @keyup.enter="searchResources"
         >
         <md-button class="btn-cancel" type="link" @click="searchPanelShow = false">取消</md-button>
       </div>
-      <md-button
+      <!-- <md-button
         type="primary"
         class="btn-search"
         icon="search"
         @click="!(searchPanelShow = false) && (search = searchValue)"
-      >搜索</md-button>
+      >搜索</md-button> -->
     </div>
 
     <Card round>
@@ -182,6 +183,10 @@ export default {
     this.getResources('all');
   },
   methods: {
+    searchResources () {
+      this.search = this.searchValue
+      this.searchPanelShow = false
+    },
     resourceOperate({ value }) {
       if (value === 'preview') {
         this.$router.push({
