@@ -13,6 +13,7 @@ pipeline {
         sh 'apt-get install -y build-essential python'
       }
     }
+
     stage('NPM INSTALL') {
       steps {
         sh 'cd vue/desktop && npm install'
@@ -22,6 +23,7 @@ pipeline {
         sh 'cd vue/mobile && npm install'
       }
     }
+
     stage('BUILD') {
       steps {
         sh 'npm run desktop-build'
@@ -29,6 +31,7 @@ pipeline {
         sh 'npm run mobile-build'
       }
     }
+
     stage('MAKE') {
       steps {
         sh 'rm -f server/public/d && rm -f server/public/m'
@@ -36,6 +39,7 @@ pipeline {
         sh 'cp vue/desktop/dist/ server/public/d && cp vue/mobile/dist/ server/public/m'
       }
     }
+    
     // stage('START') {
     //   steps {
     //     sh 'npm run server-start'
