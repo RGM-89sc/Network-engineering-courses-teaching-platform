@@ -8,7 +8,7 @@ pipeline {
   stages {
     stage('ENV') {
       steps {
-        sh 'npm config set registry https://registry.npm.taobao.org'
+        sh 'npm config set registry https://r.cnpmjs.org/'
 
         // sh 'apt-get install -y build-essential python'
       }
