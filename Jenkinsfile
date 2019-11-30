@@ -8,13 +8,9 @@ pipeline {
   stages {
     stage('ENV') {
       steps {
-        sh 'source /etc/profile'
-
-        sh 'source ~/.bash_profile'
-
         sh 'npm config set registry https://registry.npm.taobao.org'
 
-        sh 'sudo apt-get install -y build-essential python'
+        sh 'apt-get install -y build-essential python'
       }
     }
     stage('NPM INSTALL') {
