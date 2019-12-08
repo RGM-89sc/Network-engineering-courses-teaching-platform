@@ -20,9 +20,7 @@ const app = new Koa();
 const logger = log4js.getLogger();
 logger.level = 'debug';
 
-connectDB('mongodb://localhost:27017/ncw', {
-  useNewUrlParser: true
-});
+connectDB(config.db, { useNewUrlParser: true })
 
 app.use(cors({
   origin: ctx => {
@@ -31,7 +29,7 @@ app.use(cors({
     }
     return false;
   },
-  origin: ctx => ctx.request.header.origin,
+  // origin: ctx => ctx.request.header.origin,
   exposeHeaders: ['WWW-Authenticate', 'Server-Authorization'],
   maxAge: 5,
   credentials: true,

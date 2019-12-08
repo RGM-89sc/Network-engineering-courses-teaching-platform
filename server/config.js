@@ -1,6 +1,7 @@
 const port = 9000;
 
 module.exports = {
+  db: 'mongodb://admin:admin_123@39.108.52.7:27017/ncw',
   // 服务器端口
   port,
   // 服务器地址
