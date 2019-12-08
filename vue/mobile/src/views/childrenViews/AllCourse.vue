@@ -12,15 +12,16 @@
           autofocus
           placeholder="搜索课程名称或教师名称"
           @change="event => {this.searchValue = event.target.value}"
+          @keyup.enter="searchCourse"
         >
         <md-button class="btn-cancel" type="link" @click="searchPanelShow = false">取消</md-button>
       </div>
-      <md-button
+      <!-- <md-button
         type="primary"
         class="btn-search"
         icon="search"
         @click="!(searchPanelShow = false) && (search = searchValue)"
-      >搜索</md-button>
+      >搜索</md-button> -->
     </div>
 
     <div class="toolbar">
@@ -93,6 +94,10 @@ export default {
     this.getCourses();
   },
   methods: {
+    searchCourse () {
+      this.search = this.searchValue
+      this.searchPanelShow = false
+    },
     getCourses() {
       this.$http
         .get('/api/getCourses')
