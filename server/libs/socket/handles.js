@@ -17,15 +17,15 @@ module.exports = socket => {
         return
       }
 
-      // 考试时长大于15分钟，考试结束前5分钟发送提醒事件
-      if (delay > TIME.MINS_15) {
+      // 考试时长大于等于15分钟，考试结束前5分钟发送提醒事件
+      if (delay >= TIME.MINS_15) {
         setTimeout(() => {
           socket.to(id).emit('prompt', { data: { countdown: TIME.MINS_05 } })
         }, delay - TIME.MINS_05)
       }
 
-      // 考试时长大于30分钟，考试结束前15分钟发送提醒事件
-      if (delay > TIME.MINS_30) {
+      // 考试时长大于等于30分钟，考试结束前15分钟发送提醒事件
+      if (delay >= TIME.MINS_30) {
         setTimeout(() => {
           socket.to(id).emit('prompt', { data: { countdown: TIME.MINS_15 } })
         }, delay - TIME.MINS_15)
