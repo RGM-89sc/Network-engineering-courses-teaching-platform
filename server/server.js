@@ -12,6 +12,7 @@ const randomStr = require('./tools/randomStr');
 const mkdir = require('./tools/mkdir');
 const config = require('./config.js');
 const judgeDeviceType = require('./middleware/judgeDeviceType');
+const socket = require('./libs/socket')
 
 const corsWhiteList = config.corsWhiteList;
 const loginMaxAge = config.loginMaxAge;
@@ -20,7 +21,9 @@ const app = new Koa();
 const logger = log4js.getLogger();
 logger.level = 'debug';
 
-connectDB(config.db, { useNewUrlParser: true })
+connectDB(config.db)
+
+socket(config.socket)
 
 app.use(cors({
   origin: ctx => {

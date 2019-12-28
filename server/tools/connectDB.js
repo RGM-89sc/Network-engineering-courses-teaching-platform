@@ -4,8 +4,8 @@ const log4js = require('log4js');
 const logger = log4js.getLogger();
 logger.level = 'debug';
 
-module.exports = async (url, options) => {
-  await mongoose.connect(url, options)
+module.exports = async config => {
+  await mongoose.connect(config.url, config.options)
     .then(() => {
       logger.info('MongoDB connection successful');
     })

@@ -1,7 +1,12 @@
 const port = 9000;
 
 module.exports = {
-  db: 'mongodb://admin:admin_123@39.108.52.7:27017/ncw',
+  db: {
+    url: 'mongodb://admin:admin_123@39.108.52.7:27017/ncw',
+    options: {
+      useNewUrlParser: true
+    }
+  },
   // 服务器端口
   port,
   // 服务器地址
@@ -23,5 +28,9 @@ module.exports = {
     'http://localhost:8090',
   ],
 
-  defaultImageURL: '/static/img/avatar/default.png'
+  defaultImageURL: '/static/img/avatar/default.png',
+
+  socket: {
+    port: 13337
+  }
 };
