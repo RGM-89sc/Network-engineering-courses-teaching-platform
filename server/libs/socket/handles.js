@@ -9,7 +9,7 @@ const TIME = {
 module.exports = socket => {
   return {
     examStart: (id, msg) => {
-      const delay = 0 + msg.delay  // 0+ 转换为数字类型
+      const delay = + msg.delay  // 0+ 转换为数字类型
 
       // 没有获取到考试的总时长
       if (!delay) {
