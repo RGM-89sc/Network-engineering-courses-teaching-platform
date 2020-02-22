@@ -4,7 +4,7 @@
       <el-col :span="12">
         <span class="course-name">{{ courseName }}</span>
       </el-col>
-      <el-col class="toolsbar" v-if="user && user.userType === 1">
+      <el-col class="toolsbar" v-if="user && user.userType === 1 && user.id === tchID">
         <el-button
           type="primary"
           @click="$router.push({path: `${$route.path}/addExamPaper`})"
@@ -30,7 +30,7 @@
           <el-col
             :span="6"
             style="text-align: right;"
-            v-if="user && user.userType === 1"
+            v-if="user && user.userType === 1 && user.id === examPaper.tchID"
           >
             <el-button type="text" @click="openSetExamDialog(examPaper)"
               >设置</el-button
@@ -88,7 +88,8 @@
 </template>
 
 <script>
-import {ExamsProvider} from '../../../provider';
+import { ExamsProvider } from '@/provider';
+import { CoursesProvider } from '@/provider';
 export default {
   data() {
     return {
@@ -99,21 +100,39 @@ export default {
       currentSettingExam: {
         examTiming: 60,
         startEndTime: []
-      }
+      },
+      tchID: ''
     };
   },
   props: {
     user: {
       type: Object,
       default: {}
-    }
+    },
   },
   created() {
     this.courseID = this.$route.params.course_id;
     this.courseName = window.sessionStorage.getItem('exams.current_coursename');
+    this.getTchID();
     this.getExamPapers();
   },
   methods: {
+    getTchID() {
+      CoursesProvider.getCourseDetail({
+        courseID: this.courseID
+      })
+        .then(res => {
+          if (res.data.code === 1) {
+            this.tchID = res.data.data.tchID;
+          }
+          if (res.data.code === -1) {
+            console.log('获取课程对应的教师ID失败');
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
     getExamPapers() {
       ExamsProvider.getExamPapers({courseID: this.courseID})
         .then(res => {

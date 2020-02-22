@@ -4,7 +4,7 @@
       <el-col :span="12">
         <span class="course-name">{{ coursename }}</span>
       </el-col>
-      <el-col class="toolsbar" v-if="user && user.userType === 1">
+      <el-col class="toolsbar" v-if="user && user.userType === 1 && user.id === tchID">
         <el-button
           type="primary"
           @click="$router.push({path: `${$route.path}/addExercisePaper`})"
@@ -70,12 +70,14 @@
 
 <script>
 import { ExercisesProvider } from '@/provider/index';
+import { CoursesProvider } from '@/provider';
 export default {
   data() {
     return {
       courseID: '',
       coursename: '',
-      exercisePapers: []
+      exercisePapers: [],
+      tchID: ''
     };
   },
   props: {
@@ -89,9 +91,26 @@ export default {
     this.coursename = window.sessionStorage.getItem(
       'exercises.current_coursename'
     );
+    this.getTchID();
     this.getExercisePapers();
   },
   methods: {
+    getTchID() {
+      CoursesProvider.getCourseDetail({
+        courseID: this.courseID
+      })
+        .then(res => {
+          if (res.data.code === 1) {
+            this.tchID = res.data.data.tchID;
+          }
+          if (res.data.code === -1) {
+            console.log('获取课程对应的教师ID失败');
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
     getExercisePapers() {
       ExercisesProvider.getExercisePapers({courseID: this.courseID})
         .then(res => {
