@@ -46,7 +46,7 @@
       <el-form label-width="100px">
         <el-form-item label="考试名称：">
           <el-input
-            placeholder="请输入作业名称（必填）"
+            placeholder="请输入考试名称（必填）"
             v-model="examName"
           ></el-input>
         </el-form-item>
