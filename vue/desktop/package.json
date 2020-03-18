@@ -29,6 +29,7 @@
         "element-ui": "^2.8.2",
         "postcss-loader": "^3.0.0",
         "raw-loader": "^0.5.1",
+        "socket.io-client": "^2.3.0",
         "uuid": "^3.3.2",
         "vue": "^2.5.21",
         "vue-core-image-upload": "2.3.6",
