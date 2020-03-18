@@ -76,7 +76,9 @@
 </template>
 
 <script>
-import {ExamsProvider} from '@/provider/index';
+import { ExamsProvider } from '@/provider/index';
+import io from 'socket.io-client';
+import config from '@/config/index';
 export default {
   data() {
     return {
@@ -87,7 +89,17 @@ export default {
       userAnswer: {},
       examTiming: 60,
       countdown: '',
-      haveBeenHandIn: false
+      haveBeenHandIn: false,
+      examStatus: false,
+      serverEnded: false,
+      socket: {
+        instance: null,
+        closed: true
+      },
+      countdownTimer: null,
+      currentExamID: '',
+      curTimeStamp: Date.now(),
+      timeDiff: 0
     };
   },
   props: {
@@ -99,18 +111,26 @@ export default {
   created() {
     this.courseID = this.$route.params.course_id;
     this.examID = this.$route.query.id;
+    this.timeDiff = this.curTimeStamp - (+this.$route.query.time);
+    this.timeDiff = this.timeDiff > 100 ? this.timeDiff : 0;
     if (!this.examID) {
       this.$alert('没有找到该考试！', '错误', {
         confirmButtonText: '确定',
         type: 'error'
       })
         .then(() => {
-          this.$router.push({path: `/exam/${this.courseID}`});
+          this.$router.push({path: `/course/${this.courseID}/exam`});
         })
         .catch(() => {});
     } else {
       this.getExamPaper();
     }
+    //加上时间戳，解决重新考试计时器显示不正确问题，可能是由于timer未清除，一直在setItem的原因，timer未清除的原因未知
+    this.currentExamID =  `exam.${this.courseID}.${this.examID}.${this.user.id}.${this.$route.query.time}.`; 
+    this.$notify({
+      title: '警告',
+      message: `考试途中不能关闭该页面或关闭浏览器！`
+      });
   },
   beforeRouteLeave(to, from, next) {
     if (!this.haveBeenHandIn && this.countdown !== '00:00:00') {
@@ -120,19 +140,22 @@ export default {
         type: 'warning'
       })
         .then(() => {
-          this.handInExamPaper();
+          this.handInExamPaper(next);
         })
         .catch(() => {});
     }
-    if (this.haveBeenHandIn) {
+    if(this.haveBeenHandIn){
       next();
     }
+  },
+  beforeDestroy(){
+    this.clearSocket();
   },
   methods: {
     initUserAnswer() {
       const userAnswer = JSON.parse(
         window.sessionStorage.getItem(
-          `exam.${this.courseID}.${this.examID}.${this.user.id}.userAnswer`
+         `${this.currentExamID}.userAnswer`
         )
       );
       if (userAnswer && JSON.stringify(userAnswer) !== '{}') {
@@ -142,29 +165,85 @@ export default {
       }
     },
     initCountdown() {
-      const countdown = window.sessionStorage.getItem(
-        `exam.${this.courseID}.${this.examID}.${this.user.id}.countdown`
-      );
-      if (countdown) {
-        this.countdown = countdown;
-      } else {
-        const hour = Math.floor(this.examTiming / 60);
-        const mins = this.examTiming % 60;
-        this.countdown = `${hour < 10 ? '0' + hour : hour}:${
-          mins < 10 ? '0' + mins : mins
-        }:00`;
-      }
+      // const countdown = window.sessionStorage.getItem(
+      //   `${this.currentExamID}.countdown`
+      // );
+      // if (countdown) {
+      //   this.countdown = countdown;
+      // } else {
+      //   const hour = Math.floor(this.examTiming / 60);
+      //   const mins = this.examTiming % 60;
+        // this.countdown = `${hour < 10 ? '0' + hour : hour}:${
+        //   mins < 10 ? '0' + mins : mins
+        // }:00`;
+      // }
+      const countdown = this.examTiming * 60 * 1000 - this.timeDiff;
+      let seconds = Math.floor(countdown / 1000);
+      let mins = Math.floor(seconds / 60);
+      let hour = Math.floor(mins / 60);
+      seconds = Math.floor(seconds % 60);
+      mins =  Math.floor(mins % 60);
+      hour = Math.floor(hour % 24);
+      this.countdown = `${hour < 10 ? '0' + hour : hour}:${
+        mins < 10 ? '0' + mins : mins
+      }:${seconds < 10 ? '0' + seconds : seconds}`;
     },
     autoEnding() {
       this.$alert('考试已结束，将自动交卷', '考试结束', {
         confirmButtonText: '确定',
         showClose: false
       }).then(() => {
-        this.handInExamPaper();
+        this.handInExamPaper(this.fresh);
+      });
+    },
+    clearSocket(){
+      this.socket.closed = true;
+      this.socket.instance.close();
+    },
+    initSocket() {
+      const socket = io(config.socketURL);
+      this.socket.instance = socket;
+      this.socket.closed = false;
+      socket.emit('examStart', {
+        delay: this.examTiming * 60 * 1000,
+        timeDiff: this.timeDiff
+      });
+      socket.on('joinFail', (res) => {
+        console.log(res);
+      });
+      socket.on('test', (res) => {
+        console.log('test' + res.data);
+      })
+      socket.on('prompt', (res) => {
+        const min = res.data.countdown;
+        this.$notify({
+          title: '提醒',
+          message: `离考试结束还有${res.data.countdown / 60 / 1000}分钟，请抓紧时间答题`
+          });
+      });
+      socket.on('examEnd', (res) => {
+        this.serverEnded = true;
+        console.log('examend');
+        this.autoEnding();
+      })
+      socket.on('connect_error', (error) => {
+        this.$message.error("网络连接错误，请检查网络连接以便考试顺利进行!");
+      });
+      socket.on('disconnect', (reason) => {
+        if(!this.socket.closed){
+          this.$message.error("网络连接中断，请检查网络连接以便考试顺利进行!");
+        }
+      });
+      socket.on('reconnect', (attempt) => {
+        this.$message({
+          message: '网络连接恢复',
+          type: 'success'
+        });
       });
     },
     countdownTime() {
-      let timer = setInterval(() => {
+      let timer;
+      this.countdownTimer = timer = setInterval(() => {
         const time = this.countdown.split(':').map(x => parseInt(x));
         let h = time[0];
         let m = time[1];
@@ -175,7 +254,9 @@ export default {
             if (h === 0) {
               s = 0;
               clearInterval(timer);
-              this.autoEnding();
+              // if(!this.serverEnded){
+              //   this.autoEnding();
+              // };
             }
             if (h > 0) {
               m = 59;
@@ -190,18 +271,15 @@ export default {
         this.countdown = `${h < 10 ? '0' + h : h}:${m < 10 ? '0' + m : m}:${
           s < 10 ? '0' + s : s
         }`;
+        // if (s === 0 && h === 0 && m === 15) {
+        //   this.$message('离考试结束还有15分钟，请抓紧时间答题');
+        // }
 
-        if (s === 0 && h === 0 && m === 15) {
-          this.$message('离考试结束还有15分钟，请抓紧时间答题');
-        }
+        // window.sessionStorage.setItem(
+        //   `${this.currentExamID}.countdown`,
+        //   this.countdown
+        // );
 
-        if (s % 10 === 0) {
-          // 10秒缓存一次考试剩余时间
-          window.sessionStorage.setItem(
-            `exam.${this.courseID}.${this.examID}.${this.user.id}.countdown`,
-            this.countdown
-          );
-        }
       }, 1000);
     },
     getExamPaper() {
@@ -216,6 +294,7 @@ export default {
             this.examTiming = res.data.data.examTiming;
             this.initCountdown();
             this.initUserAnswer();
+            this.initSocket();
             this.countdownTime();
           }
           if (res.data.code === -1) {
@@ -223,7 +302,7 @@ export default {
             this.$alert('发生了错误导致获取数据失败', '获取数据失败', {
               confirmButtonText: '确定'
             }).then(() => {
-              this.$router.push({path: `/exam/${this.courseID}`});
+              this.$router.push({path: `/course/${this.courseID}/exam`});
             });
           }
         })
@@ -232,13 +311,13 @@ export default {
           this.$alert('发生了错误导致获取数据失败', '获取数据失败', {
             confirmButtonText: '确定'
           }).then(() => {
-            this.$router.push({path: `/exam/${this.courseID}`});
+            this.$router.push({path: `/course/${this.courseID}/exam`});
           });
         });
     },
     saveUserAnswerToSS() {
       window.sessionStorage.setItem(
-        `exam.${this.courseID}.${this.examID}.${this.user.id}.userAnswer`,
+        `${this.currentExamID}.userAnswer`,
         JSON.stringify(this.userAnswer)
       );
     },
@@ -253,7 +332,7 @@ export default {
       }
       this.saveUserAnswerToSS();
     },
-    handInExamPaper() {
+    handInExamPaper(afterExamCB) {
       ExamsProvider.handIn({
         courseID: this.courseID,
         examID: this.examID,
@@ -262,17 +341,17 @@ export default {
         .then(res => {
           if (res.data.code === 1) {
             this.haveBeenHandIn = true;
+            clearInterval(this.countdownTimer);
             window.sessionStorage.removeItem(
-              `exam.${this.courseID}.${this.examID}.${this.user.id}.userAnswer`
+              `${this.currentExamID}.userAnswer`
             );
-            window.sessionStorage.removeItem(
-              `exam.${this.courseID}.${this.examID}.${this.user.id}.countdown`
-            );
-
+            // window.sessionStorage.removeItem(
+            //   `${this.currentExamID}.countdown`
+            // );
             this.$alert(`您的成绩为${res.data.data.score}`, '您的成绩', {
               confirmButtonText: '确定',
               callback: action => {
-                this.$router.replace({path: `/course/${this.courseID}/exam`});
+                afterExamCB();
               }
             });
           }
@@ -297,9 +376,12 @@ export default {
         type: 'warning'
       })
         .then(() => {
-          this.handInExamPaper();
+          this.handInExamPaper(this.fresh);
         })
         .catch(err => {});
+    },
+    fresh() {
+      this.$router.replace({path: `/course/${this.courseID}/exam`});
     }
   }
 };

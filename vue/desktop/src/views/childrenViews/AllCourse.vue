@@ -62,6 +62,7 @@
                 :file-list="newCourse.newCourseCover"
                 :before-upload="beforeAddNewCourse"
                 :on-success="addNewCourseSuccess"
+                :on-error="addNewCourseError"
                 list-type="picture"
                 :auto-upload="false"
                 :limit="1"
@@ -161,7 +162,6 @@ export default {
     getCourses() {
       CoursesProvider.getCourses()
         .then(res => {
-          console.log(res);
           if (res.data.code === 1) {
             this.allCourses = res.data.data;
           }
@@ -194,6 +194,12 @@ export default {
         console.log(response.errMsg);
       }
     },
+    addNewCourseError(err, file, fileList) {
+      this.$alert('上传失败，请确认课程信息填写完整', '添加失败', {
+        confirmButtonText: '确定'
+      });
+      console.log(err);
+    },
     beforeAddNewCourse(file) {
       // if(typeof file === 'undefined'){
       //   this.$message.error({
@@ -212,13 +218,20 @@ export default {
             showCancelButton: false
           }
         );
+        this.addingNewCourse = false;
         return false;
       }
       return true;
     },
     addNewCourse() {
-      this.addingNewCourse = true;
-      this.$refs.upload.submit();
+      if (!this.newCourse.newCourseName) {
+        this.$message.error({
+          message:'请填写课程名称！'
+        })      
+      }else {
+        this.addingNewCourse = true;
+        this.$refs.upload.submit();
+      }
     },
     dialogClose() {
       this.$refs.addCourse.resetFields();

@@ -169,7 +169,7 @@ export default {
                 return null;
               } else {
                 this.$router.push({
-                  path: `/course/${this.courseID}/exam/examPaper?id=${examPaper.examID}`
+                  path: `/course/${this.courseID}/exam/examPaper?id=${examPaper.examID}&time=${Date.now()}`
                 });
               }
             }

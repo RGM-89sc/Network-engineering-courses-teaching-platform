@@ -55,7 +55,9 @@ import {
   Carousel,
   CarouselItem,
   Icon,
-  Image
+  Image,
+  Notification,
+  Alert
 } from 'element-ui';
 import config from './config/index';
 
@@ -114,14 +116,14 @@ Vue.use(Pagination);
 Vue.use(Breadcrumb);
 Vue.use(BreadcrumbItem);
 Vue.use(Image)
+Vue.use(Alert);
 
 Vue.prototype.$loading = Loading.service;
 Vue.prototype.$message = Message;
 Vue.prototype.$alert = MessageBox.alert;
 Vue.prototype.$confirm = MessageBox.confirm;
-
 Vue.prototype.$http = http;
-
+Vue.prototype.$notify = Notification;
 Vue.prototype.$getLoginState = getLoginState;
 dayjs.locale('zh-cn');
 Vue.prototype.$dayjs = dayjs;
