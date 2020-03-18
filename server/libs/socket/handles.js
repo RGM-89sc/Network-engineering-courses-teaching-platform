@@ -9,29 +9,39 @@ const TIME = {
 module.exports = socket => {
   return {
     examStart: (msg) => {
+      let emitDelay = 0;
       // 没有获取到考试的总时长
-      if(!msg || !msg.delay){
-        socket.emit('joinFail', { msg: 'attr delay or obj msg not found' });
+      if(!msg || !msg.delay) {
+        socket.emit('joinFail', { msg: 'attr delay or obj msg not found or timeDiff not found' });
         return;
       }
-      const delay = + msg.delay  // +转换为数字类型
+      const delay = + msg.delay;  // +转换为数字类型
+      msg.timeDiff = + msg.timeDiff;
+      const timeDiff = msg.timeDiff <= 100 ? 0 : msg.timeDiff;
+
       // 考试时长大于等于15分钟，考试结束前5分钟发送提醒事件
       if (delay >= TIME.MINS_15) {
-        setTimeout(() => {
-          socket.emit('prompt', { data: { countdown: TIME.MINS_05 } })
-        }, delay - TIME.MINS_05)
+        emitDelay = delay - TIME.MINS_05 - timeDiff;
+        if(emitDelay > 0) {
+          setTimeout(() => {
+            socket.emit('prompt', { data: { countdown: TIME.MINS_05 } })
+          }, emitDelay)
+        }
       }
 
       // 考试时长大于等于30分钟，考试结束前15分钟发送提醒事件
       if (delay >= TIME.MINS_30) {
-        setTimeout(() => {
-          socket.emit('prompt', { data: { countdown: TIME.MINS_15 } })
-        }, delay - TIME.MINS_15)
+        emitDelay = delay - TIME.MINS_15 - timeDiff;
+        if(emitDelay > 0) {
+          setTimeout(() => {
+            socket.emit('prompt', { data: { countdown: TIME.MINS_15 } })
+          }, emitDelay)
+        }
       }
-
+      emitDelay = delay - timeDiff;
       setTimeout(() => {
         socket.emit('examEnd', {})
-      }, delay)
+      }, emitDelay)
     }
   }
 }
