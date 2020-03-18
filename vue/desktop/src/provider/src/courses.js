@@ -116,8 +116,8 @@ export const CoursesProvider = {
   },
 
 
-  getFourHottestCourses: (payload) => {
-    return http.post(baseUrl + 'getFourHottestCourses', payload)
+  getFourHottestCourses: () => {
+    return http.get(baseUrl + 'getFourHottestCourses')
       .then(res => res)
       .catch(err => err)
   },
