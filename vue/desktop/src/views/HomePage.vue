@@ -1,8 +1,20 @@
 <template>
   <MainLayout class="homepage">
-    <el-carousel height="50vh">
-      <el-carousel-item v-for="item in 4" :key="item">
-        <h3>{{ item }}</h3>
+    <el-carousel height="50vh" v-if="courses.length">
+      <el-carousel-item v-for="(course, index) in courses" 
+        :key="index"     
+        style="cursor:pointer;"   
+        @click="
+          $router.push({
+            path: `/course/${course.courseID}/index`
+          })
+        ">
+        <img
+            :src="course.cover"
+            :alt="course.coursename"
+            :title="course.coursename"
+            @click.prevent=""
+        />
       </el-carousel-item>
     </el-carousel>
 
@@ -39,14 +51,19 @@
 </template>
 
 <script>
-import provider from '../provider/index';
-import { ResourcesProvider } from '../provider/index';
+import { CoursesProvider } from '../provider/index';
 import MainLayout from '../components/MainLayout';
 export default {
+  props: {
+    user: {
+    type: Object,
+      default: ()=>{}
+    }
+  },
   data() {
     return {
       carouselItems: [],
-      courses: []
+      courses: [],
     };
   },
   components: {
@@ -54,8 +71,7 @@ export default {
   },
   methods: {
     getFourCourses() {
-      this.$http
-        .get('/api/getFourHottestCourses')
+      CoursesProvider.getFourHottestCourses()
         .then(res => {
           if (res.data.code === 1) {
             this.courses = res.data.data;
@@ -74,7 +90,12 @@ export default {
 </script>
 
 <style lang="scss">
+img {
+  width: 100%;
+  height: 100%;
+}
 .course-list__wrapper {
+  margin-top: 16px;
   cursor: pointer;
 }
 
@@ -87,8 +108,7 @@ export default {
 }
 .course-item__wrapper {
   box-sizing: border-box;
-  padding: 0 20px;
-  width: 25%;
+  width: 22%;
 }
 .course-cover__wrapper {
   padding-right: 12px;
