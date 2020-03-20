@@ -19,9 +19,14 @@ const loginMaxAge = config.loginMaxAge;
 const port = config.port;
 const app = new Koa();
 const logger = log4js.getLogger();
+
+const importAccounts = require('./libs/importAccounts.js');
 logger.level = 'debug';
 
 connectDB(config.db)
+
+const excelFilePath = `./libs/student_account.xlsx`;
+importAccounts(excelFilePath);
 
 socket(config.socket)
 
