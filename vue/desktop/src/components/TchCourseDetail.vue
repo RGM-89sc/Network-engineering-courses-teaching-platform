@@ -101,9 +101,10 @@ export default {
       CoursesProvider.getCourseStusAndExams({ courseID: this.courseID })
         .then(res => {
           if (res.data.code === 1) {
-            this.courseExams = res.data.exams;
-            this.courseName = res.data.course.coursename;
-            res.data.course.stus.forEach(stu => {
+            this.courseExams = res.data.data.exams;
+            this.courseName = res.data.data.course.coursename;
+            
+            res.data.data.course.stus.forEach(stu => {
               let progress, exams;
               stu.study.some(course => {
                 if (course.courseID === this.courseID) {
