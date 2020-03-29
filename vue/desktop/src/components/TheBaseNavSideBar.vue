@@ -44,16 +44,12 @@ export default {
     for (const item of this.paths) {
       item.path = this.baseURL + item.path;
     }
-    this.path = this.paths[0].path;
-  },
+    this.path = this.$route.path.replace(/^((\/[^\/]+){3})(\/.+)/,'$1');
+  },  
   watch: {
     '$route.path': function() {
       let path = this.$route.path.replace(/(\/[^\/]+)(\/+$)/g, '$1');
-      this.path = this.$route.path.replace(/^(\/[^\/]+)(\/[^\/]+)(\/[^\/]+)(\/.+)/,'$1$2$3');
-      // 检测到跳转到了auth并且cookie已过期，更新user数据
-      if (path === '/auth' && !this.$getLoginState()) {
-        this.$emit('update:user', {});
-      }
+      this.path = this.$route.path.replace(/^((\/[^\/]+){3})(\/.+)/,'$1');
     }
   },
   methods: {}
