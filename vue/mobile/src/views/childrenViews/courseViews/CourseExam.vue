@@ -1,5 +1,5 @@
 <template>
-  <div class="gray-bg">
+  <div class="course-exam__wrapper gray-bg">
     <Card round>
       <div class="header">
         <span class="title">{{courseName}}</span>
@@ -60,7 +60,7 @@
 </template>
 
 <script>
-import Card from '../../components/Card';
+import Card from '@/components/Card';
 
 export default {
   data() {
@@ -131,9 +131,8 @@ export default {
                 return null;
               } else {
                 this.$router.push({
-                  path: `/exam/${this.courseID}/examPaper?id=${
-                    examPaper.examID
-                  }`
+                  path: `/course/${this.$route.params.course_id}/exam/examPaper?id=${
+                    examPaper.examID}&time=${Date.now()}`
                 });
               }
             }
@@ -261,5 +260,9 @@ export default {
   margin: 5rem 0;
   text-align: center;
   color: #606266;
+}
+.course-exam__wrapper {
+  padding-top: 16px;
+  min-height: calc(100vh - 7.4rem);
 }
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <div class="gray-bg">
+  <div class="course-exercise__wrapper gray-bg">
     <Card round>
       <div class="header">
         <span class="title">{{coursename}}</span>
@@ -18,7 +18,7 @@
         :title="exercisePaper.exerciseName"
         arrow
         :brief="'创建时间：' + $dayjs(exercisePaper.created).format('YYYY-MM-DD')"
-        @click="$router.push({ path: `/exercise/${courseID}/exercisePaper?id=${exercisePaper.exerciseID}` })"
+        @click="$router.push({ path: `/course/${courseID}/exercise/exercisePaper?id=${exercisePaper.exerciseID}` })"
       />
     </Card>
 
@@ -31,7 +31,7 @@
 </template>
 
 <script>
-import Card from '../../components/Card';
+import Card from '@/components/Card';
 
 export default {
   data() {
@@ -102,6 +102,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.course-exercise__wrapper {
+  padding-top: 16px;
+  min-height: calc(100vh - 7.4rem);
+}
 .header {
   display: table;
   width: 100%;

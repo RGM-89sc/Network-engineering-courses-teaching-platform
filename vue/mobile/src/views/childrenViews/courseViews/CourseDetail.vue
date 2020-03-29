@@ -14,7 +14,7 @@
           :key="part.id"
           solid
           arrow
-          @click="$router.push({ path: `${route.path}/pd?c=${ch.id}&p=${part.id}` })"
+          @click="$router.push({ path: `${$route.path}/pd?c=${ch.id}&p=${part.id}` })"
         >
           <div slot="default">
             {{part.title}}&nbsp;
@@ -106,7 +106,7 @@
 </template>
 
 <script>
-import Card from '../../components/Card';
+import Card from '@/components/Card';
 // import TeacherCard from '../../components/TeacherCard';
 // import StudentsCard from '../../components/StudentsCard';
 
@@ -327,6 +327,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.course-detail {
+  min-height: calc(100vh - 7.4rem);
+}
 .header {
   padding: 0 1rem;
   text-align: center;

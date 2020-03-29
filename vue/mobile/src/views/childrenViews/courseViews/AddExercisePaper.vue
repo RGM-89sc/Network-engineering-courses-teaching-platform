@@ -48,7 +48,7 @@
 </template>
 
 <script>
-import MultipleChoice from '../../components/MultipleChoiceEdit';
+import MultipleChoice from '@/components/MultipleChoiceEdit';
 import uuid from 'uuid/v4';
 
 export default {

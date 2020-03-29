@@ -31,11 +31,11 @@ export default {
     return {
       currentPath: '/',
       items: [
-        { id: 1, label: '课程', path: '/' },
-        { id: 2, label: '教学资源', path: '/library' },
-        { id: 3, label: '作业练习', path: '/exercise' },
-        { id: 4, label: '考试', path: '/exam' },
-        { id: 5, label: '答疑', path: '/qa' }
+        { id: 1, label: '课程', path: '/course' },
+        { id: 2, label: '答疑', path: '/qa' },
+        { id: 3, label: '技术前沿', path: '/techInfo' },
+        { id: 4, label: '新闻动态', path: '/news' },
+        { id: 5, label: '实验平台', path: '/library' }
       ]
     };
   },
@@ -59,9 +59,6 @@ export default {
       this.judgeCookieExpired(path);
     },
     updateCurrentPath(path) {
-      if (path === '/course') {
-        path = '/';
-      }
       this.currentPath = path;
     },
     judgeCookieExpired(path) {
@@ -133,16 +130,16 @@ header {
   .tab-bar-item {
     display: inline-block;
     box-sizing: border-box;
-    padding: 1rem 1.2rem;
+    padding: 1.1rem 1.2rem;
     white-space: nowrap;
     color: #606266;
-    border-bottom: 4px solid transparent;
+    border-bottom: 3px solid transparent;
     transition: all 0.2s ease;
   }
 
   .is-active {
     color: #409eff;
-    border-bottom: 4px solid #409eff;
+    border-bottom: 3px solid #409eff;
     transition: all 0.5s ease;
   }
 }

@@ -13,8 +13,8 @@
 </template>
 
 <script>
-import Card from '../../components/Card';
-import CPContent from '../../components/CPContent';
+import Card from '@/components/Card';
+import CPContent from '@/components/CPContent';
 
 export default {
   data() {

@@ -1,8 +1,8 @@
 <template>
-  <div class="gray-bg">
+  <div class="resources-wrapper gray-bg">
     <div class="search-panel" v-show="searchPanelShow">
       <div class="search-input">
-        <md-icon class="search" name="search"></md-icon>
+        <md-icon class="search" name ="search"></md-icon>
         <input
           type="text"
           autofocus
@@ -26,9 +26,9 @@
         <div class="tool-bar">
           <md-button
             v-if="user && user.userType === 1"
-            class="search-btn"
+            class="search-btn1"
             type="link"
-            @click="e => { this.uploadResource() }"
+            @click="e => {  this.uploadResource(); }"
           >上传</md-button>
           <md-button class="search-btn" type="link" @click="searchPanelShow = true">搜索</md-button>
           <!-- <md-button class="filter-btn" type="link" @click="isFilterSelectorShow = true">筛选</md-button> -->
@@ -75,13 +75,13 @@
       :data="uploadClassifyOptions[0]"
       max-height="320px"
       title="上传至分类"
-      @choose="({value}) => { this.uploadClassify = value; }"
+      @choose="({value}) => { this.uploadClassify = value; this.uploadResource() }"
     ></md-selector> -->
   </div>
 </template>
 
 <script>
-import Card from '../../components/Card';
+import Card from '@/components/Card';
 
 export default {
   data() {
@@ -90,7 +90,7 @@ export default {
       searchPanelShow: false,
       isOperateSelectorShow: false,
       // isFilterSelectorShow: false,
-      isUploadClassifySelectorShow: false,
+      // isUploadClassifySelectorShow: false,
       // classifyOptions: [
       //   [
       //     {
@@ -107,7 +107,7 @@ export default {
       //     }
       //   ]
       // ],
-      classify: 'all',
+      classify: 'courseware',
 
       searchValue: '',
       search: '',
@@ -130,7 +130,7 @@ export default {
       //     }
       //   ]
       // ],
-      uploadClassify: 'software',
+      uploadClassify: 'courseware',
       uploading: false,
       updated: 0
     };
@@ -171,15 +171,16 @@ export default {
       default: {}
     }
   },
-  watch: {
-    classify: function(newValue, oldValue) {
-      this.skip = 0;
-      this.allResources = [];
-      this.gotAllResources = false;
-      this.getResources(newValue);
-    }
-  },
+  // watch: {
+  //   classify: function(newValue, oldValue) {
+  //     this.skip = 0;
+  //     this.allResources = [];
+  //     this.gotAllResources = false;
+  //     this.getResources(newValue);
+  //   }
+  // },
   created() {
+    this.courseID = this.$route.params.course_id;
     this.getResources(this.classify);
   },
   methods: {
@@ -227,9 +228,12 @@ export default {
     },
     getResources(classify) {
       this.loading = true;
+      const courseID = this.courseID;
+      console.log(classify);
       this.$http
         .post('/api/getResources', {
           classify,
+          courseID,
           skip: this.skip,
           limit: this.limit
         })
@@ -240,11 +244,12 @@ export default {
                 filename: this.decodeFilename(data.filename),
                 date: this.dateFormat(data.created),
                 classify: data.classify,
-                href: `${this.$serverBaseUrl}/static/${data.classify}/${
+                href: `${this.$serverBaseUrl}/static/${data.classify}/${courseID}/${
                   data.filename
                 }`
               };
             });
+            console.log(resources);
             this.allResources.push(...resources);
             if (resources.length < this.limit) {
               this.gotAllResources = true;
@@ -310,6 +315,7 @@ export default {
       const formData = new FormData();
       formData.append('file', file);
       formData.append('classify', this.uploadClassify);
+      formData.append('courseID', this.courseID);
       this.$http
         .post('/api/uploadResources', formData)
         .then(res => {
@@ -434,4 +440,9 @@ export default {
   text-align: center;
   color: #409eff;
 }
+.resources-wrapper {
+  padding-top: 16px;
+  min-height: calc(100vh - 7.4rem);
+}
+
 </style>

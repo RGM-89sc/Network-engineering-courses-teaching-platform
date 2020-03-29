@@ -67,7 +67,7 @@
 </template>
 
 <script>
-import Card from '../../components/Card';
+import Card from '@/components/Card';
 
 export default {
   data() {
@@ -79,7 +79,8 @@ export default {
       userAnswer: {},
       rightAnswer: {},
       resultMark: {},
-      checkedAnswer: false
+      checkedAnswer: false,
+      path: `/course/${this.$route.params.course_id}/excercise`
     };
   },
   created() {
@@ -91,7 +92,7 @@ export default {
         content: '没有找到该作业！',
         confirmText: '确定',
         onConfirm: () => {
-          this.$router.push({ path: `/exercise/${this.courseID}` });
+          this.$router.push({ path: this.path});
         }
       });
     } else {
@@ -118,7 +119,7 @@ export default {
               content: '发生了错误导致获取数据失败',
               confirmText: '确定',
               onConfirm: () => {
-                this.$router.push({ path: `/exercise/${this.courseID}` });
+                this.$router.push({ path: this.path });
               }
             });
           }
@@ -130,7 +131,7 @@ export default {
             content: '发生了错误导致获取数据失败',
             confirmText: '确定',
             onConfirm: () => {
-              this.$router.push({ path: `/exercise/${this.courseID}` });
+              this.$router.push({ path: this.path });
             }
           });
         });

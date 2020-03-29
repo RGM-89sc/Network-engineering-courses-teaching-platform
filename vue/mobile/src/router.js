@@ -1,205 +1,364 @@
-import Vue from 'vue';
-import Router from 'vue-router';
-import getLoginState from './getLoginState';
+import Vue from "vue";
+import Router from "vue-router";
+import getLoginState from "./getLoginState";
 
 Vue.use(Router);
-
 let router = new Router({
-  mode: 'history',
+  mode: "history",
   base: process.env.BASE_URL,
-  routes: [
-    {
-      path: '/auth',
-      name: 'auth',
-      component: () => import('./views/Auth.vue'),
+  routes: [{
+      path: '/',
+      name: 'homepage',
+      component: () => import('./views/Homepage.vue'),
       meta: {
-        title: '登录&注册'
+        title: '首页'
       }
     },
     {
-      path: '/',
-      component: () => import('./views/Course.vue'),
-      children: [
-        {
-          path: '',
-          name: 'all_course',
-          component: () => import('./views/childrenViews/AllCourse.vue'),
-          meta: {
-            title: 'NCW'
-          }
-        },
-        {
-          path: '/course/:course_id',
-          name: 'course_detail',
-          component: () => import('./views/childrenViews/CourseDetail.vue'),
-          meta: { 
-            auth: 'all',
-            title: '课程详情'
-          }
-        },
-        {
-          path: '/course/:course_id/pd',
-          name: 'course_part_detail',
-          component: () => import('./views/childrenViews/CoursePartDetail.vue'),
-          meta: { 
-            auth: 'all',
-            title: '课程内容'
-          }
-        },
-        // {
-        //   path: '/editCourse',
-        //   name: 'edit_chapter',
-        //   component: () => import('./views/childrenViews/EditCourse.vue'),
-        //   meta: { 
-        //     auth: 'tch',
-        //     title: '编辑课程'
-        //   }
-        // }
-      ]
+      path: "/auth",
+      name: "auth",
+      component: () => import("./views/Auth.vue"),
+      meta: {
+        title: "登录&注册"
+      }
     },
+    // {
+    //   path: "/search",
+    //   name: "search",
+    //   component: () => import("./views/search/search.vue"),
+    //   meta: {
+    //     title: "搜索"
+    //   }
+    // },
+    //课程
     {
-      path: '/library',
-      component: () => import('./views/Library.vue'),
-      children: [
-        {
-          path: '',
-          name: 'show_resources',
-          component: () => import('./views/childrenViews/Resources.vue'),
+      path: "/course",
+      component: () => import("./views/Course.vue"),
+      children: [{
+          path: "",
+          name: "all_course",
+          component: () => import("./views/childrenViews/AllCourse.vue"),
           meta: {
-            title: '全部资源'
+            title: "全部课程"
           }
         },
         {
-          path: ':filename',
-          name: 'preview_courseware',
-          component: () => import('./views/childrenViews/PreviewCourseware.vue'),
+          path: ":course_id",
+          name: "course_item",
+          component: () => import("./views/childrenViews/CourseItem.vue"),
           meta: {
-            title: '资源预览'
-          }
-        }
-      ]
-    },
-    {
-      path: '/exercise',
-      component: () => import('./views/Exercise.vue'),
-      children: [
-        {
-          path: '',
-          name: 'all_exercise',
-          component: () => import('./views/childrenViews/AllExercise.vue'),
-          meta: {
-            title: '全部作业'
-          }
-        },
-        {
-          path: ':course_id',
-          name: 'course_exercise',
-          component: () => import('./views/childrenViews/CourseExercise.vue'),
-          meta: {
-            title: '课程作业'
-          }
-        },
-        // {
-        //   path: ':course_id/addExercisePaper',
-        //   name: 'add_exercise_paper',
-        //   component: () => import('./views/childrenViews/AddExercisePaper.vue'),
-        //   meta: { 
-        //     auth: 'tch',
-        //     title: '添加作业'
-        //   }
-        // },
-        // {
-        //   path: ':course_id/editExercisePaper',
-        //   name: 'edit_exercise_paper',
-        //   component: () => import('./views/childrenViews/EditExercisePaper.vue'),
-        //   meta: { 
-        //     auth: 'tch',
-        //     title: '编辑作业'
-        //   }
-        // },
-        {
-          path: ':course_id/exercisePaper',
-          name: 'show_exercise_paper',
-          component: () => import('./views/childrenViews/ExercisePaper.vue'),
-          meta: {
-            title: '作业练习'
-          }
-        }
-      ]
-    },
-    {
-      path: '/exam',
-      component: () => import('./views/Exam.vue'),
-      children: [
-        {
-          path: '',
-          name: 'all_exam',
-          component: () => import('./views/childrenViews/AllExam.vue'),
-          meta: {
-            title: '全部考试'
-          }
-        },
-        {
-          path: ':course_id',
-          name: 'course_exam',
-          component: () => import('./views/childrenViews/CourseExam.vue'),
-          meta: {
-            title: '课程考试'
-          }
-        },
-        // {
-        //   path: ':course_id/addExamPaper',
-        //   name: 'add_exam_paper',
-        //   component: () => import('./views/childrenViews/AddExamPaper.vue'),
-        //   meta: { 
-        //     auth: 'tch',
-        //     title: '添加考试'
-        //   }
-        // },
-        {
-          path: ':course_id/examPaper',
-          name: 'show_exam_paper',
-          component: () => import('./views/childrenViews/ExamPaper.vue'),
-          meta: { 
-            auth: 'all',
-            title: '考试'
-          }
-        }
-      ]
-    },
-    {
-      path: '/qa',
-      name: 'qa',
-      component: () => import('./views/Qa.vue')
-    },
-    {
-      path: '/myInfo',
-      component: () => import('./views/MyInfo.vue'),
-      meta: { auth: 'all' },
-      children: [
-        {
-          path: '',
-          name: 'my_courses',
-          component: () => import('./views/childrenViews/MyCourses.vue'),
-          meta: {
-            title: '我的信息'
-          }
-        },
-        {
-          path: 'courseDetail',
-          name: 'my_course_detail',
-          component: () => import('./views/childrenViews/MyCourseDetail.vue'),
-          meta: { 
-            auth: 'all',
-            title: '我的课程详情'
+            auth: "all",
+            title: "课程"
           },
+
+          children: [{
+              path: "index",
+              name: "course_detail",
+              component: () => import("./views/childrenViews/courseViews/CourseDetail.vue"),
+              meta: {
+                auth: "all",
+                title: "课程内容"
+              }
+            },
+            //课程内容
+            {
+              path: "index/pd",
+              name: "course_part_detail",
+              component: () => import("./views/childrenViews/courseViews/CoursePartDetail.vue"),
+              meta: {
+                auth: "all",
+              }
+            },
+            // //编辑课程
+            // {
+            //   path: "index/editCourse",
+            //   name: "edit_chapter",
+            //   component: () => import("./views/childrenViews/courseViews/EditCourse.vue"),
+            //   meta: {
+            //     auth: "tch",
+            //     title: "编辑课程"
+            //   }
+            // },
+            //课程公告
+            // {
+            //   path: "notice",
+            //   name: "course_notice",
+            //   component: () =>
+            //     import("./views/childrenViews/courseViews/CourseNotice.vue"),
+            //   meta: {
+            //     auth: "all",
+            //     title: "课程公告"
+            //   }
+            // },
+
+            //作业练习
+            {
+              path: "exercise",
+              component: () => import("./views/Exercise.vue"),
+              children: [
+                {
+                  path: "",
+                  name: "course_exercise",
+                  component: () =>
+                    import("./views/childrenViews/courseViews/CourseExercise.vue"),
+                  meta: {
+                    title: "课程作业"
+                  }
+                },
+                // {
+                //   path: "addExercisePaper",
+                //   name: "add_exercise_paper",
+                //   component: () =>
+                //     import("./views/childrenViews/courseViews/AddExercisePaper.vue"),
+                //   meta: {
+                //     auth: "tch",
+                //     title: "添加作业"
+                //   }
+                // },
+                // {
+                //   path: "editExercisePaper",
+                //   name: "edit_exercise_paper",
+                //   component: () =>
+                //     import("./views/childrenViews/courseViews/EditExercisePaper.vue"),
+                //   meta: {
+                //     auth: "tch",
+                //     title: "编辑作业"
+                //   }
+                // },
+                {
+                  path: "exercisePaper",
+                  name: "show_exercise_paper",
+                  component: () =>
+                    import("./views/childrenViews/courseViews/ExercisePaper.vue"),
+                  meta: {
+                    title: "作业练习"
+                  }
+                }
+              ]
+            },
+            //考试
+            {
+              path: "exam",
+              component: () => import("./views/Exam.vue"),
+              children: [
+                // {
+                //   path: "",
+                //   name: "all_exam",
+                //   component: () => import("./views/childrenViews/courseViews/AllExam.vue"),
+                //   meta: {
+                //     title: "全部考试"
+                //   }
+                // },
+                {
+                  path: "",
+                  name: "course_exam",
+                  component: () => import("./views/childrenViews/courseViews/CourseExam.vue"),
+                  meta: {
+                    title: "课程考试"
+                  }
+                },
+                // {
+                //   path: "addExamPaper",
+                //   name: "add_exam_paper",
+                //   component: () => import("./views/childrenViews/courseViews/AddExamPaper.vue"),
+                //   meta: {
+                //     auth: "tch",
+                //     title: "添加考试"
+                //   }
+                // },
+                {
+                  path: "examPaper",
+                  name: "show_exam_paper",
+                  component: () => import("./views/childrenViews/courseViews/ExamPaper.vue"),
+                  meta: {
+                    auth: "all",
+                    title: "考试"
+                  }
+                }
+              ]
+            },
+            {
+              path: "resources",
+              name: "resources",
+              component: () => import("./views/Resources.vue"),
+              children: [{
+                path: "",
+                name: "show_resources",
+                component: () =>
+                  import("./views/childrenViews/courseViews/Resources.vue"),
+                meta: {
+                  title: "课程资源"
+                }
+              },
+              {
+                path: ":filename",
+                name: "preview_courseware",
+                component: () =>
+                  import("./views/childrenViews/courseViews/PreviewCourseware.vue"),
+                meta: {
+                  title: "课件"
+                }
+              }]
+            }
+          ]
+        }
+      ]
+    },
+
+    //答疑
+    {
+      path: "/qa",
+      component: () => import("./views/Qa.vue"),
+      children: [{
+          path: "",
+          name: "qa_questions",
+          component: () => import("./views/childrenViews/QaQuestions.vue"),
+          meta: {
+            auth: 'all',
+            title: '问题列表'
+          }
+        },
+        {
+          path: ":question_id",
+          name: "qa_question",
+          component: () => import("./views/childrenViews/QaQuestion.vue"),
+          meta: {
+            auth: 'all',
+            title: '问题详情'
+          }
+        }
+      ]
+    },
+    //新闻动态
+    {
+      path: "/news",
+      component: () => import("./views/News.vue"),
+      children: [{
+          path: '',
+          name: 'article_news_list',
+          component: () =>
+            import("./views/childrenViews/ArticleList.vue"),
+          meta: {
+            title: '新闻动态|文章列表'
+          },
+          props: {
+            articleType: 'news'
+          },
+        }, {
+          path: 'article/:article_id',
+          name: 'article_news_detail',
+          component: () => import('./views/childrenViews/ArticleDetail.vue'),
+          meta: {
+            title: '新闻动态|文章详情'
+          }
+        },
+        {
+          path: 'addArticle',
+          name: 'article_news_add',
+          component: () => import('./views/childrenViews/ArticleAdd.vue'),
+          meta: {
+            auth: 'all',
+            title: '发布文章'
+          }
+        }
+      ]
+    },
+    //技术前沿
+    {
+      path: "/techInfo",
+      component: () => import("./views/TechInfo.vue"),
+      children: [{
+          path: '',
+          name: 'article_techInfo_list',
+          component: () =>
+            import("./views/childrenViews/ArticleList.vue"),
+          meta: {
+            title: '技术前沿|文章列表'
+          },
+          props: {
+            articleType: 'techInfo'
+          },
+        }, {
+          path: 'article/:article_id',
+          name: 'article_techInfo_detail',
+          component: () => import('./views/childrenViews/ArticleDetail.vue'),
+          meta: {
+            title: '技术前沿|文章详情'
+          }
+        },
+        {
+          path: 'addArticle',
+          name: 'article_techInfo_add',
+          component: () => import('./views/childrenViews/ArticleAdd.vue'),
+          meta: {
+            auth: 'all',
+            title: '发布文章'
+          }
+        }
+      ]
+    },
+    //实验平台
+    //资源
+    {
+      path: "/library",
+      component: () => import("./views/Library.vue"),
+      children: [{
+          path: "",
+          name: "show_resources",
+          component: () => import("./views/childrenViews/Resources.vue"),
+          meta: {
+            title: "全部资源"
+          }
+        },
+        {
+          path: ":filename",
+          name: "preview_courseware",
+          component: () =>
+            import("./views/childrenViews/PreviewCourseware.vue"),
+          meta: {
+            title: "实验平台"
+          }
         }
       ]
     },
     {
-      path: '/emptyPage',
-      name: 'empty_page',
-      component: () => import('./views/EmptyPage.vue')
+      path: "/myInfo",
+      component: () => import("./views/MyInfo.vue"),
+      meta: {
+        auth: "all"
+      },
+      children: [{
+          path: "myCourses",
+          name: "my_courses",
+          component: () => import("./views/childrenViews/MyCourses.vue"),
+          meta: {
+            title: "我的信息"
+          }
+        },
+        {
+          path: "courseDetail",
+          name: "my_course_detail",
+          component: () => import("./views/childrenViews/MyCourseDetail.vue"),
+          meta: {
+            auth: "all",
+            title: "我的课程详情"
+          }
+        },
+        {
+          path: 'myArticles',
+          name: 'my_articles',
+          component: () => import('./views/childrenViews/MyArticles.vue'),
+          meta: {
+            auth: 'all',
+            title: '我的文章'
+          }
+        }
+      ]
+    },
+    {
+      path: "/emptyPage",
+      name: "empty_page",
+      component: () => import("./views/EmptyPage.vue")
     }
   ]
 });
@@ -209,23 +368,33 @@ router.beforeEach((to, from, next) => {
   if (to.meta.auth) {
     const loginState = getLoginState() || {};
     const userType = loginState.userType;
-    if (to.meta.auth === 'all') {
+    if (to.meta.auth === "all") {
       if (userType !== 0 && userType !== 1) {
-        return next({ path: '/auth' });  // 登录界面
+        return next({
+          path: "/auth"
+        }); // 登录界面
       }
-    } else if (to.meta.auth === 'tch') {
+    } else if (to.meta.auth === "tch") {
       if (!userType) {
-        return next({ path: '/auth' });  // 登录界面
+        return next({
+          path: "/auth"
+        }); // 登录界面
       }
       if (userType !== 1) {
-        return next({ path: '/noAuthorization' });
+        return next({
+          path: "/noAuthorization"
+        });
       }
-    } else if (to.meta.auth === 'stu') {
+    } else if (to.meta.auth === "stu") {
       if (!userType) {
-        return next({ path: '/auth' });  // 登录界面
+        return next({
+          path: "/auth"
+        }); // 登录界面
       }
       if (userType !== 0) {
-        return next({ path: 'noAuthorization' });
+        return next({
+          path: "noAuthorization"
+        });
       }
     }
   }

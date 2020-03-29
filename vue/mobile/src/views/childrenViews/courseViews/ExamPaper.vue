@@ -60,7 +60,7 @@
 </template>
 
 <script>
-import Card from '../../components/Card';
+import Card from '@/components/Card';
 
 export default {
   data() {
@@ -72,7 +72,8 @@ export default {
       userAnswer: {},
       examTiming: 60,
       countdown: '',
-      haveBeenHandIn: false
+      haveBeenHandIn: false,
+      path:  `/course/${this.$route.params.course_id}/exam`
     };
   },
   props: {
@@ -90,7 +91,7 @@ export default {
         content: '没有找到该考试！',
         confirmText: '确定',
         onConfirm: () => {
-          this.$router.push({ path: `/exam/${this.courseID}` });
+          this.$router.push({ path: this.path });
         }
       });
     } else {
@@ -212,7 +213,7 @@ export default {
               content: '发生了错误导致获取数据失败',
               confirmText: '确定',
               onConfirm: () => {
-                this.$router.push({ path: `/exam/${this.courseID}` });
+                this.$router.push({ path: this.path  });
               }
             });
           }
@@ -224,7 +225,7 @@ export default {
             content: '发生了错误导致获取数据失败',
             confirmText: '确定',
             onConfirm: () => {
-              this.$router.push({ path: `/exam/${this.courseID}` });
+              this.$router.push({ path: this.path});
             }
           });
         });
@@ -260,7 +261,7 @@ export default {
               content: `您的成绩为${res.data.data.score}`,
               confirmText: '确定',
               onConfirm: () => {
-                this.$router.replace({ path: `/exam/${this.courseID}` });
+                this.$router.replace({ path: this.path });
               }
             });
           }
