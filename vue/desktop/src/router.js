@@ -291,7 +291,7 @@ let router = new Router({
           name: 'article_techInfo_detail',
           component: () => import('./views/childrenViews/ArticleDetail.vue'),
           meta: {
-            title: '新闻动态|文章详情'
+            title: '技术前沿|文章详情'
           }
         },
         {
