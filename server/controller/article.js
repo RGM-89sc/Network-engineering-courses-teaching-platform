@@ -217,18 +217,17 @@ module.exports = {
         }
     },
     //浏览 或 点赞次数递增
-    async updateArticleInfo(ctx) {
+    async incViewsCount(ctx) {
         const {
             articleID,
-            articleType,
-            infoType
+            articleType
         } = ctx.request.body;
         await db.article.updateOne({
             articleType,
             articleID
         }, {
             $inc: {
-                [infoType]: 1
+                views: 1
             }
         }).then(docs => {
             return ctx.body = {
