@@ -105,7 +105,7 @@ export default {
       articleList:[],
       orderArticleList: [],
       articlesCountLimit: 12,
-      dayjsNowTime: {},
+      dayjsNowTime: this.$dayjs(Date.now()),
       skipArticles: 0,
       isSelectorShow: false,
       sortOptions: [
@@ -128,7 +128,6 @@ export default {
   },
   created() {
     this.getArticles();
-    this.dayjsNowTime = this.$dayjs(Date.now());
   },
   methods: {
     showSelector() {

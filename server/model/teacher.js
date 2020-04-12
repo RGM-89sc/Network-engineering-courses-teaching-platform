@@ -41,7 +41,17 @@ const tchSchema = new mongoose.Schema({
   questionReplys: [{
     qaID: String,
     created: Date
-  }]
+  }],
+  likes: [
+    {
+      
+      articleID: {
+        type:String,
+        unique: true
+      },
+      articleType: String
+    }
+  ]
 });
 
 module.exports = mongoose.model('Teacher', tchSchema);

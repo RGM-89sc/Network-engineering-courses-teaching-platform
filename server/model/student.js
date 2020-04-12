@@ -71,6 +71,15 @@ const stuSchema = new mongoose.Schema({
     questionID: String,
     created: Date
   }],
+  likes: [
+    {
+      articleID: {
+        unique: true,
+        type: String
+      },
+      articleType: String
+    }
+  ]
   // //  浏览过的文章
   // viewedArticles:[
   //   articleID: String

@@ -69,7 +69,7 @@
             <div class="news-article-vg">
               <span> 浏览：{{ article.views }} </span>
               <span>
-                点赞：{{ article.goods }}
+                点赞：{{ article.goods.length }}
                 <span></span>
               </span>
             </div>
@@ -128,7 +128,7 @@ export default {
       orderArticleList: [],
       //要发布的文章ID
       articleID: '',
-      dayjsNowTime: {},
+      dayjsNowTime: this.$dayjs(Date.now()),
       searchVal: '',
       sortData: {
         sortSelectVal: '',
@@ -147,7 +147,7 @@ export default {
       },
       loadingArticle: true,
       articlesCountLimit: 12,
-      skipArticles: 0
+      skipArticles: 0,
     };
   },
   watch: {
@@ -156,11 +156,8 @@ export default {
     }
   },
   created() {
-    this.articleID = uuid()
-      .split('-')
-      .join('');
+    this.articleID = uuid().split('-').join('');
     this.getArticles();
-    this.dayjsNowTime = this.$dayjs(Date.now());
   },
   mounted() {
     this.IntersectionObserverOfstickyHandler({

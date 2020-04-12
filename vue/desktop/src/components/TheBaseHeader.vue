@@ -141,6 +141,7 @@ header {
   justify-content: space-between;
   .logo {
     height: 100%;
+    width: 70%;
   }
   .el-dropdown {
     padding-left: 20px;

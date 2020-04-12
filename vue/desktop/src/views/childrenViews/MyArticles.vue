@@ -58,6 +58,7 @@ export default {
       UserProvider[type]
         .getMyArticles()
         .then(res => {
+          console.log(res);
           if (res.data.code === 1) {
             this.articles = res.data.data;
           } else {

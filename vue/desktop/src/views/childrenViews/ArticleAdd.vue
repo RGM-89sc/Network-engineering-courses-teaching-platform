@@ -69,7 +69,7 @@ export default {
         authorID: '',
         avatarURL: '',
         views: 0,
-        goods: 0,
+        goods: [],
         tags: [],
         content: '',
         summary: '',
@@ -166,7 +166,6 @@ export default {
           this.article.tags.push(
             this.article.articleType === 'techInfo' ? '技术前沿' : '新闻动态'
           );
-
           ArticleProvider.postArticle(this.article)
             .then(res => {
               if (res.data.code === 1) {

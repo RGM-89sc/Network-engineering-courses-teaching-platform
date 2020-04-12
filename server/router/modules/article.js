@@ -12,10 +12,11 @@ router.post('/postArticleImage', article.postArticleImage);
 router.post('/delArticle', article.delArticle);
 // 获取 新闻 或者 技术前沿的文章
 router.post('/getArticles', article.getArticles);
-// 获取全部文章
-router.get('/getAllArticles', article.getAllArticles);
+
 // 更新文章信息
-router.post('/updateArticleInfo', article.updateArticleInfo);
+router.post('/doLikes', auth.all, article.doLikes);
+router.post('/cancelLikes', auth.all, article.cancelLikes);
+router.post('/incViewsCount', article.incViewsCount);
 // 更新文章 评论 回复
 // router.post('/updateArticle', article.updateArticle);
 

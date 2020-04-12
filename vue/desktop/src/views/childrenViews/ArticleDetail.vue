@@ -15,14 +15,21 @@
               {{ formatDate(article.created, dayjsNowTime) }}
             </div>
             <span class="item_padding"
-              >{{ article.views }}次浏览&nbsp;&nbsp;&nbsp;·</span
+
+              >
+              <el-icon class="el-icon-view"></el-icon>
+              {{ article.views }}次浏览&nbsp;&nbsp;&nbsp;·</span
             >
-            <span
+            <el-link
+              @click="likesArticleHandler"
+              :underline="false"
               class="article__good-btn item_padding"
-              @click="likeArticleHandler"
+              :type="isLiked ? 'primary' : 'default'"
             >
-              {{ article.goods }}次点赞
-            </span>
+              <el-icon :class="likesLoading ? 'el-icon-loading' : isLiked ? 'el-icon-star-on' : 'el-icon-star-off'"></el-icon>
+              {{ goodsCount }} 次点赞
+
+            </el-link>
           </div>
         </div>
       </el-row>
@@ -165,42 +172,53 @@
 </template>
 
 <script>
-import {ArticleProvider} from '@/provider/index';
+import { ArticleProvider } from '@/provider/index';
+import { formatDate } from '@/helpers/formatDate1';
+import { throttle } from '@/helpers/throttle';
 export default {
-  data() {
+    props: {
+      user: {
+        type: Object,
+        default: {}
+      }
+    },
+    data() {
     return {
       article: {},
-      articleType: 'news',
-      isGood: false,
+      articleType: this.$route.query.articleType,
+      articleID: this.$route.params.article_id,
+      isLiked: false,
       replyContent: '',
       currentReply: '',
-      dayjsNowTime: {}
+      dayjsNowTime: this.$dayjs(Date.now()),
+      goodsCount: 0,
+      likesLoading: false
     };
   },
   methods: {
-    formatDate(date, now) {
-      const created = this.$dayjs(date);
-      const sss = now.diff(created);
-      const minute = Math.ceil(sss / 1000 / 60);
-      const hour = Math.ceil(minute / 60);
-      const day = Math.ceil(hour / 24);
-      return minute > 59
-        ? hour > 23
-          ? day > 29
-            ? created.format('YYYY-MM-DD')
-            : `${day}天前`
-          : `${hour}小时前`
-        : `${minute}分钟前`;
+    checkIdentity() {
+      if(!this.user.id){
+        this.$router.push({
+          path: '/auth'
+        });
+        console.log('whywhywhy');
+        return false;
+      }
+      return true;
+    },
+    formatDate(created, now) {
+      return formatDate(created, now, this.$dayjs);
     },
     getArticle() {
-      const url = '/api/getArticle';
       ArticleProvider.getArticle({
-        articleID: this.$route.params.article_id,
+        articleID: this.articleID,
         articleType: this.articleType
       })
         .then(res => {
           if (res.data.code === 1) {
             this.article = res.data.data;
+            this.goodsCount = this.article.goods.length;
+            this.isLiked = this.article.isLiked;
             // this.comments = this.article.comments;
           }
         })
@@ -208,21 +226,50 @@ export default {
           console.error(err);
         });
     },
-    incInfo(infoType, count = 1) {
-      ArticleProvider.updateArticleInfo({
-        articleID: this.$route.params.news_id,
-        infoType
+    incViewsCount(infoType, count = 1) {
+      ArticleProvider.incViewsCount({
+        articleID: this.articleID,
+        articleType: this.articleType
       })
-        .then(() => {})
+        .then((res) => {
+          this.article.views++;
+          console.log(res);
+        })
         .catch(err => {
-          console.error(err);
+          console.error(err); 
         });
     },
-    likeArticleHandler() {
-      !this.isGood
-        ? ++this.article.goods && this.incInfo('goods')
-        : --this.article.goods && this.incInfo('goods', -1);
-      this.isGood = !this.isGood;
+
+    likesArticleHandler() {
+      if(!this.checkIdentity()){
+        return false;
+      }
+      
+      this.likesLoading = true;
+      throttle(() => {
+        let likes = direction => {
+          const method = direction === 1 ? 'doLikes' : 'cancelLikes';
+          ArticleProvider[method]({
+          articleID: this.articleID,
+          articleType: this.articleType,
+          userID: this.user.id,
+          userType: this.user.userType,
+          userName: this.user.username
+        })
+        .then((res) => {
+            this.goodsCount += direction;
+          })
+        .catch(err => {
+            console.error(err);
+        })
+        .finally(_ => {
+          this.likesLoading = false;
+        });
+        }
+        !this.isLiked ? likes(1) : likes(-1);
+
+        this.isLiked = !this.isLiked;
+        })
     },
     handler(e) {
       const index = e.currentTarget.dataset.index;
@@ -235,24 +282,17 @@ export default {
     updateComments() {
       ArticleProvider.updateArticle({
         type: 'comment',
-        articleID: this.$route.params.article_id
+        articleID: this.articleID
       }).then(res => {
         if (res.data.code === 1) {
           this.$message({});
         }
       });
-    },
-    updateReplys() {},
-    starClickHandler() {}
+    }
   },
-  computed: {},
   created() {
-    this.articleType = this.$route.query.articleType;
     this.getArticle();
-    this.dayjsNowTime = this.$dayjs(Date.now());
-  },
-  mounted() {
-    this.incInfo('views');
+    this.incViewsCount();
   }
 };
 </script>

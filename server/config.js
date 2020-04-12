@@ -4,7 +4,8 @@ module.exports = {
   db: {
     url: 'mongodb://admin:admin_123@39.108.52.7:27017/ncw',
     options: {
-      useNewUrlParser: true
+      useNewUrlParser: true,
+      useFindAndModify: false
     }
   },
   // 服务器端口

@@ -2,7 +2,8 @@ const mongoose = require('mongoose');
 const articleSchema = new mongoose.Schema({
     articleID: {
         type: String,
-        required: true
+        required: true,
+        unique: true
     },
     authorName: {
         type: String,
@@ -38,12 +39,19 @@ const articleSchema = new mongoose.Schema({
         required: true
     },
     views: {
-        type: Number
-    },
-    goods: {
         type: Number,
-        required: true
+        default: 0
     },
+    goods: [
+        {
+            userID: {
+                type: String,
+                unique: true
+            },
+            userName: String,
+            userType: Number,
+        }
+    ],
     summary: {
         type: String,
         required: true
@@ -59,7 +67,7 @@ const articleSchema = new mongoose.Schema({
         commenterName: String,
         content: String,
         created: String,
-        likeN: Number,
+        likesN: Number,
         replys: [{
             id: String,
             replyerAvatar: String,
@@ -67,7 +75,7 @@ const articleSchema = new mongoose.Schema({
             replyerID: String,
             content: String,
             created: String,
-            likeN: Number,
+            likesN: Number,
         }]
     }]
 });

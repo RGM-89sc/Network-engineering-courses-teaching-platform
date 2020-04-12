@@ -50,14 +50,26 @@ export const ArticleProvider = {
       .then(res => res)
       .catch(err => err)
   },
-  // 更新文章信息
-  updateArticleInfo: (payload) => {
-    return http.post(baseUrl + 'updateArticleInfo', payload)
+  // 递增浏览次数
+  incViewsCount: (payload) => {
+    return http.post(baseUrl + 'incViewsCount', payload)
+      .then(res => res)
+      .catch(err => err)
+  },
+  // 递增浏览次数
+  doLikes: (payload) => {
+    return http.post(baseUrl + 'doLikes', payload)
+      .then(res => res)
+      .catch(err => err)
+  },
+  // 递增浏览次数
+  cancelLikes: (payload) => {
+    return http.post(baseUrl + 'cancelLikes', payload)
       .then(res => res)
       .catch(err => err)
   },
   updateArticle: (payload) => {
-    return http.post(baseUrl + '/updateArticle', payload)
+    return http.post(baseUrl + 'updateArticle', payload)
       .then(res => res)
       .catch(err => err)
   }

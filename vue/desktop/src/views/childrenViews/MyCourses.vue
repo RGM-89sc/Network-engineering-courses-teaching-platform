@@ -8,7 +8,7 @@
     >
       <el-row>
         <el-col :span="18" class="course-name">
-          <span @click="$router.push({path: `/course/${course.courseID}`})">{{
+          <span @click="$router.push({path: `/course/${course.courseID}/index`})">{{
             course.coursename
           }}</span>
         </el-col>
