@@ -262,7 +262,7 @@ export default {
   color: #606266;
 }
 .course-exam__wrapper {
-  padding-top: 16px;
-  min-height: calc(100vh - 7.4rem);
+  padding-top: 1rem;
+  min-height: calc(100vh - 11.83333rem);
 }
 </style>

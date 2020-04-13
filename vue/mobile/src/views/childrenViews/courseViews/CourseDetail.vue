@@ -328,7 +328,7 @@ export default {
 
 <style lang="scss" scoped>
 .course-detail {
-  min-height: calc(100vh - 7.4rem);
+  min-height: calc(100vh - 10.73333rem);
 }
 .header {
   padding: 0 1rem;

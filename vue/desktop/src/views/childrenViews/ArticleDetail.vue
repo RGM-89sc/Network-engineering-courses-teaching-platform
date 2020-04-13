@@ -185,7 +185,7 @@ export default {
     data() {
     return {
       article: {},
-      articleType: this.$route.query.articleType,
+      articleType: this.$route.query.articleType || 'news',
       articleID: this.$route.params.article_id,
       isLiked: false,
       replyContent: '',
@@ -201,7 +201,6 @@ export default {
         this.$router.push({
           path: '/auth'
         });
-        console.log('whywhywhy');
         return false;
       }
       return true;
@@ -226,7 +225,7 @@ export default {
           console.error(err);
         });
     },
-    incViewsCount(infoType, count = 1) {
+    incViewsCount(count = 1) {
       ArticleProvider.incViewsCount({
         articleID: this.articleID,
         articleType: this.articleType

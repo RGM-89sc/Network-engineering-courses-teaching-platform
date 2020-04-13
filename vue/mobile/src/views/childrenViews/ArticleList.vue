@@ -1,5 +1,5 @@
 <template>
-  <div class="article-list_wrapper" :class="articleType">
+  <div class="article-list_wrapper" :class="articleList.length > 0 ? 'gray-bg' : ''">
 
     <div class="tools-bar">
       <md-button :type="isSortEnabled === true ? 'primary' : 'disabled'" size="small" @click="showSelector" icon="sort">{{curSortValue}}</md-button>
@@ -38,7 +38,7 @@
             <div class="article-vg">
               <span> 浏览：{{ article.views }} </span>
               <span>
-                点赞：{{ article.goods }}
+                点赞：{{ article.goods.length }}
                 <span></span>
               </span>
             </div>

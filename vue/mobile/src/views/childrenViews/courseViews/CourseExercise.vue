@@ -104,7 +104,7 @@ export default {
 <style lang="scss" scoped>
 .course-exercise__wrapper {
   padding-top: 16px;
-  min-height: calc(100vh - 7.4rem);
+   min-height: calc(100vh - 11.83333rem);
 }
 .header {
   display: table;

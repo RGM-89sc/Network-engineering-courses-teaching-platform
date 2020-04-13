@@ -1,5 +1,5 @@
 <template>
-  <div class="gray-bg">
+  <div class="cpd gray-bg">
     <Card round>
       <div class="header">
         <span class="part-title">{{partTitle}}</span>
@@ -118,6 +118,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.cpd {
+  padding-top: 1rem;
+  min-height: calc(100vh - 11.83333rem);
+
+}
 .header {
   display: table;
   margin: 0 0 1.5rem;

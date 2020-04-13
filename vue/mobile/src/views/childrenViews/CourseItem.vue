@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="course-item">
 
     <md-tab-bar ref="subNav" v-model="current" :items="items" @change="onChange" class="sub-nav"/>
 
@@ -43,8 +43,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.course-item {
+  padding: 0;
+}
 .sub-nav {
-  margin: -1rem 0 0rem 0;
   padding: 0;
   background-color: #ffffff;
   border-bottom: 1px solid #eee;

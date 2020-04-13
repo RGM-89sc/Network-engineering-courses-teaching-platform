@@ -19,9 +19,10 @@
             >
             <span
               class="article__good-btn item_padding"
-              @click="likeArticleHandler"
+              @click="likesArticleHandler"
             >
-              {{ article.goods }}次点赞
+              <md-icon :name="likesLoading ? 'spinner' : 'arrow-up'" :color="isLiked ? '#409eff' : 'gray'" size="md"></md-icon>
+              {{ goodsCount }}次点赞
             </span>
           </div>
         </div>
@@ -32,63 +33,103 @@
 </template>
 
 <script>
+import { formatDate } from '@/helpers/formatDate1';
+import { throttle } from '@/helpers/throttle';
 export default {
+  props: {
+    user: {
+      type: Object,
+      default: {}
+    }
+  },
   data() {
     return {
       article: {},
-      articleType: 'news',
-      isGood: false,
+      articleType: this.$route.query.articleType || 'news',
+      articleID: this.$route.params.article_id,
+      isLiked: false,
       replyContent: '',
       currentReply: '',
-      dayjsNowTime: {}
+      dayjsNowTime: this.$dayjs(Date.now()),
+      
+      goodsCount: 0,
+      likesLoading: false
     };
   },
   methods: {
     formatDate(date, now) {
-      const created = this.$dayjs(date);
-      const sss = now.diff(created);
-      const minute = Math.ceil(sss / 1000 / 60);
-      const hour = Math.ceil(minute / 60);
-      const day = Math.ceil(hour / 24);
-      return minute > 59
-        ? hour > 23
-          ? day > 29
-            ? created.format('YYYY-MM-DD')
-            : `${day}天前`
-          : `${hour}小时前`
-        : `${minute}分钟前`;
+      return formatDate(date, now, this.$dayjs);
+    },
+    checkIdentity() {
+      if(!this.user.id){
+        this.$router.push({
+          path: '/auth'
+        });
+        return false;
+      }
+      return true;
     },
     getArticle() {
      const url = '/api/getArticle';
      this.$http.post(url,{
-        articleID: this.$route.params.article_id,
+        articleID: this.articleID,
         articleType: this.articleType
       })
         .then(res => {
           if (res.data.code === 1) {
             this.article = res.data.data;
-            // this.comments = this.article.comments;
+            this.goodsCount = this.article.goods.length;
+            this.isLiked = this.article.isLiked;
           }
         })
         .catch(err => {
           console.error(err);
         });
     },
-    incInfo(infoType, count = 1) {
-      ArticleProvider.updateArticleInfo({
-        articleID: this.$route.params.news_id,
-        infoType
+    incViewsCount(count = 1) {
+      this.$http.post('/api/incViewsCount',{
+        articleID: this.articleID,
+        articleType: this.articleType
       })
-        .then(() => {})
+        .then((res) => {
+          this.article.views++;
+          console.log(res);
+        })
         .catch(err => {
-          console.error(err);
+          console.error(err); 
         });
     },
-    likeArticleHandler() {
-      !this.isGood
-        ? ++this.article.goods && this.incInfo('goods')
-        : --this.article.goods && this.incInfo('goods', -1);
-      this.isGood = !this.isGood;
+    likesArticleHandler() {
+      if(!this.checkIdentity()){
+        return false;
+      }
+      
+      this.likesLoading = true;
+      throttle(() => {
+        let likes = direction => {
+          const method = direction === 1 ? 'doLikes' : 'cancelLikes';
+          const api = `/api/${method}`;
+          this.$http.post(api, {
+          articleID: this.articleID,
+          articleType: this.articleType,
+          userID: this.user.id,
+          userType: this.user.userType,
+          userName: this.user.username
+        })
+        .then((res) => {
+            this.goodsCount += direction;
+          })
+        .catch(err => {
+            console.error(err);
+        })
+        .finally(_ => {
+          this.likesLoading = false;
+        });
+        }
+        !this.isLiked ? likes(1) : likes(-1);
+
+        this.isLiked = !this.isLiked;
+        })
     },
     handler(e) {
       const index = e.currentTarget.dataset.index;
@@ -101,7 +142,7 @@ export default {
     updateComments() {
       ArticleProvider.updateArticle({
         type: 'comment',
-        articleID: this.$route.params.article_id
+        articleID: this.articleID
       }).then(res => {
         if (res.data.code === 1) {
           this.$message({});
@@ -113,13 +154,9 @@ export default {
   },
   computed: {},
   created() {
-    this.articleType = this.$route.query.articleType;
     this.getArticle();
-    this.dayjsNowTime = this.$dayjs(Date.now());
+    this.incViewsCount();
   },
-  mounted() {
-    this.incInfo('views');
-  }
 };
 </script>
 

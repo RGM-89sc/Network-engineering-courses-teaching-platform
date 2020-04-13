@@ -441,8 +441,11 @@ export default {
   color: #409eff;
 }
 .resources-wrapper {
-  padding-top: 16px;
-  min-height: calc(100vh - 7.4rem);
+  padding-top: 1rem;
+  min-height: calc(100vh - 11.83333rem);
+}
+.md-cell-item {
+  word-break: break-all;
 }
 
 </style>
