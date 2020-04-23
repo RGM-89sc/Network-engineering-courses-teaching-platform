@@ -17,21 +17,22 @@ pipeline {
 
     stage('NPM INSTALL') {
       steps {
-        sh 'cd vue/desktop && npm install'
+        // sh 'cd vue/desktop && npm install'
 
         sh 'cd server && npm install'
 
-        sh 'cd vue/mobile && npm install'
+        // sh 'cd vue/mobile && npm install'
       }
     }
 
-    stage('BUILD') {
-      steps {
-        sh 'npm run desktop-build'
+    // 服务器内存不足，跑不起npm run build，需要手动build
+    // stage('BUILD') {
+    //   steps {
+    //     sh 'npm run desktop-build'
 
-        sh 'npm run mobile-build'
-      }
-    }
+    //     sh 'npm run mobile-build'
+    //   }
+    // }
 
     stage('MAKE') {
       steps {
