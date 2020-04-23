@@ -105,13 +105,15 @@ module.exports = {
       .use('raw-loader')
       .loader('raw-loader');
 
-    config.module
-      .rule('happypack-js')
-      .test(/\.js$/)
-      .exclude
-      .add(/node_modules/)
-      .end()
-      .use('happypack')
-      .loader('happypack/loader?id=happyBabel')
+    if (!process.env.VUE_APP_NO_HAPPYPACK) {
+      config.module
+        .rule('happypack-js')
+        .test(/\.js$/)
+        .exclude
+        .add(/node_modules/)
+        .end()
+        .use('happypack')
+        .loader('happypack/loader?id=happyBabel')
+    }
   }
 };
