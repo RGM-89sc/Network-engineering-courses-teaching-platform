@@ -154,6 +154,11 @@ header {
   }
   > .ul-menu__wrapper {
     height: 100%;
+
+    .logo {
+      width: 120px;
+    }
+
     > a {
       display: inline-block;
       height: 100%;
