@@ -36,10 +36,11 @@ pipeline {
 
     stage('MAKE') {
       steps {
-        sh 'rm -f server/public/d && rm -f server/public/m'
+        sh 'rm -rf server/public/d && rm -rf server/public/m'
 
-        sh 'cp vue/desktop/dist/ server/public/d && cp vue/mobile/dist/ server/public/m'
-     }
+        sh 'cp -r vue/desktop/dist/ server/public/ && mv server/public/dist server/public/d'
+        sh 'cp -r vue/mobile/dist/ server/public/m && mv server/public/dist server/public/m'
+      }
     }
 
     stage('START') {
