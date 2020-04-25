@@ -42,7 +42,7 @@
       </el-row>
       <el-row type="flex" justify="space-between">
         <el-col :span="3" class="normal-info-font">
-          {{ question.replysLength }} 个回答
+          {{ question.replys.length }} 个回答
         </el-col>
         <el-col :span="6">
           <el-tag
