@@ -191,7 +191,11 @@ export default {
     resourceOperate({ value }) {
       if (value === 'preview') {
         this.$router.push({
-          path: `/library/${this.encodeFilename(this.currentFile.filename)}`
+          name: 'preview_courseware',
+          params: {
+            course_id: this.$route.params.course_id,
+            filename: this.currentFile.filename
+          }
         });
       } else if (value === 'download') {
         const a = document.createElement('a');
