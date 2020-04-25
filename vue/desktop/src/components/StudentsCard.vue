@@ -7,28 +7,19 @@
       <el-row v-if="stus.length === 0">
         <span class="no-stus">暂无学生学习该课程</span>
       </el-row>
-      <el-row v-if="stus.length > 0">
-        <el-col :span="6" v-for="stu in stus.slice(0, 4)" :key="stu.id">
+      <el-row>
+        <div v-for="stu in stus.slice(0, 8)" :key="stu.id" style="display: inline-block;">
           <img :src="$serverBaseUrl + stu.avatar" alt class="stu-avatar" :title="stu.username" />
-        </el-col>
+        </div>
       </el-row>
-      <el-row v-if="stus.length > 4">
-        <el-col :span="6" v-for="stu in stus.slice(4, 8)" :key="stu.id">
-          <img :src="$serverBaseUrl + stu.avatar" alt class="stu-avatar" :title="stu.username" />
-        </el-col>
-      </el-row>
-      <el-row class="see-all-stus" v-if="stus.length > 8">
-        <el-button type="text" @click="checkingAllStu = true"
-          >查看全部</el-button
-        >
+      <el-row class="see-all-stus">
+        <el-button type="text" @click="checkingAllStu = true">查看全部</el-button>
       </el-row>
     </el-row>
     <el-dialog
       title="学习该课程的学生"
       :visible.sync="checkingAllStu"
-      width="30%"
-      v-if="stus.length > 8"
-    >
+      width="30%">
       <div>
         <img
           v-for="stu in stus"
@@ -68,7 +59,6 @@ export default {
 
 <style lang="scss" scoped>
 .stus-box {
-  text-align: center;
 
   .no-stus {
     display: block;
@@ -84,10 +74,11 @@ export default {
 
 .stu-avatar {
   display: inline-block;
-  margin-bottom: 5px;
+  margin: 0 5px 5px;
   width: 40px;
   height: 40px;
   border-radius: 50%;
   background-color: #eee;
+  border: 1px solid #ddd;
 }
 </style>
