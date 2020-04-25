@@ -97,6 +97,10 @@ export default {
 .block {
   margin-bottom: 30px;
 }
+
+.content {
+  word-break: break-all;
+}
 </style>
 
 <style lang="scss">

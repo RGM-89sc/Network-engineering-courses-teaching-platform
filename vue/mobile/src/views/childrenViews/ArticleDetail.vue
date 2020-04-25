@@ -222,3 +222,15 @@ export default {
   padding-top: 0.5rem;
 }
 </style>
+
+<style lang="scss">
+.article__content {
+  word-break: break-all;
+
+  figure[class="image"] {
+    img {
+      max-width: 100%;
+    }
+  }
+}
+</style>

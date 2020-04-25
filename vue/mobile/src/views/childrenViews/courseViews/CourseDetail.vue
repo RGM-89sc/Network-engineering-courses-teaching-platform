@@ -7,7 +7,7 @@
       <span class="course-name" v-if="courseDetail">{{courseDetail.coursename}}</span>
     </div>
     <div class="course-content">
-      <Card round v-for="ch in courseDetail.content" :key="ch.id">
+      <Card round v-for="ch in courseDetail.content" :key="ch.id" style="margin: 0 0 1rem">
         <span class="ch-name">{{ch.stamp}}</span>
         <md-field-item
           v-for="part in ch.part"
@@ -328,6 +328,7 @@ export default {
 
 <style lang="scss" scoped>
 .course-detail {
+  padding: 1rem;
   min-height: calc(100vh - 10.73333rem);
 }
 .header {

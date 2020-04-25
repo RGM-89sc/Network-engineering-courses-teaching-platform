@@ -180,6 +180,7 @@ export default {
   //   }
   // },
   created() {
+    console.log('asd')
     this.courseID = this.$route.params.course_id;
     this.getResources(this.classify);
   },
@@ -229,7 +230,7 @@ export default {
     getResources(classify) {
       this.loading = true;
       const courseID = this.courseID;
-      console.log(classify);
+      console.log('a', classify);
       this.$http
         .post('getResources', {
           classify,

@@ -1,6 +1,6 @@
 <template>
   <div class="cpd gray-bg">
-    <Card round>
+    <Card round style="margin: 0">
       <div class="header">
         <span class="part-title">{{partTitle}}</span>
         <div class="tool-bar" v-if="user && user.userType === 1">
@@ -119,7 +119,7 @@ export default {
 
 <style lang="scss" scoped>
 .cpd {
-  padding-top: 1rem;
+  padding: 1rem;
   min-height: calc(100vh - 11.83333rem);
 
 }

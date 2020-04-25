@@ -107,7 +107,7 @@ export default {
       //     }
       //   ]
       // ],
-      classify: 'all',
+      classify: 'software',
 
       searchValue: '',
       search: '',
