@@ -11,6 +11,10 @@ import Register from '@/views/childrenViews/Register';
 
 export default {
   name: 'auth',
+  components: {
+    Login,
+    Register
+  },
   data(){
     return {
       currentTab: 'Login'
@@ -31,10 +35,6 @@ export default {
     updateLoginState (user) {
       this.$parent.$emit('login', user);
     }
-  },
-  components: {
-    Login,
-    Register
   }
 };
 </script>

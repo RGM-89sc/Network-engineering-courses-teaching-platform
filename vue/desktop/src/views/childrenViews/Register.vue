@@ -79,6 +79,8 @@
 </template>
 
 <script>
+import { UserProvider } from '../../provider'
+
 export default {
   name: 'register',
   data() {
@@ -197,33 +199,24 @@ export default {
   },
   methods: {
     login() {
-      let url;
-
-      if (this.registerData.userType === 0) {
-        url = '/api/stuLogin';
-      } else {
-        url = '/api/tchLogin';
-      }
-
-      this.$http
-        .post(url, {
+      UserProvider.user.login(this.registerData.userType === 0 ? 'STU' : 'TCH', {
           id: this.registerData.id,
           password: this.registerData.password,
           userType: this.registerData.userType
         })
         .then(res => {
-          if (res.data.code === 1) {
+          if (res.code === 1) {
             this.$emit('login', this.$getLoginState());
             this.$router.push({ path: '/' });
           }
-          if (res.data.code === 0) {
+          if (res.code === 0) {
             this.$message({
               showClose: true,
               message: res.data.info,
               type: 'warning'
             });
           }
-          if (res.data.code === -1) {
+          if (res.code === -1) {
             this.$message({
               showClose: true,
               message: res.data.errMsg,
@@ -241,28 +234,19 @@ export default {
           // 提交
           this.submiting = true;
 
-          let url;
-
-          if (this.registerData.userType === 0) {
-            url = '/api/stuRegister';
-          } else {
-            url = '/api/tchRegister';
-          }
-
-          this.$http
-            .post(url, this.registerData)
+          UserProvider.user.register(this.registerData.userType === 0 ? 'STU' : 'TCH', this.registerData)
             .then(res => {
-              if (res.data.code === 1) {
+              if (res.code === 1) {
                 this.login();
               }
-              if (res.data.code === 0) {
+              if (res.code === 0) {
                 this.$message({
                   showClose: true,
                   message: res.data.info,
                   type: 'warning'
                 });
               }
-              if (res.data.code === -1) {
+              if (res.code === -1) {
                 this.$message({
                   showClose: true,
                   message: res.data.errMsg,

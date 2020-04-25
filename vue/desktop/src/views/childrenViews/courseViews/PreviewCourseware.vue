@@ -449,7 +449,7 @@ export default {
 
       .catalogue-item {
         box-sizing: border-box;
-        display: inline-block;
+        display: inline-block !important;
         width: 20%;
         vertical-align: top;
         border: 4px solid #fff;

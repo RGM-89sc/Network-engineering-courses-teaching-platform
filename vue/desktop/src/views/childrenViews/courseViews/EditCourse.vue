@@ -104,7 +104,7 @@ import CodePlugin from '@ckeditor/ckeditor5-basic-styles/src/code';
 import LinkPlugin from '@ckeditor/ckeditor5-link/src/link';
 import ParagraphPlugin from '@ckeditor/ckeditor5-paragraph/src/paragraph';
 import CKFinder from '@ckeditor/ckeditor5-ckfinder/src/ckfinder';
-import Image from '@ckeditor/ckeditor5-image/src/image';
+// import Image from '@ckeditor/ckeditor5-image/src/image';
 import ImageToolbar from '@ckeditor/ckeditor5-image/src/imagetoolbar';
 import ImageUpload from '@ckeditor/ckeditor5-image/src/imageupload';
 import ImageCaption from '@ckeditor/ckeditor5-image/src/imagecaption';
@@ -138,7 +138,7 @@ export default {
           LinkPlugin,
           ParagraphPlugin,
           CKFinder,
-          Image,
+          // Image,
           ImageToolbar,
           ImageUpload,
           ImageCaption,
@@ -419,7 +419,7 @@ export default {
         // 加入到 Promise 数组中
         axiosArray.push(
           this.$http.request({
-            url: 'api/uploadCourseVideoChunks',
+            url: 'uploadCourseVideoChunks',
             method: 'post',
             data: form,
             onUploadProgress: progressEvent => {

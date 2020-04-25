@@ -35,6 +35,8 @@
 </template>
 
 <script>
+import { UserProvider } from '../../provider'
+
 export default {
   name: 'login',
   data() {
@@ -85,46 +87,37 @@ export default {
           // 提交
           this.submiting = true;
 
-          let url;
-
-          if (this.loginData.userType === 0) {
-            url = '/api/stuLogin';
-          } else {
-            url = '/api/tchLogin';
-          }
-
-          this.$http
-            .post(url, {
-              id: this.loginData.id,
-              password: this.loginData.password,
-              userType: this.loginData.userType
-            })
-            .then(res => {
-              if (res.data.code === 1) {
-                this.$emit('login', this.$getLoginState());
-                this.$router.push({ path: '/' });
-              }
-              if (res.data.code === 0) {
-                this.$message({
-                  showClose: true,
-                  message: res.data.info,
-                  type: 'warning'
-                });
-              }
-              if (res.data.code === -1) {
-                this.$message({
-                  showClose: true,
-                  message: res.data.errMsg,
-                  type: 'error'
-                });
-              }
-            })
-            .catch(err => {
-              console.log(err);
-            })
-            .finally(() => {
-              this.submiting = false;
-            });
+          UserProvider.user.login(this.loginData.userType === 0 ? 'STU' : 'TCH', {
+            id: this.loginData.id,
+            password: this.loginData.password,
+            userType: this.loginData.userType
+          })
+          .then(res => {
+            if (res.code === 1) {
+              this.$emit('login', this.$getLoginState());
+              this.$router.push({ path: '/' });
+            }
+            if (res.code === 0) {
+              this.$message({
+                showClose: true,
+                message: res.info,
+                type: 'warning'
+              });
+            }
+            if (res.code === -1) {
+              this.$message({
+                showClose: true,
+                message: res.data.errMsg,
+                type: 'error'
+              });
+            }
+          })
+          .catch(err => {
+            console.log(err);
+          })
+          .finally(() => {
+            this.submiting = false;
+          });
         } else {
           return false;
         }

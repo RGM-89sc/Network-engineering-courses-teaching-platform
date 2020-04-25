@@ -10,7 +10,7 @@
           })
         ">
         <img
-            :src="course.cover"
+            :src="$serverBaseUrl + course.cover"
             :alt="course.coursename"
             :title="course.coursename"
             @click.prevent=""
@@ -32,7 +32,7 @@
         <el-card class="course__item_hottest">
           <div class="course-cover__wrapper">
             <img
-              :src="course.cover"
+              :src="$serverBaseUrl + course.cover"
               :alt="course.coursename"
               :title="course.coursename"
               @click.prevent=""

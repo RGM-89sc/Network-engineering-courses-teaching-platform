@@ -9,12 +9,12 @@
       </el-row>
       <el-row v-if="stus.length > 0">
         <el-col :span="6" v-for="stu in stus.slice(0, 4)" :key="stu.id">
-          <img :src="stu.avatar" alt class="stu-avatar" :title="stu.username" />
+          <img :src="$serverBaseUrl + stu.avatar" alt class="stu-avatar" :title="stu.username" />
         </el-col>
       </el-row>
       <el-row v-if="stus.length > 4">
         <el-col :span="6" v-for="stu in stus.slice(4, 8)" :key="stu.id">
-          <img :src="stu.avatar" alt class="stu-avatar" :title="stu.username" />
+          <img :src="$serverBaseUrl + stu.avatar" alt class="stu-avatar" :title="stu.username" />
         </el-col>
       </el-row>
       <el-row class="see-all-stus" v-if="stus.length > 8">
@@ -33,7 +33,7 @@
         <img
           v-for="stu in stus"
           :key="stu.id"
-          :src="stu.avatar"
+          :src="$serverBaseUrl + stu.avatar"
           alt
           class="stu-avatar"
           :title="stu.username"

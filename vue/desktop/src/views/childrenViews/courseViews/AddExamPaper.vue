@@ -10,9 +10,7 @@
             <span>第{{ index + 1 }}题</span>
           </el-col>
           <el-col :span="12" class="question-control">
-            <el-button type="text" @click="delQuestion(choiceQuestion.id)"
-              >删除</el-button
-            >
+            <el-button type="text" @click="delQuestion(choiceQuestion.id)">删除</el-button>
           </el-col>
         </el-row>
         <el-input
@@ -215,7 +213,7 @@ export default {
       }
       this.choiceQuestions = this.choiceQuestions.filter(question => {
         if (question.id === id) {
-          if (question.detail.imgs.length > 0) {
+          if (question.detail.imgs && question.detail.imgs.length > 0) {
             // 删除该题目的所有配图
             ExamsProvider.delQuestionImgs({imgs: question.detail.imgs})
               .then(res => {})

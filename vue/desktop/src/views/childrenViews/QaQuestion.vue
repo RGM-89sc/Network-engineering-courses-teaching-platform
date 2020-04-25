@@ -115,7 +115,7 @@
       :question.sync="reply"
       :disabled="!user.id"
       :uploadImageUrl="
-        `${$serverBaseUrl}/api/uploadQaImage?replyerID=${user.id}`
+        `${$serverBaseUrl}/api/uploadQaImage?questionerID=${user.id}`
       "
       @upload="upload"
       mode="answering"
@@ -124,6 +124,7 @@
 </template>
 
 <script>
+import { QaProvider } from '../../provider'
 import RichInput from '@/components/TheBaseRichInput';
 export default {
   props: {
@@ -161,16 +162,11 @@ export default {
       this.index = (val - 1) * this.offset;
     },
     getQaQuestion() {
-      const url = '/api/getQaQuestion';
-      const qaID = this.$route.params.question_id;
-      this.$http
-        .post(url, { qaID: qaID })
+      QaProvider.getQaQuestion({ qaID: this.$route.params.question_id })
         .then(res => {
           if (res.data.code === 1) {
             this.question = res.data.data;
-            this.question.created = this.$dayjs(this.question.created).format(
-              'YYYY-MM-D'
-            );
+            this.question.created = this.$dayjs(this.question.created).format('YYYY-MM-D');
             const replys = this.question.replys;
             for (let i of replys) {
               i.created = this.$dayjs(i.created).format('YYYY-MM-DD');
@@ -206,9 +202,7 @@ export default {
         type: 'warning'
       })
         .then(() => {
-          const url = '/api/updateQuestionReplys';
-          this.$http
-            .post(url, {
+          QaProvider.updateQuestionReplys({
               qaID: this.question.qaID,
               reply: {
                 replyerName: this.user.username,
@@ -216,13 +210,13 @@ export default {
                 replyerAvatar: this.user.avatar,
                 content: this.reply.content
               }
-            })
-            .then(res => {
+            }).then(res => {
               if (res.data.code === 1) {
                 this.$message({
                   message: '提交成功！',
                   type: 'success'
                 });
+                this.reply.content = ''
                 this.getQaQuestion();
               } else {
                 this.$message.error('提交失败！');

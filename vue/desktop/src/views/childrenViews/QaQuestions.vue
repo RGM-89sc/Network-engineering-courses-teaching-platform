@@ -106,7 +106,9 @@
 </template>
 
 <script>
+import { QaProvider } from '../../provider'
 import RichInput from '@/components/TheBaseRichInput';
+
 export default {
 	name: 'qaview',
 	props: {
@@ -177,25 +179,18 @@ export default {
 			});
 		},
 		getQaQuestions() {
-			const url = '/api/getQaQuestions';
-			let data = [];
-			this.$http
-				.get(url)
-				.then(res => {
-					if (res.data.code === 1) {
-						this.questions = res.data.data;
-						for (let i of this.questions) {
-							i.created = this.$dayjs(i.created).format(
-								'YYYY-MM-DD'
-							);
-							i['replysLength'] = i.replys.length;
-						}
+			QaProvider.getQaQuestions().then(res => {
+				if (res.data.code === 1) {
+					this.questions = res.data.data;
+					for (let i of this.questions) {
+						i.created = this.$dayjs(i.created).format('YYYY-MM-DD');
+						i['replysLength'] = i.replys.length;
 					}
-				})
-				.catch(err => {
-					console.log(err);
-				})
-				.finally(() => {});
+				}
+			})
+			.catch(err => {
+				console.log(err);
+			})
 		},
 		beforeUploadQuestion(
 			checkVals = { title: '标题', content: '问题内容' }
@@ -216,9 +211,7 @@ export default {
 				type: 'warning'
 			})
 				.then(() => {
-					const url = '/api/uploadQaQuestion';
-					this.$http
-						.post(url, this.question)
+					QaProvider.uploadQaQuestion(this.question)
 						.then(res => {
 							if (res.data.code === 1) {
 								this.$message({

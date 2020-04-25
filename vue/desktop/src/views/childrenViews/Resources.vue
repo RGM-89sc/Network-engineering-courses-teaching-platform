@@ -99,9 +99,10 @@
       </el-table>
     </el-row>
     <el-row type="flex" justify="center">
-      <span class="show-more" v-if="!gotAllResources" @click="showMore"
-        >显示更多</span
-      >
+      <span class="show-more" 
+            v-if="resources.length > 0 && !gotAllResources" 
+            @click="showMore"
+      >显示更多</span>
     </el-row>
 
     <el-dialog
@@ -177,6 +178,8 @@
 </template>
 
 <script>
+import { ResourcesProvider } from '@/provider'
+
 export default {
   data() {
     return {
@@ -282,34 +285,33 @@ export default {
     },
     getResources(classify) {
       this.loading = true;
-      this.$http
-        .post('/api/getResources', {
-          classify,
-          skip: this.skip,
-          limit: this.limit
-        })
-        .then(res => {
-          if (res.data.code === 1) {
-            const resources = res.data.data.map(data => {
-              return {
-                filename: this.decodeFilename(data.filename),
-                date: this.dateFormat(data.created),
-                classify: data.classify,
-                href: `${this.$serverBaseUrl}/static/${data.classify}/${data.filename}`
-              };
-            });
-            this.allResources.push(...resources);
-            if (resources.length < this.limit) {
-              this.gotAllResources = true;
-            }
+      ResourcesProvider.getResources({
+        classify,
+        skip: this.skip,
+        limit: this.limit
+      })
+      .then(res => {
+        if (res.data.code === 1) {
+          const resources = res.data.data.map(data => {
+            return {
+              filename: this.decodeFilename(data.filename),
+              date: this.dateFormat(data.created),
+              classify: data.classify,
+              href: `${this.$serverBaseUrl}/static/${data.classify}/${data.filename}`
+            };
+          });
+          this.allResources.push(...resources);
+          if (resources.length < this.limit) {
+            this.gotAllResources = true;
           }
-        })
-        .catch(err => {
-          console.log(err);
-        })
-        .finally(() => {
-          this.loading = false;
-        });
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      })
+      .finally(() => {
+        this.loading = false;
+      });
     },
     delResource(resource) {
       const that = this;
@@ -319,25 +321,23 @@ export default {
         type: 'warning'
       })
         .then(() => {
-          // 确定
-          this.$http
-            .post('/api/delResources', {
-              classify: resource.classify,
-              filename: resource.filename
-            })
-            .then(res => {
-              if (res.data.code === 1) {
-                that.$alert(`${resource.filename}已删除`, '删除成功', {
-                  confirmButtonText: '确定',
-                  callback: action => {
-                    that.$router.push({ path: '/emptyPage' });
-                  }
-                });
-              }
-            })
-            .catch(err => {
-              console.log(err);
-            });
+          ResourcesProvider.delResources({
+            classify: resource.classify,
+            filename: resource.filename,
+          })
+          .then(res => {
+            if (res.data.code === 1) {
+              that.$alert(`${resource.filename}已删除`, '删除成功', {
+                confirmButtonText: '确定',
+                callback: action => {
+                  that.$router.push({ path: '/emptyPage' });
+                }
+              });
+            }
+          })
+          .catch(err => {
+            console.log(err);
+          });
         })
         .catch(() => {
           // 取消

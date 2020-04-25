@@ -4,7 +4,7 @@ const baseUrl = config.apiBaseUrl
 
 export const OthersProvider = {
   search: (payload) => {
-    return http.post(baseUrl + 'search', payload)
+    return http.post('search', payload)
       .then(res => res.data)
       .catch(err => err)
   },

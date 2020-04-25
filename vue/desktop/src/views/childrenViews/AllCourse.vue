@@ -91,17 +91,11 @@
     <el-row v-show="courses.length === 0" class="no-course-box">
       <span class="no-course">暂无课程</span>
     </el-row>
-    <el-row
-      class="course-bar"
-      :gutter="20"
-      v-for="i in Math.ceil(courses.length / 4)"
-      :key="i"
-    >
-      <el-col
-        :span="4"
-        v-for="(course, index) in courses.slice((i - 1) * 4, (i - 1) * 4 + 4)"
-        :key="index"
-      >
+    <el-row :gutter="20">
+      <el-col class="course-bar" 
+              style="width: 260px;"
+              v-for="(course, index) in courses"
+              :key="index">
         <CourseCard :course="course" />
       </el-col>
     </el-row>

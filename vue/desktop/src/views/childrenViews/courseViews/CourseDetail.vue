@@ -325,7 +325,6 @@ export default {
         type: 'warning'
       })
         .then(() => {
-          console.log(CoursesProvider.delChapter);
           CoursesProvider.delChapter({
             courseID: this.courseID,
             tchID: this.courseDetail.tchID,
@@ -361,7 +360,7 @@ export default {
         type: 'warning'
       })
         .then(() => {
-          CoursesProvider.delPart('/api/delPart', {
+          CoursesProvider.delPart({
             courseID: this.courseID,
             tchID: this.courseDetail.tchID,
             chapter,

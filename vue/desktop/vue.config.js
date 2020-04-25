@@ -46,7 +46,9 @@ module.exports = {
       // CKEditor needs its own plugin to be built using webpack.
       new CKEditorWebpackPlugin({
         // See https://ckeditor.com/docs/ckeditor5/latest/features/ui-language.html
-        language: 'zh-cn'
+        language: 'zh-cn',
+        additionalLanguages: 'all',
+        buildAllTranslationsToSeparateFiles: true
       }),
       new HappyPack({
         //用id来标识 happypack处理那里类文件
@@ -77,6 +79,8 @@ module.exports = {
   },
 
   chainWebpack: config => {
+    config.output.set('globalObject', 'this')
+
     // Vue CLI would normally use its own loader to load .svg files. The icons used by
     // CKEditor should be loaded using raw-loader instead.
 

@@ -14,9 +14,7 @@
             <div class="article__created item_padding">
               {{ formatDate(article.created, dayjsNowTime) }}
             </div>
-            <span class="item_padding"
-
-              >
+            <span class="item_padding">
               <el-icon class="el-icon-view"></el-icon>
               {{ article.views }}次浏览&nbsp;&nbsp;&nbsp;·</span
             >

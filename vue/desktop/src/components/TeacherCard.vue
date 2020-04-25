@@ -7,8 +7,8 @@
       <img
         :src="
           tch.avatar
-            ? tch.avatar
-            : $serverBaseUrl + '/static/img/avatar/default.jpg'
+            ? $serverBaseUrl + tch.avatar
+            : $serverBaseUrl + '/static/img/avatar/default.png'
         "
         alt
         class="avatar"

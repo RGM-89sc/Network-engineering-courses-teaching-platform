@@ -178,7 +178,7 @@ export default {
       }
       this.choiceQuestions = this.choiceQuestions.filter(question => {
         if (question.id === id) {
-          if (question.detail.imgs.length > 0) {
+          if (question.detail.imgs && question.detail.imgs.length > 0) {
             // 删除该题目的所有配图
             ExercisesProvider.delQuestionImgs({
               imgs: question.detail.imgs

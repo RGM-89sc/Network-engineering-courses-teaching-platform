@@ -4,49 +4,49 @@ const baseUrl = config.apiBaseUrl
 
 export const QaProvider = {
   uploadQaQuestion: (payload) => {
-    return http.post(baseUrl + 'uploadQaQuestion', payload)
+    return http.post('uploadQaQuestion', payload)
       .then(res => res)
       .catch(err => err)
   },
 
   delQaQuestion: (payload) => {
-    return http.post(baseUrl + 'delQaQuestion', payload)
+    return http.post('delQaQuestion', payload)
       .then(res => res)
       .catch(err => err)
   },
 
   modifyQaQuestion: (payload) => {
-    return http.post(baseUrl + 'modifyQaQuestion', payload)
+    return http.post('modifyQaQuestion', payload)
       .then(res => res)
       .catch(err => err)
   },
 
   deleteQuestionReply: (payload) => {
-    return http.post(baseUrl + 'deleteQuestionReply', payload)
+    return http.post('deleteQuestionReply', payload)
       .then(res => res)
       .catch(err => err)
   },
 
   uploadQaImage: (payload) => {
-    return http.post(baseUrl + 'uploadQaImage', payload)
+    return http.post('uploadQaImage', payload)
       .then(res => res)
       .catch(err => err)
   },
 
   getQaQuestion: (payload) => {
-    return http.post(baseUrl + 'getQaQuestion', payload)
+    return http.post('getQaQuestion', payload)
       .then(res => res)
       .catch(err => err)
   },
 
   updateQuestionReplys: (payload) => {
-    return http.post(baseUrl + 'updateQuestionReplys', payload)
+    return http.post('updateQuestionReplys', payload)
       .then(res => res)
       .catch(err => err)
   },
   
-  getQaQuestions: (payload) => {
-    return http.post(baseUrl + 'getQaQuestions', payload)
+  getQaQuestions: () => {
+    return http.get('getQaQuestions')
       .then(res => res)
       .catch(err => err)
   },

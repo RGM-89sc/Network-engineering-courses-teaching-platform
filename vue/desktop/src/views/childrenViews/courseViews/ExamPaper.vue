@@ -51,16 +51,13 @@
           v-if="choiceQuestion.questionType === 'Multiple'"
           class="question-selections"
         >
-          <el-checkbox-group v-model="userAnswer[choiceQuestion.id]">
-            <el-checkbox
-              v-for="selection in choiceQuestion.detail.selections"
-              :key="selection.id"
-              :label="selection.id"
-              @change="checkbox(choiceQuestion.id, selection.id)"
-              class="question-selection"
-              >{{ selection.content }}</el-checkbox
-            >
-          </el-checkbox-group>
+          <el-checkbox
+            v-for="selection in choiceQuestion.detail.selections"
+            :key="selection.id"
+            :label="selection.id"
+            @change="checkbox(choiceQuestion.id, selection.id)"
+            class="question-selection"
+          >{{ selection.content }}</el-checkbox>
         </el-row>
       </el-card>
     </el-row>
@@ -326,7 +323,12 @@ export default {
     },
     checkbox(id, label) {
       if (Array.isArray(this.userAnswer[id])) {
-        this.userAnswer[id] = this.userAnswer[id].sort();
+        if (this.userAnswer[id].some(item => item === label)) {
+          this.userAnswer[id] = this.userAnswer[id].filter(item => item !== label)
+        } else {
+          this.userAnswer[id].push(label)
+        }
+        this.userAnswer[id] = Array.from(new Set(this.userAnswer[id])).sort();
       } else {
         this.$set(this.userAnswer, id, [label]);
       }
