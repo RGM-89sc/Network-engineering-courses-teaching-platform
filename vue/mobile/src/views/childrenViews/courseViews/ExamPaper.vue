@@ -193,7 +193,7 @@ export default {
     },
     getExamPaper() {
       this.$http
-        .post('/api/getExamPaper', {
+        .post('getExamPaper', {
           courseID: this.courseID,
           examID: this.examID
         })
@@ -241,7 +241,7 @@ export default {
     },
     handInExamPaper() {
       this.$http
-        .post('/api/handIn', {
+        .post('handIn', {
           courseID: this.courseID,
           examID: this.examID,
           userAnswer: this.userAnswer

@@ -51,6 +51,7 @@ Vue.component(Tabs.name, Tabs);
 Vue.component(TabPane.name, TabPane);
 Vue.component(DetailItem.name, DetailItem);
 Vue.component(ActivityIndicator.name, ActivityIndicator);
+import config from './config'
 
 Vue.prototype.$toast = Toast;
 Vue.prototype.$dialog = Dialog;
@@ -67,7 +68,7 @@ Vue.prototype.$getLoginState = getLoginState;
 dayjs.locale('zh-cn');
 Vue.prototype.$dayjs = dayjs;
 
-Vue.prototype.$serverBaseUrl = 'http://localhost:9000';
+Vue.prototype.$serverBaseUrl = config.serverBaseUrl;
 
 new Vue({
   router,

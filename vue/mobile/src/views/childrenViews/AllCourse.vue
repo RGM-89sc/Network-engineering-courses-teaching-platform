@@ -100,7 +100,7 @@ export default {
     },
     getCourses() {
       this.$http
-        .get('/api/getCourses')
+        .get('getCourses')
         .then(res => {
           if (res.data.code === 1) {
             this.allCourses = res.data.data;

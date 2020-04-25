@@ -42,7 +42,7 @@ export default {
   methods: {
     getMyCourseExams() {
       this.$http
-        .post('/api/getMyCourseExams', { courseID: this.courseID })
+        .post('getMyCourseExams', { courseID: this.courseID })
         .then(res => {
           if (res.data.code === 1) {
             this.courseName = res.data.data.course.coursename;

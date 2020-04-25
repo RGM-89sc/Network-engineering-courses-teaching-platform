@@ -113,9 +113,9 @@ export default {
       let url;
 
       if (this.loginData.userType === 0) {
-        url = '/api/stuLogin';
+        url = 'stuLogin';
       } else {
-        url = '/api/tchLogin';
+        url = 'tchLogin';
       }
 
       this.$http

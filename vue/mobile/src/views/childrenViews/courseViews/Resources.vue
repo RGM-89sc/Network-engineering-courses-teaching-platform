@@ -50,7 +50,7 @@
       />
 
       <div class="show-more">
-        <span v-if="!gotAllResources" @click="showMore">显示更多</span>
+        <span v-if="resources.length > 0 && !gotAllResources" @click="showMore">显示更多</span>
       </div>
     </Card>
 
@@ -231,7 +231,7 @@ export default {
       const courseID = this.courseID;
       console.log(classify);
       this.$http
-        .post('/api/getResources', {
+        .post('getResources', {
           classify,
           courseID,
           skip: this.skip,
@@ -272,7 +272,7 @@ export default {
         confirmText: '确定',
         onConfirm: () => {
           this.$http
-            .post('/api/delResources', {
+            .post('delResources', {
               classify: resource.classify,
               filename: resource.filename
             })
@@ -317,7 +317,7 @@ export default {
       formData.append('classify', this.uploadClassify);
       formData.append('courseID', this.courseID);
       this.$http
-        .post('/api/uploadResources', formData)
+        .post('uploadResources', formData)
         .then(res => {
           if (res.data.code === 1) {
             this.$dialog.succeed({

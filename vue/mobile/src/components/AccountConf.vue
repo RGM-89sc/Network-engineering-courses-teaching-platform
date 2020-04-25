@@ -97,9 +97,9 @@ export default {
           let url;
 
           if (this.user.userType === 0) {
-            url = '/api/stuLogout';
+            url = 'stuLogout';
           } else {
-            url = '/api/tchLogout';
+            url = 'tchLogout';
           }
 
           this.$http
@@ -138,9 +138,9 @@ export default {
       if (this.isPWOK && this.isPWAgainOK) {
         let apiUrl = '';
         if (this.user.userType === 1) {
-          apiUrl = '/api/tchChangePW';
+          apiUrl = 'tchChangePW';
         } else if (this.user.userType === 0) {
-          apiUrl = '/api/stuChangePW';
+          apiUrl = 'stuChangePW';
         } else {
           return false;
         }

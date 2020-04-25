@@ -267,9 +267,9 @@ export default {
       let url;
 
       if (this.registerData.userType === 0) {
-        url = '/api/stuLogin';
+        url = 'stuLogin';
       } else {
-        url = '/api/tchLogin';
+        url = 'tchLogin';
       }
 
       this.$http
@@ -342,9 +342,9 @@ export default {
       let url;
 
       if (this.registerData.userType === 0) {
-        url = '/api/stuRegister';
+        url = 'stuRegister';
       } else {
-        url = '/api/tchRegister';
+        url = 'tchRegister';
       }
 
       this.$http

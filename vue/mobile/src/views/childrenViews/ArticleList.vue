@@ -153,7 +153,7 @@ export default {
         : `${minute}分钟前`;
     },
     getArticles() {
-      this.$http.post('/api/getArticles',{
+      this.$http.post('getArticles',{
         articleType: this.articleType,
         skipArticles: this.skipArticles,
         articlesCountLimit: this.articlesCountLimit

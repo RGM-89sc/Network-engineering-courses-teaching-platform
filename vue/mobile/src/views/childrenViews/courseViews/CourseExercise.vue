@@ -55,7 +55,7 @@ export default {
   methods: {
     getExercisePapers() {
       this.$http
-        .post('/api/getExercisePapers', { courseID: this.courseID })
+        .post('getExercisePapers', { courseID: this.courseID })
         .then(res => {
           if (res.data.code === 1) {
             this.exercisePapers = res.data.data;
@@ -73,7 +73,7 @@ export default {
       })
         .then(() => {
           this.$http
-            .post('/api/delExercisePaper', {
+            .post('delExercisePaper', {
               courseID: this.courseID,
               exerciseID
             })

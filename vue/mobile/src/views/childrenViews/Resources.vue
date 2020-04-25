@@ -228,7 +228,7 @@ export default {
     getResources(classify) {
       this.loading = true;
       this.$http
-        .post('/api/getResources', {
+        .post('getResources', {
           classify,
           skip: this.skip,
           limit: this.limit
@@ -267,7 +267,7 @@ export default {
         confirmText: '确定',
         onConfirm: () => {
           this.$http
-            .post('/api/delResources', {
+            .post('delResources', {
               classify: resource.classify,
               filename: resource.filename
             })
@@ -311,7 +311,7 @@ export default {
       formData.append('file', file);
       formData.append('classify', this.uploadClassify);
       this.$http
-        .post('/api/uploadResources', formData)
+        .post('uploadResources', formData)
         .then(res => {
           if (res.data.code === 1) {
             this.$dialog.succeed({

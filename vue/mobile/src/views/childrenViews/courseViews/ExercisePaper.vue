@@ -102,7 +102,7 @@ export default {
   methods: {
     getExercisePaper() {
       this.$http
-        .post('/api/getExercisePaper', {
+        .post('getExercisePaper', {
           courseID: this.courseID,
           exerciseID: this.exerciseID
         })

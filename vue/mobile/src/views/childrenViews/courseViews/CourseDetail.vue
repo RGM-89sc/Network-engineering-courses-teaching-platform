@@ -156,7 +156,7 @@ export default {
     },
     getCourseDetail() {
       this.$http
-        .post('/api/getCourseDetail', {
+        .post('getCourseDetail', {
           courseID: this.courseID
         })
         .then(res => {
@@ -181,7 +181,7 @@ export default {
     },
     addChapterToCourse() {
       this.$http
-        .post('/api/addChapterToCourse', {
+        .post('addChapterToCourse', {
           courseID: this.courseID,
           tchID: this.courseDetail.tchID,
           newChapter: {
@@ -218,7 +218,7 @@ export default {
         confirmText: '确定',
         onConfirm: () => {
           this.$http
-            .post('/api/delCourse', {
+            .post('delCourse', {
               courseID: this.courseID,
               tchID: this.courseDetail.tchID
             })
@@ -251,7 +251,7 @@ export default {
         confirmText: '确定',
         onConfirm: () => {
           this.$http
-            .post('/api/delChapter', {
+            .post('delChapter', {
               courseID: this.courseID,
               tchID: this.courseDetail.tchID,
               chapter
@@ -285,7 +285,7 @@ export default {
         confirmText: '确定',
         onConfirm: () => {
           this.$http
-            .post('/api/delPart', {
+            .post('delPart', {
               courseID: this.courseID,
               tchID: this.courseDetail.tchID,
               chapter,

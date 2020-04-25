@@ -70,7 +70,7 @@ export default {
       return true;
     },
     getArticle() {
-     const url = '/api/getArticle';
+     const url = 'getArticle';
      this.$http.post(url,{
         articleID: this.articleID,
         articleType: this.articleType
@@ -87,7 +87,7 @@ export default {
         });
     },
     incViewsCount(count = 1) {
-      this.$http.post('/api/incViewsCount',{
+      this.$http.post('incViewsCount',{
         articleID: this.articleID,
         articleType: this.articleType
       })
@@ -108,7 +108,7 @@ export default {
       throttle(() => {
         let likes = direction => {
           const method = direction === 1 ? 'doLikes' : 'cancelLikes';
-          const api = `/api/${method}`;
+          const api = `${method}`;
           this.$http.post(api, {
           articleID: this.articleID,
           articleType: this.articleType,

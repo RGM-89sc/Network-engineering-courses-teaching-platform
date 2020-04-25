@@ -120,7 +120,7 @@ export default {
         .then(() => {
           if (this.checkQuestionsInfo() && this.exerciseName) {
             this.$http
-              .post('/api/addExercisePaper', {
+              .post('addExercisePaper', {
                 courseID: this.courseID,
                 exerciseID: this.exerciseID,
                 exerciseName: this.exerciseName,
@@ -171,7 +171,7 @@ export default {
           if (question.detail.imgs.length > 0) {
             // 删除该题目的所有配图
             this.$http
-              .post('/api/delQuestionImgs', { imgs: question.detail.imgs })
+              .post('delQuestionImgs', { imgs: question.detail.imgs })
               .then(res => {})
               .catch(err => {});
           }

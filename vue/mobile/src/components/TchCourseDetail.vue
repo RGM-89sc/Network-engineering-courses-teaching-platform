@@ -53,7 +53,7 @@ export default {
   methods: {
     getCourseStusAndExams() {
       this.$http
-        .post('/api/getCourseStusAndExams', { courseID: this.courseID })
+        .post('getCourseStusAndExams', { courseID: this.courseID })
         .then(res => {
           if (res.data.code === 1) {
             this.courseExams = res.data.data.exams;
@@ -126,7 +126,7 @@ export default {
             return null;
           }
           this.$http
-            .post('/api/resetStuExamScore', {
+            .post('resetStuExamScore', {
               stuID,
               courseID: this.courseID,
               examID: exam.examID

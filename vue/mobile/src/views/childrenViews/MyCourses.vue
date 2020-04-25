@@ -54,7 +54,7 @@ export default {
   methods: {
     tchGetMyCourses() {
       this.$http
-        .get('/api/tchGetMyCourses')
+        .get('tchGetMyCourses')
         .then(res => {
           if (res.data.code === 1) {
             this.courses = res.data.data;
@@ -70,7 +70,7 @@ export default {
     },
     stuGetMyCourses() {
       this.$http
-        .get('/api/stuGetMyCourses')
+        .get('stuGetMyCourses')
         .then(res => {
           if (res.data.code === 1) {
             this.courses = res.data.data.courses;

@@ -6,7 +6,6 @@ server/public/*
 !server/public/static
 server/public/static/courseware/*
 server/public/static/img/avatar/*
-!server/public/static/img/avatar/default.jpg
 server/public/static/img/exam/*
 server/public/static/img/exercises/*
 server/public/static/img/post/*

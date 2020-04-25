@@ -51,7 +51,7 @@ export default {
   methods: {
     startStudy() {
       this.$http
-        .post('/api/startStudy', {
+        .post('startStudy', {
           courseID: this.courseID
         })
         .then(res => {
@@ -75,7 +75,7 @@ export default {
     },
     getPartDetailNoAuth() {
       this.$http
-        .post('/api/getPartDetailNoAuth', {
+        .post('getPartDetailNoAuth', {
           courseID: this.courseID,
           chapter: this.chapter,
           part: this.part

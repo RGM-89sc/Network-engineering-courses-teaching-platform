@@ -168,7 +168,7 @@ module.exports = {
         avatar: `/static/img/avatar/${name}`
       })
       .then(docs => {
-        if (ctx.state.user.avatar !== '/static/img/avatar/default.jpg' && path.extname(ctx.state.user.avatar) !== extName) {
+        if (ctx.state.user.avatar !== '/static/img/avatar/default.png' && path.extname(ctx.state.user.avatar) !== extName) {
           setTimeout(() => {
             try {
               fs.unlinkSync(path.join(__dirname, `../public${ctx.state.user.avatar}`));

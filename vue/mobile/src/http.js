@@ -1,9 +1,10 @@
 import axios from 'axios';
 import router from './router';
 import getLoginState from './getLoginState';
+import config from './config/index'
 
 const http = axios.create({
-  baseURL: process.env.VUE_APP_BASE_API,
+  baseURL: config.apiBaseUrl,
   withCredentials: true // 允许携带cookie
 });
 

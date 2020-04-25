@@ -56,6 +56,7 @@ export default {
   }
 
   .control {
+    padding: 10px 0 0;
     text-align: center;
     border-top: 1px solid #eee;
   }

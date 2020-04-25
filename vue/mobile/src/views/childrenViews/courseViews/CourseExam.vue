@@ -89,7 +89,7 @@ export default {
   methods: {
     getExamPapers() {
       this.$http
-        .post('/api/getExamPapers', { courseID: this.courseID })
+        .post('getExamPapers', { courseID: this.courseID })
         .then(res => {
           if (res.data.code === 1) {
             this.examPapers = res.data.data;
@@ -115,7 +115,7 @@ export default {
       }
       if (this.user && (this.user.userType === 1 || this.user.userType === 0)) {
         this.$http
-          .post('/api/checkStuCanEnterExam', {
+          .post('checkStuCanEnterExam', {
             courseID: this.courseID,
             examID: examPaper.examID
           })
@@ -176,7 +176,7 @@ export default {
         });
       } else {
         this.$http
-          .post('/api/updateExamPaper', {
+          .post('updateExamPaper', {
             courseID: this.courseID,
             examID: this.currentSettingExam.examID,
             startTime: this.currentSettingExam.startEndTime[0],
@@ -210,7 +210,7 @@ export default {
       })
         .then(() => {
           this.$http
-            .post('/api/delExamPaper', {
+            .post('delExamPaper', {
               courseID: this.courseID,
               examID
             })
