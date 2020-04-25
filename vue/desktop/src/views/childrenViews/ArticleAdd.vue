@@ -125,7 +125,7 @@ export default {
         },
         ckfinder: {
           // Upload the images to the server using the CKFinder QuickUpload command.
-          uploadUrl: `${this.$serverBaseUrl}/api/postArticleImage?articleID=${this.$route.query.articleID}&type=${this.$route.query.type}`,
+          uploadUrl: `${this.$serverBaseUrl}/api/postArticleImage?articleID=${this.$route.query.articleID}&articleType=${this.$route.query.articleType}`,
           options: {
             resourceType: '.jpg,.jpeg,.png'
           }
