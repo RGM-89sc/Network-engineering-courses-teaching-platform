@@ -39,6 +39,11 @@
 const run = async (filePath) => {
   const workbook = new Excel.Workbook();
   // await connectDB(config.db);
+  if(!filePath) {
+    logger.error(`导入账号文件路径不存在！`);
+    return -1;
+  }
+  
   workbook.xlsx.readFile(filePath)
     .then(() => {
       let successCount = 0, failedCount = 0, repeatedCount = 0;
@@ -81,7 +86,7 @@ const run = async (filePath) => {
     }).then(() => {
      
     }).catch(err => {
-      logger.info(err);
+      logger.error('账号信息文件读取失败！' + err);
     });
 }
 // run(`student_account.xlsx`);
