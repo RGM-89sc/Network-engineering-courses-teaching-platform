@@ -7,6 +7,7 @@
             <span>{{ this.partInfo.title }}</span>
           </div>
           <ckeditor
+            class="edit-course-ckeditor"
             :editor="editor"
             v-model="editorData"
             :config="editorConfig"
@@ -104,7 +105,7 @@ import CodePlugin from '@ckeditor/ckeditor5-basic-styles/src/code';
 import LinkPlugin from '@ckeditor/ckeditor5-link/src/link';
 import ParagraphPlugin from '@ckeditor/ckeditor5-paragraph/src/paragraph';
 import CKFinder from '@ckeditor/ckeditor5-ckfinder/src/ckfinder';
-// import Image from '@ckeditor/ckeditor5-image/src/image';
+import Image from '@ckeditor/ckeditor5-image/src/image';
 import ImageToolbar from '@ckeditor/ckeditor5-image/src/imagetoolbar';
 import ImageUpload from '@ckeditor/ckeditor5-image/src/imageupload';
 import ImageCaption from '@ckeditor/ckeditor5-image/src/imagecaption';
@@ -138,7 +139,7 @@ export default {
           LinkPlugin,
           ParagraphPlugin,
           CKFinder,
-          // Image,
+          Image,
           ImageToolbar,
           ImageUpload,
           ImageCaption,
@@ -458,8 +459,14 @@ export default {
 </script>
 
 <style lang="scss">
-.ck-editor__editable {
-  margin-bottom: 50px;
-  min-height: 70vh;
+
+.edit-course-ckeditor {
+  + .ck-editor {
+    > .ck-editor__main {
+      > .ck-content {
+        min-height: 70vh;
+      }
+    }
+  }
 }
 </style>

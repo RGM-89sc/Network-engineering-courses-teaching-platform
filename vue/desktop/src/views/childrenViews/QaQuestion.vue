@@ -42,7 +42,7 @@
       </el-row>
       <el-row type="flex" justify="space-between">
         <el-col :span="3" class="normal-info-font">
-          {{ question.replysLength }} 个回答
+          {{ question.replys.length }} 个回答
         </el-col>
         <el-col :span="6">
           <el-tag
@@ -245,7 +245,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-* {
+.qad__wrapper {
   font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB',
     'Microsoft YaHei', '微软雅黑', Arial, sans-serif;
 }

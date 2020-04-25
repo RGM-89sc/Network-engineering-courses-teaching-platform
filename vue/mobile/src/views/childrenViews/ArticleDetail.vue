@@ -159,10 +159,16 @@ export default {
   },
 };
 </script>
-
+<style>
+  .article__content img{
+    max-width: 100%;
+  }
+</style>
 <style lang="scss" scoped>
 .article-detail {
   padding: 1rem;
+  font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB',
+  'Microsoft YaHei', '微软雅黑', Arial, sans-serif;
 }
 .icon-left {
   margin-right: 2px;
@@ -220,6 +226,8 @@ export default {
 .article__content {
   margin-top: 2rem;
   padding-top: 0.5rem;
+  line-height: 1.75;
+  word-break: break-word;
 }
 </style>
 

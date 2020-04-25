@@ -212,12 +212,13 @@ module.exports = {
   },
   //上传图片
   async postArticleImage(ctx) {
-    const { authorID, articleType } = ctx.request.query;
+    const { articleID, articleType } = ctx.request.query;
+    console.log(articleType);
     const file = ctx.request.files.upload;
     const fpath = file.path;
     const extname = path.extname(file.name);
     const imgUUID = uuidV4().split("-").join("");
-    const fname = `article_${authorID}_${imgUUID}${extname}`;
+    const fname = `article_${articleID}_${imgUUID}${extname}`;
     setTimeout(() => {
       fs.renameSync(
         fpath,
@@ -231,7 +232,7 @@ module.exports = {
     ctx.body = {
       uploaded: 1, //写死的
       fileName: fname, //图片名
-      url: serverURL + "/static/img/article/" + fname, //上传服务器的图片的url
+      url: serverURL + `/static/img/article/${articleType}/${fname}`, //上传服务器的图片的url
     };
   },
   //浏览次数递增
