@@ -1,5 +1,5 @@
 <template>
-  <div class="news-detail">
+  <div class="article-detail">
     <article class="news-article">
       <h1 class="article__title">{{ article.title }}</h1>
       <el-row type="flex" class="article__meta sub-font_sub" :gutter="1">
@@ -295,6 +295,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.article-detail {
+  font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB',
+  'Microsoft YaHei', '微软雅黑', Arial, sans-serif;
+}
+
 .icon-left {
   margin-right: 2px;
 }
@@ -353,6 +358,7 @@ export default {
 }
 .article__content {
   margin-top: 50px;
+  line-height: 1.75;
 }
 .comment__main,
 .reply__main {
