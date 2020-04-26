@@ -211,7 +211,6 @@ module.exports = {
   //上传图片
   async postArticleImage(ctx) {
     const { articleID, articleType } = ctx.request.query;
-    console.log(articleType);
     const file = ctx.request.files.upload;
     const fpath = file.path;
     const extname = path.extname(file.name);
