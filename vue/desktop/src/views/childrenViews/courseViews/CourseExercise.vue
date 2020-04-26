@@ -36,7 +36,7 @@
           <el-col
             :span="6"
             style="text-align: right;"
-            v-if="user && user.userType === 1"
+            v-if="user && user.userType === 1 && user.id === tchID"
           >
             <el-button
               type="text"

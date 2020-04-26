@@ -172,7 +172,7 @@ import TheBaseNavSideBar from '@/components/TheBaseNavSideBar';
 export default {
   data() {
     return {
-      courseID: '',
+      // courseID: '',
       courseDetail: {},
       newChapterFormRules: {
         stamp: [{required: true, message: '请输入章节名称', trigger: 'blur'}]
@@ -197,13 +197,14 @@ export default {
     };
   },
   props: {
+    courseID: String,
     user: {
       type: Object,
       default: {}
     }
   },
   created() {
-    this.courseID = this.$route.params.course_id;
+    // this.courseID = this.$route.params.course_id;
     this.getCourseDetail();
   },
   methods: {

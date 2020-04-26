@@ -174,6 +174,16 @@
 import {ResourcesProvider} from '@/provider/index';
 export default {
   name: 'show_resources',
+  props: {
+    user: {
+      type: Object,
+      default: () => {}
+    },
+    courseID: {
+      type: String,
+      default: ''
+    }
+  },
   data() {
     return {
       // classifyOptions: [
@@ -217,7 +227,6 @@ export default {
       uploaded: 0,
 
       uploadSuccessDialogVisible: false,
-      courseID: ''
     };
   },
   computed: {
@@ -235,12 +244,7 @@ export default {
       // }
     }
   },
-  props: {
-    user: {
-      type: Object,
-      default: {}
-    }
-  },
+
   // watch: {
   //   classify: function(newValue, oldValue) {
   //     this.skip = 0;
@@ -250,7 +254,6 @@ export default {
   //   }
   // },
   created() {
-    this.courseID = this.$route.params.course_id;
     this.getResources(this.classify);
   },
   methods: {
@@ -280,10 +283,9 @@ export default {
     },
     getResources(classify) {
       this.loading = true;
-      const courseID = this.courseID;
       ResourcesProvider.getResources({
         classify,
-        courseID,
+        courseID:  this.courseID,
         skip: this.skip,
         limit: this.limit
       })
@@ -294,7 +296,7 @@ export default {
                 filename: this.decodeFilename(data.filename),
                 date: this.dateFormat(data.created),
                 classify: data.classify,
-                href: `${this.$serverBaseUrl}/static/${data.classify}/${courseID}/${data.filename}`
+                href: `${this.$serverBaseUrl}/static/${data.classify}/${this.courseID}/${data.filename}`
               };
             });
             this.allResources.push(...resources);
