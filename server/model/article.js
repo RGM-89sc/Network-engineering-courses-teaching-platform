@@ -44,9 +44,7 @@ const articleSchema = new mongoose.Schema({
     },
     goods: [
         {
-            userID: {
-                type: String
-            },
+            userID: String,
             userName: String,
             userType: Number,
         }

@@ -224,7 +224,7 @@ export default {
             })
             .then(res => {
               if (res.data.code === 1) {
-                this.$router.push({ path: '/emptyPage' });
+                this.$router.push({ path: '/course' });
               }
               if (res.data.code === 0) {
                 this.$toast.failed(res.data.info);

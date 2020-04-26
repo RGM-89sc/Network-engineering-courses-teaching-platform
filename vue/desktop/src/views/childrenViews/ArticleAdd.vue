@@ -69,7 +69,6 @@ export default {
         authorID: '',
         avatarURL: '',
         views: 0,
-        goods: [],
         tags: [],
         content: '',
         summary: '',
