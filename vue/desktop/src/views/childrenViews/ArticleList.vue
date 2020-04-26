@@ -40,7 +40,7 @@
     <el-card class="news__list">
       <div
         class="news__item"
-        v-for="(article, index) in orderArticleList"
+        v-for="(article, index) in pageArticles"
         :key="index"
       >
         <article class="news-article">
@@ -105,6 +105,19 @@
         class="article-loading__wrapper"
       ></div>
     </el-card>
+    <el-row v-if="articleList.length > 0" class="pagination">
+      <el-col>
+        <el-pagination
+          :current-page.sync="currentPage"
+          :page-size="pageSize"
+          layout="prev, pager, next, jumper"
+          :total="totalSize"
+          @current-change="handlePageChange"
+          background
+        >
+        </el-pagination>
+      </el-col>
+    </el-row>
   </div>
 </template>
 
@@ -124,12 +137,20 @@ export default {
   },
   data() {
     return {
+      //pagintation data
+      currentPage: 1,
+      pageSize: 8,
       articleList: [],
-      orderArticleList: [],
+      pageIndex: 0,
+      // pageArticles: null,
+
+
       //要发布的文章ID
       articleID: '',
       dayjsNowTime: this.$dayjs(Date.now()),
       searchVal: '',
+
+
       sortData: {
         sortSelectVal: '',
         sortOptions: [
@@ -146,14 +167,22 @@ export default {
         ]
       },
       loadingArticle: true,
-      articlesCountLimit: 12,
+
       skipArticles: 0,
     };
+  },
+  computed: {
+    totalSize() {
+      return this.articleList.length; 
+    },
+    pageArticles() {
+      return this.articleList.slice(this.pageIndex, this.pageIndex + this.pageSize);
+    }
   },
   watch: {
     'sortData.sortSelectVal': function(sortType) {
       this.sortArticleList(sortType)
-    }
+    },
   },
   created() {
     this.articleID = uuid().split('-').join('');
@@ -165,6 +194,9 @@ export default {
     });
   },
   methods: {
+    handlePageChange(val) {
+      this.pageIndex = (val - 1) * this.pageSize;
+    },
     formatDate(date, now) {
       const created = this.$dayjs(date);
       const sss = now.diff(created);
@@ -183,12 +215,12 @@ export default {
       ArticleProvider.getArticles({
         articleType: this.articleType,
         skipArticles: this.skipArticles,
-        articlesCountLimit: this.articlesCountLimit
+        articlesCountLimit: this.pageSize
       })
         .then(res => {
           if (res.data.code === 1) {
             this.articleList = res.data.data;
-            this.skipArticles += this.articlesCountLimit;
+            this.skipArticles += this.pageSize;
           }
           this.sortArticleList('ascendingTime')
         })
@@ -216,13 +248,6 @@ export default {
         } else if (entries[0].isIntersecting === true) {
           root.classList.remove('sticky__element');
         }
-        // entries.map(item => {
-        //   if (item.intersectionRatio > 0) {
-        //     console.log(item);
-        //   } else {
-        //     console.log(item);
-        //   }
-        // });
       };
       const intersectionObserver = new IntersectionObserver(observerHandler);
 
@@ -231,7 +256,7 @@ export default {
     sortArticleList(sortType) {
       const dayjs = this.$dayjs;
       const direction = sortType === 'ascendingTime' ? -1 : 1;
-      this.orderArticleList = this.articleList.sort((x, y) => {
+      this.pageArticles.sort((x, y) => {
         return dayjs(x.created).isAfter(dayjs(y.created))
           ? direction
           : -direction;
@@ -328,5 +353,8 @@ export default {
   padding: 0 25.5% 0 25.5%;
   left: 0;
   min-width: 720px;
+}
+.pagination {
+  margin-top: 24px;
 }
 </style>
