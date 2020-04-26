@@ -16,6 +16,9 @@ const resourcesSchema = new mongoose.Schema({
   created: {
     type: Date,
     default: Date.now
+  },
+  userID: {
+    type: String,
   }
 });
 
