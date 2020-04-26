@@ -15,4 +15,6 @@ server/public/static/software/*
 server/public/static/video/*
 server/public/d/**
 server/public/m/**
+server/public/static/img/article/**
+server/public/static/img/qa/**
 .vscode
