@@ -47,11 +47,11 @@
           <div class="news-article__title">
             <h3>
               <el-link
-                @click="$router.push({ 
-                  name: 'article_news_detail', 
-                  params: { article_id: article.articleID }, 
-                  query: { articleType: articleType },
-                })"
+                @click="
+                  $router.push({
+                    path: `/${articleType}/article/${article.articleID}?articleType=${articleType}`
+                  })
+                "
                 >{{ article.title }}</el-link
               >
             </h3>
