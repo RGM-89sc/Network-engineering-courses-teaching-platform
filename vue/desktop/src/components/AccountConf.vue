@@ -162,11 +162,14 @@ export default {
       });
     },
     imageuploaded(res) {
-      if (res.data.code === 1) {
+      if (res.code === 1) {
+        this.$message({
+          message: '头像更换成功！',
+          type: 'success'
+        });
         this.avatar = res.data.avatarUrl;
-        window.location.reload();
       }
-      if (res.data.code === -1) {
+      if (res.code === -1) {
         this.$alert('头像更改失败', '失败', {
           confirmButtonText: '确定'
         });
