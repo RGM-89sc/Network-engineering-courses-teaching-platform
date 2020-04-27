@@ -17,6 +17,7 @@ router.post('/getArticles', article.getArticles);
 router.post('/doLikes', auth.all, article.doLikes);
 router.post('/cancelLikes', auth.all, article.cancelLikes);
 router.post('/incViewsCount', article.incViewsCount);
+router.post('/getArticlesCount', article.getArticlesCount);
 // 更新文章 评论 回复
 // router.post('/updateArticle', article.updateArticle);
 

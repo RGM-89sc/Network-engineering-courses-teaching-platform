@@ -29,6 +29,8 @@ import {
   TabPane,
   DetailItem,
   ActivityIndicator,
+  ScrollView,
+  ScrollViewMore
 } from 'mand-mobile';
 
 FastClick.attach(document.body);
@@ -51,6 +53,9 @@ Vue.component(Tabs.name, Tabs);
 Vue.component(TabPane.name, TabPane);
 Vue.component(DetailItem.name, DetailItem);
 Vue.component(ActivityIndicator.name, ActivityIndicator);
+Vue.component(ScrollView.name, ScrollView);
+Vue.component(ScrollViewMore.name, ScrollViewMore);
+
 import config from './config'
 
 Vue.prototype.$toast = Toast;

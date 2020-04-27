@@ -82,7 +82,7 @@
 				<el-col>
 					<el-pagination
 						:current-page.sync="currentPage"
-						:page-size="this.offset"
+						:page-size="offset"
 						layout="prev, pager, next, jumper"
 						:total="totalItems"
 						@current-change="handleCurPageChange"

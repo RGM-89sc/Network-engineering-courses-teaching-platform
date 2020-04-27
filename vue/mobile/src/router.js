@@ -92,113 +92,69 @@ let router = new Router({
             // },
 
             //作业练习
+
             {
               path: "exercise",
-              component: () => import("./views/Exercise.vue"),
-              children: [
-                {
-                  path: "",
-                  name: "course_exercise",
-                  component: () =>
-                    import("./views/childrenViews/courseViews/CourseExercise.vue"),
-                  meta: {
-                    title: "课程作业"
-                  }
-                },
-                // {
-                //   path: "addExercisePaper",
-                //   name: "add_exercise_paper",
-                //   component: () =>
-                //     import("./views/childrenViews/courseViews/AddExercisePaper.vue"),
-                //   meta: {
-                //     auth: "tch",
-                //     title: "添加作业"
-                //   }
-                // },
-                // {
-                //   path: "editExercisePaper",
-                //   name: "edit_exercise_paper",
-                //   component: () =>
-                //     import("./views/childrenViews/courseViews/EditExercisePaper.vue"),
-                //   meta: {
-                //     auth: "tch",
-                //     title: "编辑作业"
-                //   }
-                // },
-                {
-                  path: "exercisePaper",
-                  name: "show_exercise_paper",
-                  component: () =>
-                    import("./views/childrenViews/courseViews/ExercisePaper.vue"),
-                  meta: {
-                    title: "作业练习"
-                  }
-                }
-              ]
+              name: "course_exercise",
+              component: () =>
+                import("./views/childrenViews/courseViews/CourseExercise.vue"),
+              meta: {
+                title: "课程作业"
+              }
+            },
+            {
+              path: "exercise/exercisePaper",
+              name: "show_exercise_paper",
+              component: () =>
+                import("./views/childrenViews/courseViews/ExercisePaper.vue"),
+              meta: {
+                title: "作业练习"
+              }
             },
             //考试
             {
               path: "exam",
-              component: () => import("./views/Exam.vue"),
-              children: [
-                // {
-                //   path: "",
-                //   name: "all_exam",
-                //   component: () => import("./views/childrenViews/courseViews/AllExam.vue"),
-                //   meta: {
-                //     title: "全部考试"
-                //   }
-                // },
-                {
-                  path: "",
-                  name: "course_exam",
-                  component: () => import("./views/childrenViews/courseViews/CourseExam.vue"),
-                  meta: {
-                    title: "课程考试"
-                  }
-                },
-                // {
-                //   path: "addExamPaper",
-                //   name: "add_exam_paper",
-                //   component: () => import("./views/childrenViews/courseViews/AddExamPaper.vue"),
-                //   meta: {
-                //     auth: "tch",
-                //     title: "添加考试"
-                //   }
-                // },
-                {
-                  path: "examPaper",
-                  name: "show_exam_paper",
-                  component: () => import("./views/childrenViews/courseViews/ExamPaper.vue"),
-                  meta: {
-                    auth: "all",
-                    title: "考试"
-                  }
-                }
-              ]
+              name: "course_exam",
+              component: () => import("./views/childrenViews/courseViews/CourseExam.vue"),
+              meta: {
+                title: "课程考试"
+              }
+            },
+            // {
+            //   path: "addExamPaper",
+            //   name: "add_exam_paper",
+            //   component: () => import("./views/childrenViews/courseViews/AddExamPaper.vue"),
+            //   meta: {
+            //     auth: "tch",
+            //     title: "添加考试"
+            //   }
+            // },
+            {
+              path: "exam/examPaper",
+              name: "show_exam_paper",
+              component: () => import("./views/childrenViews/courseViews/ExamPaper.vue"),
+              meta: {
+                auth: "all",
+                title: "考试"
+              }
             },
             {
               path: "resources",
-              name: "resources",
-              component: () => import("./views/Resources.vue"),
-              children: [{
-                path: "",
-                name: "show_resources",
-                component: () =>
-                  import("./views/childrenViews/courseViews/Resources.vue"),
-                meta: {
-                  title: "课程资源"
-                }
-              },
-              {
-                path: ":filename",
-                name: "preview_courseware",
-                component: () =>
-                  import("./views/childrenViews/courseViews/PreviewCourseware.vue"),
-                meta: {
-                  title: "课件"
-                }
-              }]
+              name: "show_resources",
+              component: () =>
+                import("./views/childrenViews/courseViews/Resources.vue"),
+              meta: {
+                title: "课程资源"
+              }
+            },
+            {
+              path: "resources/:filename",
+              name: "preview_courseware",
+              component: () =>
+                import("./views/childrenViews/courseViews/PreviewCourseware.vue"),
+              meta: {
+                title: "课件"
+              }
             }
           ]
         }

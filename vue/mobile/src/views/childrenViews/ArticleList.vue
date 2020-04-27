@@ -6,32 +6,27 @@
     </div>
 
     <div class="article-list">
+    <md-scroll-view
+        ref="scrollView"
+        :scrolling-x="false"
+        @end-reached="$_onEndReached"
+      >
       <card
-        class="article-item"
-        v-for="(article, index) in orderArticleList"
+        class="article-item scroll-view-list"
+        v-for="(article, index) in articleList"
         round
         shadow="always"
-        :key="index"
-      >
-        <article class="article">
+        :key="index">
+        <article class="article scroll-view-item">
           <div class="article-title">
-            <h3>
-              <md-button
-                type="link"
-                @click="
-                  $router.push({
-                    path: `/${articleType}/article/${article.articleID}?articleType=${articleType}`
-                  })
-                "
-                >{{ article.title }}</md-button
-              >
+            <h3 @click="$router.push({path: `/${articleType}/article/${article.articleID}?articleType=${articleType}`})">
+              {{ article.title }}
             </h3>
           </div>
 
           <p class="article__content">{{ article.summary }}</p>
           <div
-            class="article__info normal-info-font normal-margin__tb"
-          >
+            class="article__info normal-info-font normal-margin__tb">
             <div class="article-author">
               <p href="">{{ article.authorName }} </p>
             </div>
@@ -46,8 +41,7 @@
           <div
             type="flex"
             justify="space-between"
-            class="article__meta"
-          >
+            class="article__meta">
             <div class="article__tags">
               <md-tag
                 size="small"
@@ -64,6 +58,14 @@
           </div>
         </article>
       </card>
+
+      <!-- loading more -->
+      <md-scroll-view-more
+        slot="more"
+        :is-finished="isFinished"
+      >
+      </md-scroll-view-more>
+    </md-scroll-view>
       <card
         v-if="articleList.length === 0 && loadingArticle === false"
         class="article_empty"
@@ -87,6 +89,7 @@
 
 <script>
 import Card from '@/components/Card';
+import { formatDate } from '@/helpers/formatDate1'
 export default {
   props: {
     user: {
@@ -103,10 +106,7 @@ export default {
     return {
       isSortEnabled: false,
       articleList:[],
-      orderArticleList: [],
-      articlesCountLimit: 12,
       dayjsNowTime: this.$dayjs(Date.now()),
-      skipArticles: 0,
       isSelectorShow: false,
       sortOptions: [
         [
@@ -120,16 +120,60 @@ export default {
           }
         ],
       ],
-      loadingArticle: true,
+      loadingArticle: false,
       curSortValue: '按时间正序',
-      sortType: 'ascendingTime'
+      sortType: 'ascendingTime',
+
+
+      //loading  more data
+      isFinished: false,
+      loadSize: 5,
+      totalSize: this.loadSize + 1,
+      currentSize: 0
     }
     
   },
   created() {
-    this.getArticles();
+    
+    this.getArticlesCount();
+    this.$_onEndReached();
+  },
+  mounted() {
+    window.ScrollViewTrigger1 = () => {
+      this.$refs.scrollView.triggerRefresh()
+    }
   },
   methods: {
+    $_onEndReached() {
+      if (this.isFinished || this.loadingArticle) {
+        return
+      }
+      this.loadingArticle = true;
+      // async data
+      setTimeout(() => {
+        this.getArticles()
+         .then(res => {
+          if (res.data.code === 1 && res.data.data.length > 0) {
+            const moreArticles = res.data.data;
+            this.articleList = [...this.articleList, ...moreArticles];
+            this.currentSize += this.loadSize;
+            this.isSortEnabled = true;
+          }
+          this.sortArticleList(this.sortType)
+          if (this.currentSize >= this.totalSize) {
+            this.isFinished = true
+          }
+        })
+        .catch(err => {
+          this.$toast.failed('加载失败！');
+          console.log(err);
+        })
+        .finally(() => {
+          this.loadingArticle = false;
+          this.$refs.scrollView.finishLoadMore()
+        });
+      }, 1000)
+    },
     showSelector() {
       this.isSelectorShow = true
     },
@@ -139,44 +183,30 @@ export default {
       this.sortArticleList(value);
     },
     formatDate(date, now) {
-      const created = this.$dayjs(date);
-      const sss = now.diff(created);
-      const minute = Math.ceil(sss / 1000 / 60);
-      const hour = Math.ceil(minute / 60);
-      const day = Math.ceil(hour / 24);
-      return minute > 59
-        ? hour > 23
-          ? day > 29
-            ? created.format('YYYY-MM-DD')
-            : `${day}天前`
-          : `${hour}小时前`
-        : `${minute}分钟前`;
+      formatDate(date, now, this.$dayjs);
     },
     getArticles() {
-      this.$http.post('getArticles',{
+      return this.$http.post('getArticles',{
         articleType: this.articleType,
-        skipArticles: this.skipArticles,
-        articlesCountLimit: this.articlesCountLimit
+        skipArticles: this.currentSize,
+        getArticlesCount: this.loadSize
       })
-        .then(res => {
-          if (res.data.code === 1 && res.data.data.length > 0) {
-            this.articleList = res.data.data;
-            this.skipArticles += this.articlesCountLimit;
-            this.isSortEnabled = true;
-          }
-          this.sortArticleList(this.sortType)
-        })
-        .catch(err => {
-          console.log(err);
-        })
-        .finally(() => {
-          this.loadingArticle = false;
-        });
     },    
+    getArticlesCount() {
+      this.$http.post(`getArticlesCount`, {
+        articleType: this.articleType,
+      }).then(res => {
+        if(res.data.code === 1) {
+          this.totalSize = res.data.data;
+        }
+      }).catch(err => {
+        console.error('无法获取文章总数！', err);
+      })
+    },
     sortArticleList(sortType) {
       const dayjs = this.$dayjs;
       const direction = sortType === 'ascendingTime' ? -1 : 1;
-      this.orderArticleList = this.articleList.sort((x, y) => {
+      this.articleList.sort((x, y) => {
         return dayjs(x.created).isAfter(dayjs(y.created))
           ? direction
           : -direction;
@@ -216,7 +246,6 @@ export default {
 //   display: flex;
 // }
 .article {
-  padding: 1.2rem;
   border-radius: 5px;
   transition: background-color 0.2s ease-in-out;
 }
@@ -229,10 +258,9 @@ export default {
 }
 .article-title {
   h3 {
-    margin: 0;
-    > button {
-      padding: 0;
-    }
+    color: #2f86f6; 
+    font-size: 1rem;
+    font-weight: normal;
   }
 }
 .article__info,.article__meta{
@@ -248,7 +276,7 @@ export default {
   -webkit-box-orient: vertical;
   color: #909399;
   font-size: 14px;
-  padding: 0 .2rem;
+  padding: .5rem 0;
 }
 .article__date {
   color: #909399;
