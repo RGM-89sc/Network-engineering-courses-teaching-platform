@@ -167,7 +167,7 @@ let router = new Router({
             },
             {
               path: "resources",
-              name: "show_resources",
+              name: "show_course_resources",
               component: () =>
                 import("./views/childrenViews/courseViews/Resources.vue"),
               meta: {
@@ -202,12 +202,21 @@ let router = new Router({
           }
         },
         {
-          path: ":question_id",
+          path: "question/:question_id",
           name: "qa_question",
           component: () => import("./views/childrenViews/QaQuestion.vue"),
           meta: {
             auth: 'all',
             title: '问题详情'
+          }
+        },
+        {
+          path: "addQuestion",
+          name: "add_question",
+          component: () => import("./views/childrenViews/QaAddQuestion.vue"),
+          meta: {
+            auth: 'all',
+            title: '提问题'
           }
         }
       ]
@@ -295,7 +304,7 @@ let router = new Router({
         },
         {
           path: ":filename",
-          name: "preview_courseware",
+          name: "preview_software",
           component: () =>
             import("./views/childrenViews/PreviewCourseware.vue"),
           meta: {

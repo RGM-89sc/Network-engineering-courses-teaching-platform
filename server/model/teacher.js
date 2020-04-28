@@ -37,6 +37,14 @@ const tchSchema = new mongoose.Schema({
     created: Date,
     articleType: String
   }],
+  //提出过的问题
+  questions: [{
+    qaID: String,
+    title: String,
+    created: Date,
+    tags: Array,
+    solved: Boolean
+  }],
   //回答过的问题
   questionReplys: [{
     qaID: String,

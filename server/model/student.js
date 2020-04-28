@@ -64,11 +64,13 @@ const stuSchema = new mongoose.Schema({
     qaID: String,
     title: String,
     created: Date,
-    questionerID: String
+    tags: Array,
+    solved: Boolean
   }],
   //回答过的问题
   questionReplys: [{
-    questionID: String,
+    replyID: String,
+    qaID: String,
     created: Date
   }],
   likes: [

@@ -215,7 +215,6 @@ export default {
       ArticleProvider.getArticles({
         articleType: this.articleType,
         skipArticles: this.skipArticles,
-        articlesCountLimit: this.pageSize
       })
         .then(res => {
           if (res.data.code === 1) {

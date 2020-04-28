@@ -36,15 +36,15 @@ const qaSchema = new mongoose.Schema({
         type: String,
         require: true
     },
-    tag: {
-        type: String,
+    tags: {
+        type: Array,
         require: true
     },
     created: {
         type: Date,
         default: Date.now
     },
-    isReplyed: {
+    solved: {
         type: Boolean,
         default: false
     },

@@ -6,8 +6,11 @@
           <el-breadcrumb-item :to="{ path: '/qa' }"
             >问题列表</el-breadcrumb-item
           >
-          <el-breadcrumb-item v-show="canBreadCrumbItemShow"
+          <el-breadcrumb-item v-show="routeName === 'qa_question'"
             >问题详情</el-breadcrumb-item
+          >
+          <el-breadcrumb-item v-show="routeName === 'add_question'"
+            >提问题</el-breadcrumb-item
           >
         </el-breadcrumb>
       </el-col></el-row
@@ -32,8 +35,8 @@ export default {
     return {};
   },
   computed: {
-    canBreadCrumbItemShow() {
-      return this.$route.name === 'qa_question' ? true : false;
+    routeName() {
+      return this.$route.name;
     }
   }
 };

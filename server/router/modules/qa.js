@@ -14,9 +14,11 @@ router.post('/uploadQaImage', qa.uploadQaImage)
 
 router.post('/getQaQuestion', qa.getQaQuestion)
 
-router.post('/updateQuestionReplys', qa.updateQuestionReplys);
+router.post('/updateQuestionReplys', qa.updateQuestionReplys)
 
-router.get('/getQaQuestions', qa.getQaQuestions)
+router.post('/getQaQuestions', qa.getQaQuestions)
+
+router.get('/getSize', qa.getSize)
 
 
 module.exports = router;

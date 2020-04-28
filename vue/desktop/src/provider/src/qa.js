@@ -44,9 +44,13 @@ export const QaProvider = {
       .then(res => res)
       .catch(err => err)
   },
-  
+  getSize: () => {
+    return http.get('getSize')
+      .then(res => res)
+      .catch(err => err)
+  },
   getQaQuestions: () => {
-    return http.get('getQaQuestions')
+    return http.post('getQaQuestions')
       .then(res => res)
       .catch(err => err)
   },

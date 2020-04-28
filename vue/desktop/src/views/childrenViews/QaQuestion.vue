@@ -48,9 +48,7 @@
           <el-tag
             :key="tag"
             v-for="tag in question.tags"
-            closable
             :disable-transitions="false"
-            @close="handleClose(tag)"
           >
             {{ tag }}
           </el-tag>
@@ -111,21 +109,57 @@
         </el-pagination>
       </el-col>
     </el-row>
-    <RichInput
-      :question.sync="reply"
-      :disabled="!user.id"
-      :uploadImageUrl="
-        `${$serverBaseUrl}/api/uploadQaImage?questionerID=${user.id}`
-      "
-      @upload="upload"
-      mode="answering"
-    />
+    <el-card class="rich-text" shadow="always" >
+      <el-row type="flex">
+        <h1>回答问题</h1>
+      </el-row>
+      <ckeditor
+          class="answer-editor"
+          ref="answerEditor"
+          :editor="editor"
+          v-model="reply.content"
+          :config="editorConfig"
+          :disabled="!isLogin"
+      ></ckeditor>
+      <el-row class="rich-text__footer" type="flex" justify="space-between">
+        <el-col :span="5">
+          <el-button type="danger" @click="question.content = ''"
+            >清空内容</el-button
+          ></el-col
+        >
+        <el-col :span="2.5">
+          <el-button type="primary" @click="upload">
+            提交回答
+          </el-button></el-col
+        >
+      </el-row>
+    </el-card>
+
   </div>
 </template>
 
 <script>
 import { QaProvider } from '../../provider'
-import RichInput from '@/components/TheBaseRichInput';
+import ClassicEditor from '@ckeditor/ckeditor5-editor-classic/src/classiceditor';
+
+import EssentialsPlugin from '@ckeditor/ckeditor5-essentials/src/essentials';
+import HeadingPlugin from '@ckeditor/ckeditor5-heading/src/heading';
+import BoldPlugin from '@ckeditor/ckeditor5-basic-styles/src/bold';
+import ItalicPlugin from '@ckeditor/ckeditor5-basic-styles/src/italic';
+import FontPlugin from '@ckeditor/ckeditor5-font/src/font';
+import UnderlinePlugin from '@ckeditor/ckeditor5-basic-styles/src/underline';
+import AlignmentPlugin from '@ckeditor/ckeditor5-alignment/src/alignment';
+import SuperScriptPlugin from '@ckeditor/ckeditor5-basic-styles/src/superscript';
+import CodePlugin from '@ckeditor/ckeditor5-basic-styles/src/code';
+import LinkPlugin from '@ckeditor/ckeditor5-link/src/link';
+import ParagraphPlugin from '@ckeditor/ckeditor5-paragraph/src/paragraph';
+import CKFinder from '@ckeditor/ckeditor5-ckfinder/src/ckfinder';
+import Image from '@ckeditor/ckeditor5-image/src/image';
+import ImageToolbar from '@ckeditor/ckeditor5-image/src/imagetoolbar';
+import ImageUpload from '@ckeditor/ckeditor5-image/src/imageupload';
+import ImageCaption from '@ckeditor/ckeditor5-image/src/imagecaption';
+import ImageStyle from '@ckeditor/ckeditor5-image/src/imagestyle';
+
 export default {
   props: {
     // question: {
@@ -146,10 +180,69 @@ export default {
       },
       index: 0,
       offset: 8,
-      currentPage: 1
+      editor: ClassicEditor,
+      editorConfig: {
+        plugins: [
+          EssentialsPlugin,
+          HeadingPlugin,
+          BoldPlugin,
+          ItalicPlugin,
+          FontPlugin,
+          UnderlinePlugin,
+          AlignmentPlugin,
+          SuperScriptPlugin,
+          CodePlugin,
+          LinkPlugin,
+          ParagraphPlugin,
+          CKFinder,
+          Image,
+          ImageToolbar,
+          ImageUpload,
+          ImageCaption,
+          ImageStyle
+        ],
+
+        toolbar: {
+          items: [
+            'heading',
+            '|',
+            'link',
+            'imageUpload',
+            // 'imageStyle:full',
+            // 'imageStyle:side',
+            '|',
+            'bold',
+            'italic',
+            'fontSize',
+            'underline',
+            'superscript',
+            'code',
+            '|',
+            'alignment:left',
+            'alignment:right',
+            'alignment:center',
+            'alignment:justify',
+            '|',
+            'undo',
+            'redo'
+          ]
+        },
+
+        ckfinder: {
+          // Upload the images to the server using the CKFinder QuickUpload command.
+          uploadUrl: `${this.$serverBaseUrl}/api/uploadQaImage?questionerID=${this.user.id}`,
+          options: {
+            resourceType: '.jpg,.jpeg,.png'
+          }
+        }
+      }
+
     };
   },
   computed: {
+    isLogin() {
+      return !!this.user.id;
+    },
     totalItems() {
       return this.question.replys.length;
     },
@@ -237,9 +330,6 @@ export default {
   },
   created() {
     this.getQaQuestion();
-  },
-  components: {
-    RichInput
   }
 };
 </script>
@@ -299,6 +389,23 @@ $FONT_SIZE: 16px;
 .question__footer {
   margin-top: 20px;
 }
-.user-name {
+.rich-text {
+  margin-top: 20px;
+}
+
+.rich-text__footer {
+  margin-top: 20px;
+}
+.rich-text__header {
+  margin-bottom: 20px;
+}
+.answer-editor {
+  + .ck-editor {
+    > .ck-editor__main {
+      > .ck-content {
+        min-height: 30vh;
+      }
+    }
+  }
 }
 </style>

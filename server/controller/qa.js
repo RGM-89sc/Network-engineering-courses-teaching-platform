@@ -11,33 +11,34 @@ module.exports = {
         const {
             title,
             content,
-            tag,
+            tags,
             questionerAvatar,
             questionerName,
             questionerID,
-            questionerType
+            questionerType,
         } = ctx.request.body;
         const qaID = uuidV4().split('-').join('')
         await db.qa.create({
             qaID,
             title,
             content,
-            tag,
+            tags,
             questionerAvatar,
             questionerName,
             questionerID,
             questionerType
         }).then(async docs => {
             //更新 user 的问题列表
-            await db.student.updateOne({
+            await db[`${questionerType}`].updateOne({
                 id: questionerID
             }, {
                 $push: {
                     questions: {
-                        qaID: docs.qaID,
-                        title: docs.title,
-                        created: docs.created,
-                        questionerID: docs.questionerID
+                        qaID: qaID,
+                        title: title,
+                        tags: tags,
+                        solved: false,
+                        created: docs.created
                     }
                 }
             });
@@ -56,6 +57,7 @@ module.exports = {
     async delQaQuestion(ctx) {
         const {
             qaID,
+            questionerType,
             questionerID
         } = ctx.request.body;
         if (questionerID !== ctx.state.user.id) {
@@ -64,18 +66,16 @@ module.exports = {
                 info: '没有删除问题的权限！'
             }
         }
-
-
         await db.qa.deleteOne({
             qaID,
             questionerID
         }).then(async docs => {
-            await db.student.updateOne({
+            await db[`${questionerType}`].updateOne({
                 id: questionerID
             }, {
                 $pull: {
                     questions: {
-                        id: qaID
+                        qaID
                     }
                 }
             });
@@ -114,8 +114,26 @@ module.exports = {
     async deleteQuestionReply(ctx) {
 
     },
-    //加载全部问题
+    //
+    async getSize(ctx) {
+        await db.qa.find({})
+            .countDocuments()
+            .then(count => {
+            return (ctx.body = {
+                data: count,
+                code: 1,
+            });
+            })
+            .catch((err) => {
+                return (ctx.body = {
+                    errMsg: err.message,
+                    code: -1,
+                });
+            });     
+    },
+    //加载qa
     async getQaQuestions(ctx) {
+        // const { skips, limits } = ctx.request.body;
         await db.qa.find({}, {
 
         }, {
@@ -125,7 +143,8 @@ module.exports = {
             questionerAvatar: 0,
             content: 0,
             replys: 0
-        }).then((docs) => {
+        })
+        .then(docs => {
             ctx.body = {
                 data: docs,
                 code: 1
