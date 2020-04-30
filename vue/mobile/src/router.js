@@ -175,14 +175,23 @@ let router = new Router({
           }
         },
         {
-          path: ":question_id",
+          path: "question/:question_id",
           name: "qa_question",
           component: () => import("./views/childrenViews/QaQuestion.vue"),
           meta: {
             auth: 'all',
             title: '问题详情'
           }
-        }
+        },
+        {
+          path: "addQuestion",
+          name: "add_question",
+          component: () => import("./views/childrenViews/QaAddQuestion.vue"),
+          meta: {
+            auth: 'all',
+            title: '提问题'
+          }
+        },
       ]
     },
     //新闻动态

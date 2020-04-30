@@ -49,6 +49,14 @@ const qaSchema = new mongoose.Schema({
         default: false
     },
     replys: [{
+        replyerID: {
+            type: String,
+            require: true
+        },
+        replyID: {
+            type: String,
+            require: true,
+        },
         replyerName: {
             type: String,
             require: true
@@ -65,7 +73,6 @@ const qaSchema = new mongoose.Schema({
         created: {
             type: Date,
             default: Date.now
-
         },
         content: {
             type: String,
@@ -85,7 +92,7 @@ const qaSchema = new mongoose.Schema({
 qaSchema.index({ 
   title: 'text',
   content: 'text',
-  tag: 'text',
+  tags: 'text',
   'replys.content': 'text'
 })
 

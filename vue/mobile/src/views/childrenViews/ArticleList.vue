@@ -2,70 +2,74 @@
   <div class="article-list_wrapper" :class="articleList.length > 0 ? 'gray-bg' : ''">
 
     <div class="tools-bar">
-      <md-button :type="isSortEnabled === true ? 'primary' : 'disabled'" size="small" @click="showSelector" icon="sort">{{curSortValue}}</md-button>
+      <md-button type="primary" size="small" inline @click="handleAddArticle">
+        发布文章
+      </md-button>
+      <md-button inline :type="isSortEnabled === true ? 'primary' : 'disabled'" size="small" @click="showSelector" icon="sort">{{curSortValue}}</md-button>
     </div>
 
     <div class="article-list">
-    <md-scroll-view
-        ref="scrollView"
-        :scrolling-x="false"
-        @end-reached="$_onEndReached"
-      >
-      <card
-        class="article-item scroll-view-list"
-        v-for="(article, index) in articleList"
-        round
-        shadow="always"
-        :key="index">
-        <article class="article scroll-view-item">
-          <div class="article-title">
-            <h3 @click="$router.push({path: `/${articleType}/article/${article.articleID}?articleType=${articleType}`})">
-              {{ article.title }}
-            </h3>
-          </div>
+      <md-scroll-view
+          ref="scrollView"
+          :scrolling-x="false"
+          @end-reached="$_onEndReached"
+        >
+        <card
+          class="article-item scroll-view-list"
+          v-for="(article, index) in articleList"
+          round
+          shadow="always"
+          :key="index">
+          <article class="article scroll-view-item" 
+                   @click="$router.push({path: `/${articleType}/article/${article.articleID}?articleType=${articleType}`})">
+            <div class="article-title">
+              <h3>
+                {{ article.title }}
+              </h3>
+            </div>
 
-          <p class="article__content">{{ article.summary }}</p>
-          <div
-            class="article__info normal-info-font normal-margin__tb">
-            <div class="article-author">
-              <p href="">{{ article.authorName }} </p>
+            <p class="article__content">{{ article.summary }}</p>
+            <div
+              class="article__info normal-info-font normal-margin__tb">
+              <div class="article-author">
+                <p href="">{{ article.authorName }} </p>
+              </div>
+              <div class="article-vg">
+                <span> 浏览：{{ article.views }} </span>
+                <span>
+                  点赞：{{ article.goods.length }}
+                  <span></span>
+                </span>
+              </div>
             </div>
-            <div class="article-vg">
-              <span> 浏览：{{ article.views }} </span>
-              <span>
-                点赞：{{ article.goods.length }}
-                <span></span>
-              </span>
+            <div
+              type="flex"
+              justify="space-between"
+              class="article__meta">
+              <div class="article__tags">
+                <md-tag
+                  size="small"
+                  shape="fillet"
+                  fill-color="236,245,255"
+                  v-for="(tag, index) in article.tags"
+                  :key="index"
+                  >{{ tag }}</md-tag
+                >
+              </div>
+              <div class="article__date">
+                {{ formatDate(article.created, dayjsNowTime) }}
+              </div>
             </div>
-          </div>
-          <div
-            type="flex"
-            justify="space-between"
-            class="article__meta">
-            <div class="article__tags">
-              <md-tag
-                size="small"
-                shape="fillet"
-                fill-color="236,245,255"
-                v-for="(tag, index) in article.tags"
-                :key="index"
-                >{{ tag }}</md-tag
-              >
-            </div>
-            <div class="article__date">
-              {{ formatDate(article.created, dayjsNowTime) }}
-            </div>
-          </div>
-        </article>
-      </card>
+          </article>
+        </card>
 
-      <!-- loading more -->
-      <md-scroll-view-more
-        slot="more"
-        :is-finished="isFinished"
-      >
-      </md-scroll-view-more>
-    </md-scroll-view>
+        <!-- loading more -->
+        <md-scroll-view-more
+          slot="more"
+          :is-finished="isFinished"
+        >
+        </md-scroll-view-more>
+      </md-scroll-view>
       <card
         v-if="articleList.length === 0 && loadingArticle === false"
         class="article_empty"
@@ -134,16 +138,15 @@ export default {
     
   },
   created() {
-    
     this.getArticlesCount();
     this.$_onEndReached();
   },
-  mounted() {
-    window.ScrollViewTrigger1 = () => {
-      this.$refs.scrollView.triggerRefresh()
-    }
-  },
   methods: {
+    handleAddArticle() {
+      this.$router.push({
+        path: `${this.$route.path}/addArticle?articleType=${this.articleType}`
+      })
+    },
     $_onEndReached() {
       if (this.isFinished || this.loadingArticle) {
         return
@@ -226,10 +229,9 @@ export default {
 }
 .tools-bar {
   height: 2.6rem;
-  > button {
-    width: 36%;
-    float: right;
-  }
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }
 .article-loading__wrapper {
   height: 120px;
@@ -250,6 +252,7 @@ export default {
   transition: background-color 0.2s ease-in-out;
 }
 .article-list {
+  height: calc(100vh - 9.53333rem);
   width: 100%;
   > .card {
     padding: 0;
@@ -289,5 +292,7 @@ export default {
   text-align: center;
   color: #909090;
 }
-
+.tools-bar {
+  margin: 0 1rem;
+}
 </style>

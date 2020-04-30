@@ -298,6 +298,7 @@ export default {
           QaProvider.updateQuestionReplys({
               qaID: this.question.qaID,
               reply: {
+                replyerID: this.user.id,
                 replyerName: this.user.username,
                 replyerType: this.user.usertype,
                 replyerAvatar: this.user.avatar,

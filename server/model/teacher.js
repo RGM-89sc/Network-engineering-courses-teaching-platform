@@ -47,6 +47,7 @@ const tchSchema = new mongoose.Schema({
   }],
   //回答过的问题
   questionReplys: [{
+    replyID: String,
     qaID: String,
     created: Date
   }],

@@ -14,7 +14,7 @@ module.exports = {
       .find({
         articleType,
       })
-      .count()
+      .countDocuments()
       .then((count) => {
         return (ctx.body = {
           data: count,

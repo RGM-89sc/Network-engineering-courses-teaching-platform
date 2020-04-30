@@ -66,7 +66,7 @@ module.exports = {
                 info: '没有删除问题的权限！'
             }
         }
-        await db.qa.deleteOne({
+        await db.qa.findOneAndRemove({
             qaID,
             questionerID
         }).then(async docs => {
@@ -79,6 +79,15 @@ module.exports = {
                     }
                 }
             });
+            docs.replys.forEach(async reply => {
+                await db[`${reply.replyerType}`].updateOne({
+                    $pull: {
+                        questionReplys: {
+                            replyID: reply.replyID
+                        }
+                    }
+                }).then(docs => {}).catch(err => {});
+            })
             return ctx.body = {
                 code: 1,
                 data: docs
@@ -110,7 +119,7 @@ module.exports = {
             }
         })
     },
-    //删除问题的回复 or 回答
+    //删除问题的回答
     async deleteQuestionReply(ctx) {
 
     },
@@ -133,17 +142,10 @@ module.exports = {
     },
     //加载qa
     async getQaQuestions(ctx) {
-        // const { skips, limits } = ctx.request.body;
-        await db.qa.find({}, {
-
-        }, {
-            _id: 0,
-            __v: 0,
-            content: 0,
-            questionerAvatar: 0,
-            content: 0,
-            replys: 0
-        })
+        const { skips, limits } = ctx.request.body;
+        await db.qa.find({})
+        .skip(parseInt(skips))
+        .limit(parseInt(limits))
         .then(docs => {
             ctx.body = {
                 data: docs,
@@ -185,7 +187,8 @@ module.exports = {
             qaID,
             reply
         } = ctx.request.body;
-
+        const replyID = uuidV4().split('-'.join(''));
+        reply.replyID = replyID;
         await db.qa.updateOne({
             qaID
         }, {

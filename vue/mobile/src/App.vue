@@ -63,6 +63,6 @@ li {
 }
 
 .gray-bg {
-  background-color: rgb(240, 240, 240);
+  background-color: #e9ecef;
 }
 </style>

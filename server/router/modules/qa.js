@@ -18,7 +18,7 @@ router.post('/updateQuestionReplys', qa.updateQuestionReplys)
 
 router.post('/getQaQuestions', qa.getQaQuestions)
 
-router.get('/getSize', qa.getSize)
+router.get('/getQaQuestionsSize', qa.getSize)
 
 
 module.exports = router;
