@@ -2,10 +2,12 @@
   <div class="article-list_wrapper" :class="articleList.length > 0 ? 'gray-bg' : ''">
 
     <div class="tools-bar">
+      <md-button inline :type="isSortEnabled === true ? 'primary' : 'disabled'" size="small" @click="showSelector" icon="sort">
+        {{curSortValue}}
+      </md-button>
       <md-button type="primary" size="small" inline @click="handleAddArticle">
         发布文章
       </md-button>
-      <md-button inline :type="isSortEnabled === true ? 'primary' : 'disabled'" size="small" @click="showSelector" icon="sort">{{curSortValue}}</md-button>
     </div>
 
     <div class="article-list">
