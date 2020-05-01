@@ -23,6 +23,8 @@ router.post('/resetStuExamScore', auth.tch, teacher.resetStuExamScore);
 
 // 教师查看自己发布的文章
 router.get('/tchGetMyArticles', auth.tch, teacher.getMyArticles);
+router.get('/tchGetMyQuestions', auth.tch, teacher.getMyQuestions);
+
 
 
 module.exports = router;

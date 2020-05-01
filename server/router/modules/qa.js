@@ -4,7 +4,7 @@ const auth = require('../../middleware/auth');
 
 router.post('/uploadQaQuestion', auth.all, qa.uploadQaQuestion)
 
-router.post('/delQaQuestion', auth.stu, qa.delQaQuestion)
+router.post('/delQaQuestion', auth.all, qa.delQaQuestion)
 
 router.post('/modifyQaQuestion', auth.all, qa.modifyQaQuestion)
 

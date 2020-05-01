@@ -291,5 +291,13 @@ module.exports = {
       data: articles,
       code: 1
     }
-  }
+  },
+
+  async getMyQuestions(ctx) {
+    const questions = ctx.state.user.questions || [];
+    return ctx.body = {
+      data: questions,
+      code: 1
+    }
+  },
 };

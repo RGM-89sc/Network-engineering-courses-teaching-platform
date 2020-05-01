@@ -18,7 +18,6 @@
       <md-tab-pane
         label="我的问题"
         name="my-questions"
-        v-if="user.userType === 0"
       >
         <MyQuestions :user="user" />
       </md-tab-pane>

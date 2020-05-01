@@ -27,6 +27,10 @@
         :config="editorConfig"
         :disabled="!isLogin"
       ></ckeditor>
+
+      <md-button type="primary" @click="upload">
+        提交
+      </md-button>
     </div>
 
 
@@ -179,67 +183,67 @@
         if(this.tags.length < this.tagsLimit) {
           setTimeout( () => this.inputTagVisible = true, 500);
         }
-      }
-    },
-    beforeUploadQuestion(
-			checkVals = { title: '标题', content: '问题内容' }
-		) {
-			if(!this.isLogin) return false;
-			const Q = this.question;
-			for (let i in checkVals) {
-				if (Q[i] === '') {
-					this.emptyUploadToast(checkVals[i]);
-					return false;
-				}
-			}
-			return true;
-    },
-		uploadQuestion() {
-			this.$dialog.confirm({
-        title: '确认',
-        content: '请确认是否提交问题',
-				confirmText: '确定',
-				cancelText: '取消',
-        onConfirm: () => {
-					const Q = this.question;
-					Q.questionerID = this.user.id;
-					Q.questionerName = this.user.username;
-					Q.questionerAvatar = this.user.avatar;
-          Q.questionerType = this.user.userType === 1 ? 'teacher' : 'student';
-          Q.tags = this.tags;
-					QaProvider.uploadQaQuestion(Q)
-						.then(res => {
-							if (res.data.code === 1) {
-								this.$toast.succeed('提交成功！');
-								this.$router.push({
-									path: '/emptyPage'
-								});
-							} else {
-                console.error(res.data)
-								this.$toast.failed(res.data);
-							}
-						})
-						.catch(err => {
-							this.$toast.failed(err);
-							console.log(err);
-						});   
+      },
+      beforeUploadQuestion(
+        checkVals = { title: '标题', content: '问题内容' }
+      ) {
+        if(!this.isLogin) return false;
+        const Q = this.question;
+        for (let i in checkVals) {
+          if (Q[i] === '') {
+            this.emptyUploadToast(checkVals[i]);
+            return false;
+          }
         }
-			})
+        return true;
+      },
+      uploadQuestion() {
+        this.$dialog.confirm({
+          title: '确认',
+          content: '请确认是否提交问题',
+          confirmText: '确定',
+          cancelText: '取消',
+          onConfirm: () => {
+            const Q = this.question;
+            Q.questionerID = this.user.id;
+            Q.questionerName = this.user.username;
+            Q.questionerAvatar = this.user.avatar;
+            Q.questionerType = this.user.userType === 1 ? 'teacher' : 'student';
+            Q.tags = this.tags; 
+            this.$http.post(`uploadQaQuestion`, Q)
+              .then(res => {
+                if (res.data.code === 1) {
+                  this.$toast.succeed('提交成功！');
+                  this.$router.push({
+                    path: '/qa'
+                  });
+                } else {
+                  console.error(res.data)
+                  this.$toast.failed(res.data);
+                }
+              })
+              .catch(err => {
+                this.$toast.failed(err);
+                console.log(err);
+              });   
+          }
+        })
+      },
+      upload() {
+        this.beforeUploadQuestion() && this.uploadQuestion();
+      },
+      loginToast() {
+        this.$alert('请先登录！', '登录提示', {
+          confirmButtonText: '确定',
+          callback: action => {
+            this.$router.push({ path: '/auth' });
+          }
+        });
+      },
+      emptyUploadToast(message = '内容') {
+        this.$toast.failed(`${message}不能为空！`);
+      },
     },
-    upload() {
-			this.beforeUploadQuestion() && this.uploadQuestion();
-		},
-		loginToast() {
-			this.$alert('请先登录！', '登录提示', {
-				confirmButtonText: '确定',
-				callback: action => {
-					this.$router.push({ path: '/auth' });
-				}
-			});
-		},
-		emptyUploadToast(message = '内容') {
-			this.$toast.failed(`${message}不能为空！`);
-		},
     components: {
       Tag
     },

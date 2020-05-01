@@ -5,7 +5,7 @@
       :key="article.articleID"
       class="article"
       shadow="always">
-      <div type="flex">
+      <div>
         <div class="article-name">
           <h3 
             @click="
@@ -127,10 +127,10 @@ export default {
         font-size: 0.8rem;
         align-self: center;
     }
-  .manipulate {
-    padding-right: 20px;
-    text-align: right;
-  }
+    .manipulate {
+        padding-right: 20px;
+        text-align: right;
+    }
   }
 
 }

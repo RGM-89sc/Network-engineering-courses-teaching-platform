@@ -60,6 +60,7 @@ module.exports = {
             questionerType,
             questionerID
         } = ctx.request.body;
+        const type = questionerType || this.user.userType == 1 ? 'teacher' : 'student';
         if (questionerID !== ctx.state.user.id) {
             return ctx.body = {
                 code: 0,
@@ -70,7 +71,7 @@ module.exports = {
             qaID,
             questionerID
         }).then(async docs => {
-            await db[`${questionerType}`].updateOne({
+            await db[`${type}`].updateOne({
                 id: questionerID
             }, {
                 $pull: {
