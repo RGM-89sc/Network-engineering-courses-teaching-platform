@@ -10,7 +10,7 @@
       :user="user"
       v-if="user && user.userType === 0"
       @changeCourseComponent="changeCourseComponentHandler"
-      :course="courseID"
+      :courseID="courseID"
     ></StuCourseDetail>
   </div>
 </template>

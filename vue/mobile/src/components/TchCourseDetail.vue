@@ -1,6 +1,17 @@
 <template>
   <div>
     <div class="header">
+      <md-icon 
+          class="return-button"
+          name="arrow-left" 
+          size="sm"
+          color="#409eff"
+          @click="
+            $emit('changeCourseComponent', {
+              from: 'myCourseDetail',
+              to: 'myCourses'
+            })
+        "></md-icon>
       <span>统计信息 - {{courseName}}</span>
     </div>
 
@@ -33,7 +44,6 @@ import Card from './Card';
 export default {
   data() {
     return {
-      courseID: '',
       loadingStusData: true,
       courseName: '',
       courseExams: [],
@@ -44,10 +54,13 @@ export default {
     user: {
       type: Object,
       default: {}
+    },
+    courseID: {
+      type: String,
+      default: ''
     }
   },
   created() {
-    this.courseID = this.$route.query.id;
     this.getCourseStusAndExams();
   },
   methods: {
@@ -194,5 +207,8 @@ export default {
   .exam {
     border-bottom: 1px solid #eee;
   }
+}
+.return-button {
+  margin-right: 0.5rem;
 }
 </style>
