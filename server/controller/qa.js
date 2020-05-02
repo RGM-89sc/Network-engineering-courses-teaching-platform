@@ -188,7 +188,7 @@ module.exports = {
             qaID,
             reply
         } = ctx.request.body;
-        const replyID = uuidV4().split('-'.join(''));
+        const replyID = uuidV4().split('-').join('');
         reply.replyID = replyID;
         await db.qa.updateOne({
             qaID
