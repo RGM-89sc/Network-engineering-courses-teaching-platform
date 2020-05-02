@@ -184,7 +184,8 @@ export default {
             examID
           })
             .then(res => {
-              if (res.data.code === 1) {
+              const code = res.code;
+              if (code === 1) {
                 this.currentStuExams.some((e, index) => {
                   if (e.examID === examID) {
                     this.currentStuExams[index].examScore = '-';
@@ -213,7 +214,7 @@ export default {
                   type: 'success'
                 });
               }
-              if (res.data.code === -1) {
+              if (code === -1) {
                 console.log(res.errMsg);
                 this.$message.error('发生错误，操作失败');
               }
