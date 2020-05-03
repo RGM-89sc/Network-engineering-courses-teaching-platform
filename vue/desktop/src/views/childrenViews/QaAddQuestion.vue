@@ -239,7 +239,7 @@ export default {
 									type: 'success'
 								});
 								this.$router.push({
-									path: '/emptyPage'
+									path: '/qa'
 								});
 							} else {
                 console.error(res.data)

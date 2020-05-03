@@ -3,9 +3,9 @@
     <Card round style="margin: 0">
       <div class="header">
         <span class="part-title">{{partTitle}}</span>
-        <div class="tool-bar" v-if="user && user.userType === 1">
+        <!-- <div class="tool-bar" v-if="user && user.userType === 1">
           <md-button class="edit-btn" type="link">编辑</md-button>
-        </div>
+        </div> -->
       </div>
       <CPContent v-if="content" :content="content"></CPContent>
     </Card>

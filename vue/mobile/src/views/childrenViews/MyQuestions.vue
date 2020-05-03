@@ -9,7 +9,7 @@
       <div>
         
         <div class="question-name">
-          <h3 @click="$router.push({path: `/qa/${question.id}`})">{{
+          <h3 @click="$router.push({path: `/qa/question/${question.qaID}`})">{{
             question.title
           }}</h3>
         </div>

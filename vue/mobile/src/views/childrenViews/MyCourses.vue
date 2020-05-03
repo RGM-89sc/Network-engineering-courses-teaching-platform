@@ -9,7 +9,13 @@
         <div class="manipulate">
           <md-button
             type="link"
-            @click="$router.push({ path: `/myInfo/courseDetail?id=${course.courseID}` })"
+            @click="
+              $emit('changeCourseComponent', {
+                from: 'myCourses',
+                to: 'myCourseDetail',
+                courseID: course.courseID
+              })
+            "
           >统计信息</md-button>
         </div>
       </div>

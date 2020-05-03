@@ -147,6 +147,9 @@ module.exports = {
         await db.qa.find({})
         .skip(parseInt(skips))
         .limit(parseInt(limits))
+        .sort({
+            created: -1
+        })
         .then(docs => {
             ctx.body = {
                 data: docs,
@@ -183,12 +186,12 @@ module.exports = {
         })
     },
     //更新问题的回复
-    async updateQuestionReplys(ctx) {
+    async updateQuestionReplys( ctx) {
         const {
             qaID,
             reply
         } = ctx.request.body;
-        const replyID = uuidV4().split('-'.join(''));
+        const replyID = uuidV4().split('-').join('');
         reply.replyID = replyID;
         await db.qa.updateOne({
             qaID

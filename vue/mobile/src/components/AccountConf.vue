@@ -189,11 +189,10 @@ export default {
       }
     },
     imageuploaded(res) {
-      if (res.data.code === 1) {
-        this.avatar = res.data.avatarUrl;
-        window.location.reload();
+      if (res.code === 1) {
+        this.avatar = res.data.avatarUrl + `?timestamp=${Date.now()}`; 
       }
-      if (res.data.code === -1) {
+      if (res.code === -1) {
         this.$dialog.failed({
           title: '失败',
           content: '头像更改失败',

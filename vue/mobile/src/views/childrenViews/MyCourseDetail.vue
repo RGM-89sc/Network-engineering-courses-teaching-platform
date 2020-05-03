@@ -1,7 +1,15 @@
 <template>
   <div>
-    <TchCourseDetail :user="user" v-if="user && user.userType === 1"></TchCourseDetail>
-    <StuCourseDetail :user="user" v-if="user && user.userType === 0"></StuCourseDetail>
+    <TchCourseDetail 
+      v-if="user && user.userType === 1" 
+      @changeCourseComponent="changeCourseComponentHandler" 
+      :user="user" 
+      :courseID="courseID"></TchCourseDetail>
+    <StuCourseDetail 
+      v-if="user && user.userType === 0" 
+      :user="user" 
+      @changeCourseComponent="changeCourseComponentHandler"
+      :courseID="courseID"></StuCourseDetail>
   </div>
 </template>
 
@@ -19,6 +27,15 @@ export default {
     user: {
       type: Object,
       default: {}
+    },
+    courseID: {
+      type: String,
+      default: ''
+    }
+  },
+  methods: {
+    changeCourseComponentHandler(route) {
+      this.$emit('changeCourseComponent', route);
     }
   },
   components: {
