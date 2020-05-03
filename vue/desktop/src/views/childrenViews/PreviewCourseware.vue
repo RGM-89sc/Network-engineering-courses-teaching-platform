@@ -129,7 +129,7 @@ export default {
   data() {
     return {
       src: pdf.createLoadingTask(
-        `${this.$serverBaseUrl}/static/courseware/${this.$route.params.filename}`
+        `${this.$serverBaseUrl}/static/software/${this.$route.params.filename}`
       ),
       loading: null,
       currentPage: 1,

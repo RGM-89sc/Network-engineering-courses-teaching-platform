@@ -91,7 +91,7 @@
             }"
           >
             <a
-              :href="$route.path + '#' + pageNumber"
+              :href="'#' + pageNumber"
               v-for="pageNumber in needLoadPageNum"
               :key="pageNumber"
               @click="changePage(pageNumber)"

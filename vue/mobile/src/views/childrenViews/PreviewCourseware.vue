@@ -33,7 +33,7 @@ export default {
   data() {
     return {
       src: pdf.createLoadingTask(
-        `${this.$serverBaseUrl}/static/courseware/${
+        `${this.$serverBaseUrl}/static/software/${
           this.$route.params.filename
         }`
       ),
