@@ -2,7 +2,7 @@ const port = 9000;
 
 module.exports = {
   db: {
-    url: 'mongodb://admin:admin_123@39.108.52.7:27017/ncw',
+    url: '',
     options: {
       useNewUrlParser: true,
       useFindAndModify: false
