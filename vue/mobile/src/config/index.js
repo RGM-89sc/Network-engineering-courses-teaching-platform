@@ -1,5 +1,5 @@
 export default {
-  serverBaseUrl: 'http://localhost:9000',
-  apiBaseUrl: 'http://localhost:9000/api/',
-  socketURL: 'ws://localhost:13337'
+  serverBaseUrl: 'http://39.108.52.7:9000',
+  apiBaseUrl: 'http://39.108.52.7:9000/api/',
+  socketURL: 'ws://39.108.52.7:13337'
 }

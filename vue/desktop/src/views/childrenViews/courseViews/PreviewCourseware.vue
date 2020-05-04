@@ -412,6 +412,7 @@ export default {
   }
 
   .pagination {
+    margin-top: 0;
     font-size: 1rem;
   }
 }
