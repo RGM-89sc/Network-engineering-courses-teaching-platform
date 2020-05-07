@@ -98,7 +98,9 @@
               console.log(err);
             })
             .finally(() => {
-              this.$refs.scrollView.finishLoadMore();
+              if (this.$refs.scrollView) {
+                this.$refs.scrollView.finishLoadMore();
+              }
             })
         }, 1000);
       },

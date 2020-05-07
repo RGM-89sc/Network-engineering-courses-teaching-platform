@@ -55,9 +55,10 @@ export default {
   },
   methods: {
     getMyCourseExams() {
-      userProvider.student.getMyCourseExams({ courseID: this.courseID })
+      UserProvider.student.getMyCourseExams({ courseID: this.courseID })
         .then(res => {
-          if (res.data.code === 1) {
+          console.log(res)
+          if (res.code === 1) {
             this.courseName = res.data.course.coursename;
             res.data.exams.forEach(exam => {
               let score = '-';
@@ -75,7 +76,7 @@ export default {
             });
             this.loadingData = false;
           }
-          if (res.data.code === -1) {
+          if (res.code === -1) {
             console.log(res.errMsg);
             this.$message.error('加载失败');
           }

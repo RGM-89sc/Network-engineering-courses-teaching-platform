@@ -2,7 +2,7 @@ const port = 9000;
 
 module.exports = {
   db: {
-    url: 'mongodb://admin:admin_123@39.108.52.7:27017/ncw',
+    url: '',
     options: {
       useNewUrlParser: true,
       useFindAndModify: false
@@ -11,7 +11,7 @@ module.exports = {
   // 服务器端口
   port,
   // 服务器地址
-  serverURL: `http://127.0.0.1:${port}`,
+  serverURL: `http://39.108.52.7:${port}`,
   // cookie有效期
   loginMaxAge: 1000 * 60 * 60 * 3,
   // 跨域白名单

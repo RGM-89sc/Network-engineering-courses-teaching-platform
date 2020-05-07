@@ -8,7 +8,6 @@ const resourcesSchema = new mongoose.Schema({
   filename: {
     type: String,
     require: true,
-    unique: true
   },
   courseID: {
     type: String

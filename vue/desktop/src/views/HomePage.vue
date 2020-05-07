@@ -39,7 +39,7 @@
             />
           </div>
           <div class="course-info__wrapper">
-            <p class="course_tch-name">{{ course.tchID }}</p>
+            <!-- <p class="course_tch-name">{{ course.tchID }}</p> -->
             <p :title="course.coursename" class="course_course-name">
               {{ course.coursename }}
             </p>

@@ -75,7 +75,6 @@ export default {
           console.log(res);
           if (res.data.code === 1) {
             this.courses = res.data.data;
-            console.log(this.courses);
           }
           if (res.data.code === -1) {
             this.$message.error('加载失败');
@@ -90,10 +89,10 @@ export default {
       UserProvider.student
         .getMyCourses()
         .then(res => {
-          if (res.data.code === 1) {
-            this.courses = res.data.data.courses;
+          if (res.code === 1) {
+            this.courses = res.data.courses;
           }
-          if (res.data.code === -1) {
+          if (res.code === -1) {
             this.$message.error('加载失败');
           }
         })

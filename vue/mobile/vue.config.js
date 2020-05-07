@@ -2,6 +2,9 @@ const path = require('path');
 const CKEditorWebpackPlugin = require('@ckeditor/ckeditor5-dev-webpack-plugin');
 const { styles } = require('@ckeditor/ckeditor5-dev-utils');
 const pxtorem = require('postcss-pxtorem');
+// const HappyPack = require('happypack');
+// const os = require('os');
+// const happyThreadPool = HappyPack.ThreadPool({ size: os.cpus().length });
 
 // ckeditor5的主题设置，源码中styles.getPostCssConfig返回一个只有一个plugins属性的对象
 // Various modules in the CKEditor source code import .css files.
@@ -37,14 +40,30 @@ module.exports = {
   transpileDependencies: [
     /ckeditor5-[^/\\]+[/\\]src[/\\].+\.js$/,
   ],
-
   configureWebpack: {
+    output: {
+      globalObject: `window`
+    },
     plugins: [
       // CKEditor needs its own plugin to be built using webpack.
       new CKEditorWebpackPlugin({
         // See https://ckeditor.com/docs/ckeditor5/latest/features/ui-language.html
-        language: 'zh-cn'
-      })
+        language: 'zh-cn',
+        additionalLanguages: 'all',
+        buildAllTranslationsToSeparateFiles: true
+      }),
+      // new HappyPack({
+      //   //用id来标识 happypack处理那里类文件
+      //   id: 'happyBabel',
+      //   //如何处理  用法和loader 的配置一样
+      //   loaders: [{
+      //     loader: 'babel-loader?cacheDirectory=true',
+      //   }],
+      //   //共享进程池
+      //   threadPool: happyThreadPool,
+      //   //允许 HappyPack 输出日志
+      //   verbose: true,
+      // })
     ]
   },
 
@@ -55,6 +74,9 @@ module.exports = {
   },
 
   chainWebpack: config => {
+    // config.output.set('globalObject', `typeof self !== 'undefined' ? self : this`)
+    // console.log(config.output.get('globalObject'))
+    
     // Vue CLI would normally use its own loader to load .svg files. The icons used by
     // CKEditor should be loaded using raw-loader instead.
 
@@ -111,5 +133,18 @@ module.exports = {
           })
         ]
       });
+    
+    // if (!process.env.VUE_APP_NO_HAPPYPACK) {
+    //   config.module
+    //     .rule('happypack-js')
+    //     .test(/\.js$/)
+    //     .exclude
+    //     .add(/node_modules/)
+    //     .end()
+    //     .use('happypack')
+    //     .loader('happypack/loader?id=happyBabel')
+    // }
+
+    console.log(config.output.get('globalObject'))
   }
 };

@@ -17,7 +17,7 @@
           style="background-color: #eee;"
           @error="pdfError"
         ></pdf>
-        <span>{{ currentPage }} / {{ pageCount }}</span>
+        <!-- <span>{{ currentPage }} / {{ pageCount }}</span> -->
       </el-row>
       <el-row class="pdf-console">
         <el-col class="tools" :span="12">
@@ -129,7 +129,7 @@ export default {
   data() {
     return {
       src: pdf.createLoadingTask(
-        `${this.$serverBaseUrl}/static/courseware/${this.$route.params.filename}`
+        `${this.$serverBaseUrl}/static/software/${this.$route.params.filename}`
       ),
       loading: null,
       currentPage: 1,
@@ -350,17 +350,6 @@ export default {
 .pdf-main {
   position: relative;
   border: 1px solid #eee;
-
-  span {
-    position: absolute;
-    display: block;
-    top: 5px;
-    right: 5px;
-    padding: 5px 10px;
-    background-color: rgba($color: #555, $alpha: 0.1);
-    border-radius: 10px;
-    z-index: 999;
-  }
 }
 
 .pdf-console {
@@ -378,20 +367,23 @@ export default {
   }
 
   .pagination {
+    margin-top: 0;
     font-size: 1rem;
   }
 }
 
 .catalogue {
   box-sizing: border-box;
-  display: table;
+  display: flex;
   overflow: hidden;
   white-space: nowrap;
   border: 1px solid #eee;
 
   .prev,
   .next {
-    display: table-cell;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     width: 40px;
     text-align: center;
     vertical-align: middle;
@@ -409,12 +401,11 @@ export default {
     background-color: #eee;
 
     .catalogue-list {
-      display: table-cell;
       transition: all 0.5s ease;
 
       .catalogue-item {
         box-sizing: border-box;
-        display: inline-block;
+        display: inline-block !important;
         width: 20%;
         vertical-align: top;
         border: 4px solid #fff;
