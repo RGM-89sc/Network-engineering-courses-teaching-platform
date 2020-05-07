@@ -132,9 +132,6 @@ export default {
       }
     };
   },
-  created() {
-    console.log(this.user);
-  },
   methods: {
     //判断
     beforePost() {
@@ -175,7 +172,6 @@ export default {
                 this.$router.push({path: `/${this.article.articleType}`});
               } else {
                 this.$message.error('发布失败！');
-                console.log(res.data.errMsg);
               }
             })
             .catch(err => {

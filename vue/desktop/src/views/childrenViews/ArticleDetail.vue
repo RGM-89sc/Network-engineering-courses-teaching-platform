@@ -230,7 +230,6 @@ export default {
       })
         .then((res) => {
           this.article.views++;
-          console.log(res);
         })
         .catch(err => {
           console.error(err); 

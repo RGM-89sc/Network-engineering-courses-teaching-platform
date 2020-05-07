@@ -190,7 +190,9 @@ export default {
     },
     imageuploaded(res) {
       if (res.code === 1) {
-        this.avatar = res.data.avatarUrl + `?timestamp=${Date.now()}`; 
+        // this.avatar = res.data.avatarUrl + `?timestamp=${Date.now()}`; 
+        //bad solution
+        window.location.reload();
       }
       if (res.code === -1) {
         this.$dialog.failed({

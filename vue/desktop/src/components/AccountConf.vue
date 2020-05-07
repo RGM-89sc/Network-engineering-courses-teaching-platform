@@ -167,7 +167,10 @@ export default {
           message: '头像更换成功！',
           type: 'success'
         });
-        this.avatar = res.data.avatarUrl + `?timestamp=${Date.now()}`; 
+        //需要和$emit 事件组合使用，通知header更改头像
+        //bad solution
+        //this.avatar = res.data.avatarUrl + `?timestamp=${Date.now()}`; 
+        window.location.reload();
       }
       if (res.code === -1) {
         this.$alert('头像更改失败', '失败', {
