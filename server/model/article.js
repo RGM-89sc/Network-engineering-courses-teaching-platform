@@ -1,21 +1,26 @@
 const mongoose = require('mongoose');
+    //不存储字段，从用户（教师、学生）集合获取
+    // avatarURL: {
+    //     type: String,
+    //     default: '/static/img/avatar/default.png'
+    // },
+    // authorName: {
+    //     type: String,
+    //     required: true
+    // },
 const articleSchema = new mongoose.Schema({
     articleID: {
         type: String,
         required: true,
         unique: true
     },
-    authorName: {
-        type: String,
-        required: true
-    },
     authorID: {
         type: String,
         required: true
     },
-    avatarURL: {
+    authorType: {
         type: String,
-        default: '/static/img/avatar/default.png'
+        required: true
     },
     articleType: {
         type: String,

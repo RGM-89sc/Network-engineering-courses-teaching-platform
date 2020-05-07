@@ -43,7 +43,20 @@ module.exports = {
       )
       .skip(parseInt(skipArticles))
       .limit(parseInt(getArticlesCount))
-      .then((docs) => {
+      .then(async (docs) => {
+        docs.forEach(async article => {
+          await db[article.authorType].findOne({
+            id: article.authorID
+          })
+          .then(user => {
+            article.avatarURL = user.avatar;
+            article.authorName = user.username;
+          })
+          .catch(err => {
+            throw Error(err)
+          });
+        })
+
         return (ctx.body = {
           data: docs,
           code: 1,
@@ -76,11 +89,21 @@ module.exports = {
           __v: 0,
         }
       )
-      .then((docs) => {
+      .then(async (docs) => {
+        const _doc = docs._doc;
+        _doc.isLiked = isLiked;
+        await db[_doc.authorType].findOne({
+          id: _doc.authorID
+        })
+        .then(docs => {
+          _doc.avatarURL = docs.avatar;
+          _doc.authorName = docs.username;
+        })
+        .catch(err => {
+          throw Error(err)
+        });
         ctx.body = {
-          data: Object.assign({
-            isLiked
-          },docs._doc),
+          data: docs,
           code: 1,
         };
       })
@@ -94,10 +117,7 @@ module.exports = {
   //上传新闻
   async postArticle(ctx) {
     const {
-      authorName,
-      authorID,
       articleID,
-      avatarURL,
       tags,
       content,
       title,
@@ -106,12 +126,13 @@ module.exports = {
       summary,
       articleType,
     } = ctx.request.body;
+    const authorType = ctx.state.user.userType === 1 ? 'teacher' : 'student';
+    const authorID = ctx.state.user.id;
     await db.article
       .create({
-        authorName,
+        authorType,
         authorID,
         articleID,
-        avatarURL,
         tags,
         content,
         title,

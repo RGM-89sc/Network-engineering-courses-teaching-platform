@@ -158,9 +158,9 @@ export default {
           type: 'warning'
         }).then(() => {
           this.article.articleID = this.$route.query.articleID;
-          this.article.authorName = this.user.username;
-          this.article.authorID = this.user.id;
-          this.article.avatarURL = this.user.avatar;
+          // this.article.authorName = this.user.username;
+          // this.article.authorID = this.user.id;
+          // this.article.avatarURL = this.user.avatar;
           this.article.articleType = this.$route.query.articleType;
           this.article.tags.push(
             this.article.articleType === 'techInfo' ? '技术前沿' : '新闻动态'

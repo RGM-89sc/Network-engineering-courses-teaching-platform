@@ -828,21 +828,49 @@ module.exports = {
       });
   },
   async getFourHottestCourses(ctx) {
-    await db.courses.find({}, {
-      __v: 0,
-      _id: 0
-    }).sort({
-      'stus.length': -1
-    }).limit(4).then(docs => {
-      return ctx.body = {
-        data: docs,
-        code: 1
-      }
-    }).catch(err => {
-      return ctx.body = {
-        code: -1,
-        errMsg: err.message
-      }
-    })
+    const LENGTH_LIMIT = 4;
+    await db.courses.aggregate([{
+          $lookup: {
+            from: "teachers",
+            localField: "tchID",
+            foreignField: "id",
+            as: "tch"
+          }
+        },
+        {
+          $project: {
+            _id: 0,
+            __v: 0,
+            tch: {
+              _id: 0,
+              __v: 0,
+              id: 0,
+              password: 0,
+              faculty: 0,
+              teaching: 0,
+              avatar: 0,
+              stus: 0,
+              content: 0,
+              created: 0
+            }
+          }
+        }
+      ])
+      .sort({
+        'stus.length': -1
+      })
+      .limit(LENGTH_LIMIT)
+      .then(docs => {
+        return ctx.body = {
+          code: 1,
+          data: docs
+        }
+      })
+      .catch(err => {
+        return ctx.body = {
+          code: -1,
+          errMsg: err.message
+        }
+      });
   }
 };

@@ -72,4 +72,10 @@ export const TeacherProvider = {
       .then(res => res)
       .catch(err => err)
   },
+  // 教师查看自己的问题
+  getMyQuestions: () => {
+    return http.get('tchGetMyQuestions')
+      .then(res => res.data)
+      .catch(err => err)
+  },
 }

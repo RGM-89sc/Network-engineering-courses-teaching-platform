@@ -49,8 +49,8 @@ export default {
   },
   methods: {
     getMyquestions() {
-      //   const type = this.user.userType === 0 ? 'stu' : 'tch';
-      UserProvider.student
+      const type = this.user.userType === 0 ? 'student' : 'teacher';
+      UserProvider[`${type}`]
         .getMyQuestions()
         .then(res => {
           if (res.code === 1) {
@@ -60,7 +60,6 @@ export default {
               message: '获取信息失败!',
               type: 'fail'
             });
-            console.error(res);
           }
         })
         .catch(err => {
@@ -68,7 +67,7 @@ export default {
         });
     },
     delQuestion(question) {
-      QaProvider.delQaQuestion()({
+      QaProvider.delQaQuestion({
         qaID: question.qaID,
         questionerID: this.user.id
       })
@@ -78,11 +77,11 @@ export default {
               message: '删除成功',
               type: 'success'
             });
+            this.getMyquestions();
           } else if (res.data.code === 0) {
             this.$message.error({
               message: res.data.data.info
             });
-            console.log(res.data);
           } else {
             this.$message.error({
               message: '删除失败！'

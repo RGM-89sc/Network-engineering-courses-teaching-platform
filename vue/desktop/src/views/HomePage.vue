@@ -13,11 +13,16 @@
             :src="$serverBaseUrl + course.cover"
             :alt="course.coursename"
             :title="course.coursename"
-            @click.prevent=""
-        />
+            @click="
+              $router.push({
+                path: `/course/${course.courseID}/index`
+              })
+            "/>
       </el-carousel-item>
     </el-carousel>
-
+    <el-card class="no-course" shadow="always" v-else>
+      暂无课程开放
+    </el-card>
     <el-row type="flex" class="course-list__wrapper" justify="space-between">
       <div
         v-for="(course, index) in courses"
@@ -39,7 +44,7 @@
             />
           </div>
           <div class="course-info__wrapper">
-            <!-- <p class="course_tch-name">{{ course.tchID }}</p> -->
+            <p class="course_tch-name">{{ course.tch[0].username }}</p>
             <p :title="course.coursename" class="course_course-name">
               {{ course.coursename }}
             </p>
@@ -73,6 +78,7 @@ export default {
     getFourCourses() {
       CoursesProvider.getFourHottestCourses()
         .then(res => {
+          console.log(res)
           if (res.data.code === 1) {
             this.courses = res.data.data;
           }
@@ -131,5 +137,10 @@ img {
     -webkit-box-orient: vertical;
     display: -webkit-box;
   }
+}
+.no-course {
+  padding: 5rem;
+  text-align: center;
+  color: #909090;
 }
 </style>
