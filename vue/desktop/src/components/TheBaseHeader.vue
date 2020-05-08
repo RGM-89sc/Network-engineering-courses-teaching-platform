@@ -40,7 +40,7 @@
 
       <el-dropdown v-else trigger="click" @command="userCommand">
         <span class="el-dropdown-link">
-          <img class="avatar" :src="$serverBaseUrl + user.avatar" />
+          <img class="avatar" :src="user.avatar" />
           {{ user.username }}
           <i class="el-icon-arrow-down el-icon--right"></i>
         </span>
