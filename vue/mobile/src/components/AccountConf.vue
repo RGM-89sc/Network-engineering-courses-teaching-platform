@@ -190,9 +190,10 @@ export default {
     },
     imageuploaded(res) {
       if (res.code === 1) {
-        // this.avatar = res.data.avatarUrl + `?timestamp=${Date.now()}`; 
-        //bad solution
-        window.location.reload();
+        //需要和$emit 事件组合使用，通知header更改头像
+        //因为header中的头像地址引用的是user.avatar 故直接修改user.avatar应该能达到预期效果
+        this.user.avatar = this.avatar = res.data.avatarUrl + `?timestamp=${Date.now()}`; 
+        // window.location.reload();
       }
       if (res.code === -1) {
         this.$dialog.failed({
