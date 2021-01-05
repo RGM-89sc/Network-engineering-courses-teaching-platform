@@ -24,7 +24,7 @@
     "@ckeditor/ckeditor5-theme-lark": "^18.0.0",
     "@ckeditor/ckeditor5-utils": "^18.0.0",
     "@ckeditor/ckeditor5-vue": "^1.0.1",
-    "axios": "^0.18.0",
+    "axios": "^0.21.1",
     "dayjs": "^1.8.11",
     "element-ui": "^2.8.2",
     "node-sass": "^4.14.0",
