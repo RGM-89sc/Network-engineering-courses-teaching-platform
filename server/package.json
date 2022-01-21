@@ -16,7 +16,7 @@
     "koa-session2": "^2.2.8",
     "koa-static": "^5.0.0",
     "koa2-cors": "^2.0.6",
-    "log4js": "^3.0.6",
+    "log4js": "^6.4.0",
     "mongoose": "^5.4.2",
     "npm": "^6.11.3",
     "passport-local": "^1.0.0",
