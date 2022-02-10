@@ -47,7 +47,7 @@
     "eslint-plugin-vue": "^6.2.2",
     "vue-template-compiler": "^2.6.11",
     "happypack": "^5.0.1",
-    "node-sass": "^4.14.0",
+    "node-sass": "^7.0.0",
     "postcss-pxtorem": "^4.0.1",
     "sass-loader": "^7.3.1",
     "svg-sprite-loader": "^4.2.7"
